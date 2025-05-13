@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "637784399093",
+    "project_id": "svtppm-14250",
+    "storage_bucket": "svtppm-14250.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:637784399093:android:574589c7ae0effda36b9bc",
+        "android_client_info": {
+          "package_name": "com.example.svt_ppm"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIzVH6zEU0qyvgcQGShnw6lmOSW3Aek-Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

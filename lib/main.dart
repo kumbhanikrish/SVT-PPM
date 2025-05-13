@@ -1,7 +1,7 @@
 // import 'package:country_code_picker/country_code_picker.dart';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -36,6 +36,7 @@ void main() async {
   await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPreferences.getInstance();
+  await Firebase.initializeApp();
 
   runApp(const MyApp());
   configLoading();
@@ -63,7 +64,7 @@ class MyApp extends StatelessWidget {
               appBarTheme: AppBarTheme(
                 backgroundColor: AppColor.whiteColor,
                 surfaceTintColor: AppColor.whiteColor,
-                iconTheme: IconThemeData(color: AppColor.greyColor),
+                iconTheme: IconThemeData(color: AppColor.hintColor),
               ),
               bottomSheetTheme: BottomSheetThemeData(
                 backgroundColor: AppColor.whiteColor,
@@ -84,4 +85,9 @@ class MyApp extends StatelessWidget {
   }
 }
 
-dynamic providers = [BlocProvider(create: (context) => AuthCubit())];
+dynamic providers = [
+  BlocProvider(create: (context) => AuthCubit()),
+  BlocProvider(create: (context) => StepperCubit()),
+  BlocProvider(create: (context) => ImageUploadCubit()),
+  BlocProvider(create: (context) => RadioCubit()),
+];

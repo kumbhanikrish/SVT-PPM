@@ -32,16 +32,16 @@ class CustomButton extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: backgroundColor ?? AppColor.themePrimaryColor2,
+        color: backgroundColor ?? AppColor.themePrimaryColor,
         border: Border.all(
-          color: borderColor ?? AppColor.themePrimaryColor2,
+          color: borderColor ?? AppColor.themePrimaryColor,
           width: 1,
         ),
         borderRadius: borderRadius ?? BorderRadius.circular(10),
       ),
       child: InkWell(
-        splashColor: AppColor.themePrimaryColor2,
-        highlightColor: AppColor.themePrimaryColor2,
+        splashColor: AppColor.hintColor,
+        highlightColor: AppColor.hintColor,
         borderRadius: BorderRadius.circular(10),
         onTap: onTap,
         child: Padding(
@@ -50,8 +50,8 @@ class CustomButton extends StatelessWidget {
             child: CustomText(
               text: text,
               color: textColor ?? AppColor.whiteColor,
-              fontWeight: fontWeight ?? FontWeight.w500,
-              fontSize: fontSize ?? 12,
+              fontWeight: fontWeight ?? FontWeight.w600,
+              fontSize: fontSize ?? 16,
             ),
           ),
         ),
@@ -152,7 +152,7 @@ class CustomIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      color: color ?? AppColor.themePrimaryColor2,
+      color: color ?? AppColor.blackColor,
       onPressed: onPressed,
       icon: Icon(icon, size: size),
     );

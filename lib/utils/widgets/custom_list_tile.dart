@@ -35,8 +35,8 @@ class CustomListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      splashColor: AppColor.greyColor,
-      highlightColor: AppColor.greyColor,
+      splashColor: AppColor.hintColor,
+      highlightColor: AppColor.hintColor,
       borderRadius: BorderRadius.circular(12),
 
       child: ListTile(

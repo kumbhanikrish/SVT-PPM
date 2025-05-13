@@ -1,13 +1,11 @@
 // import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
-import 'package:svt_ppm/utils/widgets/custom_text.dart';
 // import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 class CustomTextField extends StatelessWidget {
   final String hintText;
-  final String text;
+  final String labelText;
   final TextEditingController? controller;
   final bool isPassword;
   final Widget? prefixIcon;
@@ -33,7 +31,7 @@ class CustomTextField extends StatelessWidget {
     this.maxLength,
     this.onChanged,
     this.color,
-    this.text = '',
+    required this.labelText ,
     this.focusNode,
     this.fillColor,
     this.keyboardType = TextInputType.text,
@@ -46,14 +44,6 @@ class CustomTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (text.isNotEmpty) ...[
-          CustomText(
-            text: text,
-            fontSize: 14,
-            color: AppColor.themePrimaryColor,
-          ),
-          Gap(10),
-        ],
         TextFormField(
           controller: controller,
           obscureText: isPassword,
@@ -63,21 +53,31 @@ class CustomTextField extends StatelessWidget {
           maxLines: line,
           minLines: line,
           maxLength: maxLength,
+
           onTap: onTap,
           onChanged: onChanged,
           cursorColor: AppColor.themePrimaryColor,
           style: TextStyle(color: AppColor.themePrimaryColor),
           decoration: InputDecoration(
+            floatingLabelBehavior: FloatingLabelBehavior.always,
             hintText: hintText,
+            labelText: labelText,
+            labelStyle: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              fontFamily: 'DM Sans',
+
+              color: AppColor.themePrimaryColor,
+            ),
             prefixIcon: prefixIcon,
             suffixIcon: suffixIcon,
             fillColor: fillColor ?? AppColor.whiteColor,
             hintStyle: TextStyle(
-              fontSize: 14,
+              fontSize: 12,
               fontWeight: FontWeight.w400,
               fontFamily: 'DM Sans',
 
-              color: color ?? AppColor.themePrimaryColor,
+              color: color ?? AppColor.hintColor,
             ),
             filled: true,
 
