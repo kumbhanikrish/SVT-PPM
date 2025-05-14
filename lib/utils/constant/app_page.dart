@@ -5,4 +5,7 @@ class AppPage {
   static String signupScreen = '/signupScreen';
   static String selectionScreen = '/selectionScreen';
   static String homeScreen = '/homeScreen';
+  static String eventScreen = '/eventScreen';
+  static String eventViewAllScreen = '/eventViewAllScreen';
+  static String appFeatureScreen = '/appFeatureScreen';
 }

@@ -7,11 +7,15 @@ import 'package:svt_ppm/utils/widgets/custom_text.dart';
 
 class CustomTitleSeeAllWidget extends StatelessWidget {
   final String title;
+  final String? image;
   final void Function() seeAllOnTap;
+  final Widget? child;
   const CustomTitleSeeAllWidget({
     super.key,
     required this.title,
     required this.seeAllOnTap,
+    this.child,
+    this.image,
   });
   @override
   Widget build(BuildContext context) {
@@ -20,7 +24,7 @@ class CustomTitleSeeAllWidget extends StatelessWidget {
         Expanded(
           child: Row(
             children: <Widget>[
-              SvgPicture.asset(AppImage.calendar),
+              SvgPicture.asset(image ?? AppImage.calendar),
               Gap(10),
               CustomText(
                 text: title,
@@ -33,12 +37,14 @@ class CustomTitleSeeAllWidget extends StatelessWidget {
         ),
         InkWell(
           onTap: seeAllOnTap,
-          child: CustomText(
-            text: 'See All',
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            color: AppColor.themePrimaryColor,
-          ),
+          child:
+              child ??
+              CustomText(
+                text: 'See All',
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: AppColor.themePrimaryColor,
+              ),
         ),
       ],
     );
@@ -46,9 +52,18 @@ class CustomTitleSeeAllWidget extends StatelessWidget {
 }
 
 class CustomDivider extends StatelessWidget {
-  const CustomDivider({super.key});
+  final double? height;
+  const CustomDivider({super.key, this.height});
   @override
   Widget build(BuildContext context) {
-    return Divider(thickness: 1, color: AppColor.themeSecondaryColor);
+    return Divider(
+      thickness: 1,
+      color: AppColor.themePrimaryColor.withOpacity(0.2),
+      height: height,
+    );
   }
 }
+
+
+
+

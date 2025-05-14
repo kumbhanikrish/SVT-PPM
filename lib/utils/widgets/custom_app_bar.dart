@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:svt_ppm/utils/constant/app_image.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
 import 'package:svt_ppm/utils/widgets/custom_text.dart';
@@ -54,6 +55,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final PreferredSizeWidget? bottom;
   final double? fontSize;
   final bool? centerTitle;
+  final void Function()? notificationOnTap;
   const CustomAppBar({
     super.key,
     required this.title,
@@ -61,6 +63,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.bottom,
     this.fontSize,
+    this.notificationOnTap,
     this.centerTitle,
   });
   @override
@@ -96,7 +99,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               padding: const EdgeInsets.only(left: 16, bottom: 10),
               child: Image.asset(AppLogo.smallLogo),
             ),
-        actions: actions,
+        actions:
+            actions ??
+            [
+              InkWell(
+                onTap: notificationOnTap,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: SvgPicture.asset(AppImage.notification),
+                ),
+              ),
+            ],
         automaticallyImplyLeading: true,
         centerTitle: centerTitle ?? true,
         iconTheme: IconThemeData(color: AppColor.themePrimaryColor),

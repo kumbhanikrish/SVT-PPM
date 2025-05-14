@@ -16,6 +16,7 @@ class CustomListTile extends StatelessWidget {
   final Widget? subtitle;
   final double? fontSize;
   final double? height;
+  final BorderRadiusGeometry? borderRadius;
   const CustomListTile({
     super.key,
     required this.text,
@@ -30,6 +31,7 @@ class CustomListTile extends StatelessWidget {
     this.textColor,
     this.fontWeight,
     this.fontSize,
+    this.borderRadius,
   });
   @override
   Widget build(BuildContext context) {
@@ -37,11 +39,14 @@ class CustomListTile extends StatelessWidget {
       onTap: onTap,
       splashColor: AppColor.hintColor,
       highlightColor: AppColor.hintColor,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(15),
 
       child: ListTile(
         tileColor: tileColor,
         contentPadding: contentPadding ?? EdgeInsets.zero,
+        shape: RoundedRectangleBorder(
+          borderRadius: borderRadius ?? BorderRadius.zero,
+        ),
         leading:
             leadingImage.isEmpty
                 ? null

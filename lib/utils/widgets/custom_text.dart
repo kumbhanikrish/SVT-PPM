@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
 
@@ -42,35 +43,39 @@ class CustomText extends StatelessWidget {
 class CustomTitleName extends StatelessWidget {
   final String title;
   final String text;
-  final double? width;
+  final bool icon;
+  final double? fontSize;
+  final String? image;
 
   const CustomTitleName({
     super.key,
     required this.title,
     required this.text,
-    this.width,
+    this.image,
+    this.fontSize,
+    this.icon = false,
   });
   @override
   Widget build(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        SizedBox(
-          width: width ?? 120,
-          child: CustomText(
-            text: title,
-            fontWeight: FontWeight.w600,
-            fontSize: 14,
-          ),
-        ),
-        const CustomText(text: ':', fontWeight: FontWeight.w600, fontSize: 14),
-        const Gap(5),
+        if (icon == true) ...[
+          SvgPicture.asset(image ?? ''),
+        ] else ...[
+          CustomText(text: title, fontSize: fontSize ?? 10),
+          CustomText(text: ':', fontSize: fontSize ?? 10),
+        ],
+        const Gap(2),
+
         Expanded(
-          child: CustomText(
-            text: text,
-            color: AppColor.themePrimaryColor,
-            fontSize: 12,
-            overflow: true,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 1),
+            child: CustomText(
+              text: text,
+              color: AppColor.hintColor,
+              fontSize: fontSize ?? 10,
+              overflow: true,
+            ),
           ),
         ),
       ],

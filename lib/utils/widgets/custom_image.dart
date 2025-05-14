@@ -42,42 +42,47 @@ class CustomCachedImage extends StatelessWidget {
   final String imageUrl;
   final double width;
   final double height;
+  final BorderRadiusGeometry? borderRadius;
 
   const CustomCachedImage({
     super.key,
     required this.imageUrl,
     this.width = 100,
     this.height = 100,
+    this.borderRadius,
   });
 
   @override
   Widget build(BuildContext context) {
-    return CachedNetworkImage(
-      imageUrl: imageUrl,
-      width: width,
-      height: height,
-      fit: BoxFit.fill,
-      placeholder:
-          (context, url) => Center(
-            child: SizedBox(
-              height: 20,
-              width: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 1,
-                color: AppColor.themePrimaryColor,
+    return ClipRRect(
+      borderRadius: borderRadius ?? BorderRadius.zero,
+      child: CachedNetworkImage(
+        imageUrl: imageUrl,
+        width: width,
+        height: height,
+        fit: BoxFit.fill,
+        placeholder:
+            (context, url) => Center(
+              child: SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 1,
+                  color: AppColor.themePrimaryColor,
+                ),
               ),
             ),
-          ),
-      errorWidget:
-          (context, url, error) => Container(
-            width: width,
-            height: height,
-            decoration: BoxDecoration(
-              color: Colors.red[100],
-              borderRadius: BorderRadius.circular(12),
+        errorWidget:
+            (context, url, error) => Container(
+              width: width,
+              height: height,
+              decoration: BoxDecoration(
+                color: Colors.red[100],
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: const Icon(Icons.error, color: Colors.red),
             ),
-            child: const Icon(Icons.error, color: Colors.red),
-          ),
+      ),
     );
   }
 }

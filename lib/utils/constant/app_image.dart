@@ -9,6 +9,18 @@ class AppImage {
   static String circle = 'assets/image/circle.svg';
   static String user = 'assets/image/user.jpg';
   static String calendar = 'assets/image/calendar.svg';
+  static String schema = 'assets/image/schema.png';
+  static String kit = 'assets/image/kit.png';
+  static String comity = 'assets/image/comity.png';
+  static String exam = 'assets/image/exam.png';
+  static String notification = 'assets/image/notification.svg';
+  static String rightArrow = 'assets/image/right-arrow.svg';
+  static String dateTime = 'assets/image/date-time.svg';
+  static String pastEvent = 'assets/image/past-event.svg';
+  static String date = 'assets/image/date.svg';
+  static String schemaDetails = 'assets/image/schema-details.svg';
+  static String pdf = 'assets/image/pdf.svg';
+  static String president = 'assets/image/president.svg';
 }
 
 class AppLogo {
