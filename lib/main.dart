@@ -9,17 +9,22 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:sizer/sizer.dart';
 import 'package:svt_ppm/local_data/local_data_sever.dart';
+import 'package:svt_ppm/module/app_features/cubit/community/community_cubit.dart';
+import 'package:svt_ppm/module/app_features/cubit/kits/kits_cubit.dart';
+import 'package:svt_ppm/module/app_features/cubit/schemas/schemas_cubit.dart';
 import 'package:svt_ppm/module/auth/cubit/auth_cubit.dart';
+import 'package:svt_ppm/module/home/cubit/home_cubit.dart';
+import 'package:svt_ppm/module/profile/cubit/profile_cubit.dart';
 import 'package:svt_ppm/services/api_services.dart';
 import 'package:svt_ppm/utils/routes/app_routes.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
 
 void configLoading() {
   EasyLoading.instance
-    ..backgroundColor = AppColor.themePrimaryColor2
-    ..indicatorColor = AppColor.themeSecondaryColor
-    ..textColor = AppColor.themeSecondaryColor
-    ..progressColor = AppColor.themeSecondaryColor
+    ..backgroundColor = AppColor.themePrimaryColor
+    ..indicatorColor = AppColor.lightThemePrimaryColor
+    ..textColor = AppColor.lightThemePrimaryColor
+    ..progressColor = AppColor.lightThemePrimaryColor
     ..maskType = EasyLoadingMaskType.black
     ..userInteractions = false
     ..loadingStyle = EasyLoadingStyle.custom
@@ -87,7 +92,17 @@ class MyApp extends StatelessWidget {
 
 dynamic providers = [
   BlocProvider(create: (context) => AuthCubit()),
+  BlocProvider(create: (context) => HomeCubit()),
   BlocProvider(create: (context) => StepperCubit()),
   BlocProvider(create: (context) => ImageUploadCubit()),
+  BlocProvider(create: (context) => ProfileImageCubit()),
+  BlocProvider(create: (context) => FrontImageCubit()),
+  BlocProvider(create: (context) => BackImageCubit()),
   BlocProvider(create: (context) => RadioCubit()),
+  BlocProvider(create: (context) => SchemasCubit()),
+  BlocProvider(create: (context) => SelectRelationCubit()),
+  BlocProvider(create: (context) => SelectStandardCubit()),
+  BlocProvider(create: (context) => ProfileCubit()),
+  BlocProvider(create: (context) => CommunityCubit()),
+  BlocProvider(create: (context) => KitsCubit()),
 ];

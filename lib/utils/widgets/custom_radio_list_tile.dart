@@ -9,19 +9,24 @@ customRadio({
 
   required String genderIcon,
   required String title,
+  Color? borderColor,
+  EdgeInsetsGeometry? padding,
   required void Function() onTap,
   Widget? child,
 }) {
   return Container(
     decoration: BoxDecoration(
       color: AppColor.whiteColor,
-      border: Border.all(color: AppColor.themePrimaryColor, width: 1),
+      border: Border.all(
+        color: borderColor ?? AppColor.themePrimaryColor,
+        width: 1,
+      ),
       borderRadius: BorderRadius.circular(10),
     ),
     child: InkWell(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.all(13),
+        padding: padding ?? const EdgeInsets.all(13),
         child: Column(
           children: [
             Row(

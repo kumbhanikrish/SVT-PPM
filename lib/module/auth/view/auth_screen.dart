@@ -5,12 +5,14 @@ import 'package:svt_ppm/module/auth/view/login_screen.dart';
 import 'package:svt_ppm/module/auth/view/otp_verification_screen.dart';
 import 'package:svt_ppm/utils/constant/app_image.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
+import 'package:svt_ppm/utils/widgets/custom_error_toast.dart';
 
 class AuthScreen extends StatelessWidget {
   const AuthScreen({super.key});
   @override
   Widget build(BuildContext context) {
     StepperCubit stepperCubit = BlocProvider.of<StepperCubit>(context);
+    AuthCubit authCubit = BlocProvider.of<AuthCubit>(context);
     TextEditingController numberController = TextEditingController();
 
     Widget getStepText(int step) {
@@ -18,12 +20,19 @@ class AuthScreen extends StatelessWidget {
         case 0:
           return LoginScreen(
             loginOnTap: () {
-              stepperCubit.nextStep(step: 1);
+              if (numberController.text.isEmpty) {
+                customErrorToast(
+                  context,
+                  text: 'Please enter your mobile number',
+                );
+                return;
+              }
+              authCubit.checkMember(context, number: numberController.text);
             },
             numberController: numberController,
           );
         case 1:
-          return OtpVerificationScreen();
+          return OtpVerificationScreen(number: numberController.text);
 
         default:
           return Container();
@@ -32,36 +41,38 @@ class AuthScreen extends StatelessWidget {
 
     stepperCubit.init();
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
 
-        children: [
-          Stack(
-            children: [
-              CustomPaint(
-                size: Size(double.infinity, 350),
-                painter: CurvedGlowPainter(),
-              ),
+          children: [
+            Stack(
+              children: [
+                CustomPaint(
+                  size: Size(double.infinity, 350),
+                  painter: CurvedGlowPainter(),
+                ),
 
-              Positioned(
-                right: 0,
-                left: 0,
-                top: 30,
+                Positioned(
+                  right: 0,
+                  left: 0,
+                  top: 30,
 
-                child: Image.asset(AppLogo.splashLogo, height: 230),
-              ),
-            ],
-          ),
+                  child: Image.asset(AppLogo.splashLogo, height: 230),
+                ),
+              ],
+            ),
 
-          BlocBuilder<StepperCubit, int>(
-            builder: (context, currentStep) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: getStepText(currentStep),
-              );
-            },
-          ),
-        ],
+            BlocBuilder<StepperCubit, int>(
+              builder: (context, currentStep) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: getStepText(currentStep),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

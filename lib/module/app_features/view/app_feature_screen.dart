@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:svt_ppm/module/app_features/view/comity_section.dart';
+import 'package:svt_ppm/module/app_features/view/exam_screen.dart';
+import 'package:svt_ppm/module/app_features/view/kit_screen.dart';
 import 'package:svt_ppm/module/app_features/view/schema_section.dart';
 import 'package:svt_ppm/utils/widgets/custom_app_bar.dart';
 
@@ -14,10 +16,10 @@ class AppFeatureScreen extends StatelessWidget {
         case 'Schema':
           return SchemaSection();
         case 'Kit':
-          return Container();
+          return KitScreen();
 
         case 'Exam (GK)':
-          return Container();
+          return ExamScreen();
         case 'Comity':
           return ComitySection();
 

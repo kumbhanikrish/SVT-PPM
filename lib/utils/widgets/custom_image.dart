@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:svt_ppm/utils/constant/app_image.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
 
 class CustomTextFiledImage extends StatelessWidget {
@@ -80,7 +81,10 @@ class CustomCachedImage extends StatelessWidget {
                 color: Colors.red[100],
                 borderRadius: BorderRadius.circular(15),
               ),
-              child: const Icon(Icons.error, color: Colors.red),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Image.asset(AppImage.imageError, fit: BoxFit.cover),
+              ),
             ),
       ),
     );

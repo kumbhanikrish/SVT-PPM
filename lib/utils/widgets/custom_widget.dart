@@ -28,7 +28,7 @@ class CustomTitleSeeAllWidget extends StatelessWidget {
               Gap(10),
               CustomText(
                 text: title,
-                fontSize: 18,
+
                 fontWeight: FontWeight.w600,
                 color: AppColor.hintColor,
               ),
@@ -63,7 +63,3 @@ class CustomDivider extends StatelessWidget {
     );
   }
 }
-
-
-
-

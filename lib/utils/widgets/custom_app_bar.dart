@@ -56,15 +56,21 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double? fontSize;
   final bool? centerTitle;
   final void Function()? notificationOnTap;
+  final Radius? bottomRadius;
+  final Color? shadowColor;
+  final double? blurRadius;
   const CustomAppBar({
     super.key,
     required this.title,
     this.leading,
+    this.blurRadius,
     this.actions,
     this.bottom,
     this.fontSize,
     this.notificationOnTap,
     this.centerTitle,
+    this.bottomRadius,
+    this.shadowColor,
   });
   @override
   Widget build(BuildContext context) {
@@ -72,15 +78,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: AppColor.themePrimaryColor,
+            color: shadowColor ?? AppColor.themePrimaryColor.withOpacity(0.5),
             blurRadius: 3,
             spreadRadius: 2,
             offset: Offset(0, 4),
           ),
         ],
         borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(15),
-          bottomRight: Radius.circular(15),
+          bottomLeft: bottomRadius ?? Radius.circular(15),
+          bottomRight: bottomRadius ?? Radius.circular(15),
         ),
         color: AppColor.themeSecondaryColor,
       ),

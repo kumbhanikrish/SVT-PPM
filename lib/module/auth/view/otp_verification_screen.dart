@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 import 'package:pinput/pinput.dart';
-import 'package:svt_ppm/utils/constant/app_page.dart';
+import 'package:svt_ppm/module/auth/cubit/auth_cubit.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
 import 'package:svt_ppm/utils/widgets/custom_button.dart';
 import 'package:svt_ppm/utils/widgets/custom_text.dart';
 
 class OtpVerificationScreen extends StatelessWidget {
-  OtpVerificationScreen({super.key});
+  final String number;
+  OtpVerificationScreen({super.key, required this.number});
   final TextEditingController pinController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    AuthCubit authCubit = BlocProvider.of<AuthCubit>(context);
+
     final defaultPinTheme = PinTheme(
       width: 50,
       height: 50,
@@ -42,19 +47,18 @@ class OtpVerificationScreen extends StatelessWidget {
           fontWeight: FontWeight.w500,
         ),
         const Gap(26),
-        CustomText(text: 'Enter OTP', fontWeight: FontWeight.w600),
-        Gap(5),
+
         Center(
           child: Pinput(
             controller: pinController,
-            length: 6,
+            length: 4,
             animationCurve: Curves.easeInOut,
             defaultPinTheme: defaultPinTheme,
           ),
         ),
         const Gap(16),
         Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CustomText(
               text: "Didn't receive code?",
@@ -64,7 +68,9 @@ class OtpVerificationScreen extends StatelessWidget {
             ),
             const Gap(5),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                authCubit.sendOtp(context, number: number, login: false);
+              },
               child: CustomText(
                 text: 'Resend code',
                 fontWeight: FontWeight.w600,
@@ -78,10 +84,10 @@ class OtpVerificationScreen extends StatelessWidget {
         CustomButton(
           text: 'Verify OTP',
           onTap: () {
-            Navigator.pushNamedAndRemoveUntil(
+            authCubit.verifyOtp(
               context,
-              AppPage.homeScreen,
-              (route) => false,
+              number: number,
+              otp: pinController.text,
             );
           },
         ),

@@ -11,6 +11,9 @@ class AppColor {
   static Color whiteColor = Colors.white;
   static Color blackColor = Colors.black;
   static Color transparentColor = Colors.transparent;
+  static Color amberColor = Colors.amber;
+  static Color redColor = Colors.red;
+  static Color greenColor = Colors.green;
   static Color hintColor = Color(0xFF858688);
   static Color subTitleColor = Color(0xFF8D8D8D);
   static Color fillColor = Color(0xFFF3F4F6);

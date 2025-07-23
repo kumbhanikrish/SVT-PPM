@@ -17,60 +17,65 @@ class LoginScreen extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          CustomText(
-            text: 'Welcome Back',
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-          ),
-          Gap(8),
-          CustomText(
-            text: 'Please sign in to your account.',
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-            color: AppColor.hintColor,
-          ),
-          Gap(30),
-          CustomTextField(
-            hintText: 'Enter Mobile Number',
-            labelText: 'Mobile Number',
-            controller: numberController,
-          ),
-          Gap(40),
-          CustomButton(text: 'Login with OTP', onTap: loginOnTap),
-          Gap(32),
-          customSignUpWith(),
-          Gap(25),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        CustomText(
+          text: 'Welcome Back',
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+        ),
+        Gap(8),
+        CustomText(
+          text: 'Please sign in to your account.',
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+          color: AppColor.hintColor,
+        ),
+        Gap(30),
+        CustomTextField(
+          hintText: 'Enter Mobile Number',
+          labelText: 'Mobile Number',
+          keyboardType: TextInputType.number,
 
-          customGoogleAndAppleLogin(googleOnTap: () {}, appleOnTap: () {}),
-          Gap(25),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              CustomText(
-                text: 'Don’t have an account?',
-                color: AppColor.hintColor,
+          controller: numberController,
+        ),
+        Gap(40),
+        CustomButton(text: 'Login with OTP', onTap: loginOnTap),
+        Gap(32),
+        customSignUpWith(),
+        Gap(25),
+
+        customGoogleAndAppleLogin(googleOnTap: () {}, appleOnTap: () {}),
+        Gap(25),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            CustomText(
+              text: 'Don’t have an account?',
+              color: AppColor.hintColor,
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(
+                  context,
+                  AppPage.selectionScreen,
+
+                  arguments: {'addMember': false},
+                );
+              },
+              child: CustomText(
+                text: ' Sign up',
+                color: AppColor.themePrimaryColor,
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
               ),
-              InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, AppPage.selectionScreen);
-                },
-                child: CustomText(
-                  text: ' Sign up',
-                  color: AppColor.themePrimaryColor,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

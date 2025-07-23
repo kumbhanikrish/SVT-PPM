@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
@@ -63,7 +64,9 @@ class CustomTitleName extends StatelessWidget {
           SvgPicture.asset(image ?? ''),
         ] else ...[
           CustomText(text: title, fontSize: fontSize ?? 10),
-          CustomText(text: ':', fontSize: fontSize ?? 10),
+          if (title.isNotEmpty) ...[
+            CustomText(text: ':', fontSize: fontSize ?? 10),
+          ],
         ],
         const Gap(2),
 
@@ -79,6 +82,67 @@ class CustomTitleName extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class CustomEmpty extends StatelessWidget {
+  const CustomEmpty({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: Center(
+        child: CustomText(
+          text: 'Not Found!!!',
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+          color: AppColor.subTitleColor,
+        ),
+      ),
+    );
+  }
+}
+
+class CustomHTMLText extends StatelessWidget {
+  final String text;
+  final double fontSize;
+  final FontWeight fontWeight;
+  final Color? color;
+  final TextAlign textAlign;
+  final int? maxLines;
+  final bool overflow;
+
+  const CustomHTMLText({
+    super.key,
+    required this.text,
+    this.fontSize = 16,
+    this.fontWeight = FontWeight.w400,
+    this.color,
+    this.textAlign = TextAlign.left,
+    this.maxLines,
+    this.overflow = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Html(
+      data: text.trim(),
+      style: {
+        "html": Style(margin: Margins.zero, padding: HtmlPaddings.zero),
+        "body": Style(
+          fontSize: FontSize(fontSize),
+          fontWeight: fontWeight,
+          color: color ?? AppColor.themePrimaryColor,
+          fontFamily: 'DM Sans',
+          textAlign: textAlign,
+          maxLines: maxLines,
+          padding: HtmlPaddings.zero,
+          margin: Margins.zero,
+          textOverflow: overflow ? TextOverflow.ellipsis : TextOverflow.visible,
+        ),
+        "*": Style(margin: Margins.zero, padding: HtmlPaddings.zero),
+      },
     );
   }
 }

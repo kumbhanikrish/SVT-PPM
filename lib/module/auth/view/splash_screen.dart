@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:svt_ppm/main.dart';
 import 'package:svt_ppm/utils/constant/app_image.dart';
 import 'package:svt_ppm/utils/constant/app_page.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
@@ -21,22 +23,22 @@ class _SplashScreenState extends State<SplashScreen> {
         AppPage.authScreen,
         (route) => false,
       );
-      // String authToken = await localDataSaver.getAuthToken();
-      // log('authTokenauthToken ::$authToken');
+      String authToken = await localDataSaver.getAuthToken();
+      log('authTokenauthToken ::$authToken');
 
-      // if (authToken.isEmpty) {
-      //   Navigator.pushNamedAndRemoveUntil(
-      //     context,
-      //     AppPage.loginScreen,
-      //     (route) => false,
-      //   );
-      // } else {
-      //   Navigator.pushNamedAndRemoveUntil(
-      //     context,
-      //     AppPage.dashboardScreen,
-      //     (route) => false,
-      //   );
-      // }
+      if (authToken.isEmpty) {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppPage.authScreen,
+          (route) => false,
+        );
+      } else {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppPage.homeScreen,
+          (route) => false,
+        );
+      }
     });
     super.initState();
   }

@@ -7,6 +7,8 @@ customBottomSheet(
   BuildContext context, {
   required String title,
   required Widget child,
+  required bool showButton,
+  required void Function() buttonOnTap,
 }) {
   return showModalBottomSheet(
     context: context,
@@ -29,14 +31,17 @@ customBottomSheet(
                 height: 60,
                 child: CustomAppBar(
                   title: title,
+                  shadowColor: AppColor.whiteColor,
+                  bottomRadius: Radius.circular(0),
                   bottom: PreferredSize(
                     preferredSize: const Size.fromHeight(1),
                     child: Container(
-                      color: AppColor.themePrimaryColor,
+                      color: AppColor.whiteColor,
                       height: 0.5,
                       margin: const EdgeInsets.symmetric(horizontal: 24),
                     ),
                   ),
+                  actions: [],
                   leading: CustomIconButton(
                     icon: Icons.close,
                     onPressed: () {
@@ -47,6 +52,12 @@ customBottomSheet(
               ),
             ),
             child,
+            if (showButton) ...[
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: CustomButton(text: 'Submit', onTap: buttonOnTap),
+              ),
+            ],
           ],
         ),
       );

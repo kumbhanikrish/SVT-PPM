@@ -1,148 +1,134 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:sizer/sizer.dart';
+import 'package:svt_ppm/module/app_features/cubit/community/community_cubit.dart';
 import 'package:svt_ppm/utils/constant/app_image.dart';
+import 'package:svt_ppm/utils/constant/app_page.dart';
 import 'package:svt_ppm/utils/widgets/custom_card.dart';
 import 'package:svt_ppm/utils/widgets/custom_widget.dart';
 
-class ComitySection extends StatelessWidget {
+class ComitySection extends StatefulWidget {
   const ComitySection({super.key});
+
+  @override
+  State<ComitySection> createState() => _ComitySectionState();
+}
+
+class _ComitySectionState extends State<ComitySection> {
+  @override
+  void initState() {
+    CommunityCubit communityCubit = BlocProvider.of<CommunityCubit>(context);
+    communityCubit.getCommunityMembers(context);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    Map<String, dynamic> committeeData = {};
     return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          Gap(10),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-            child: CustomTitleSeeAllWidget(
-              title: 'List of Comity',
-              seeAllOnTap: () {},
-              image: AppImage.schemaDetails,
-              child: SizedBox(),
-            ),
-          ),
+      child: BlocBuilder<CommunityCubit, CommunityState>(
+        builder: (context, state) {
+          if (state is GetCommunityMembersState) {
+            committeeData = state.communityMembersModel;
+          }
+          return Column(
+            children:
+                committeeData.entries.map((entry) {
+                  final String key = entry.key;
+                  final dynamic value = entry.value;
+                  String formattedTitle = _formatTitle(key);
 
-          CustomDivider(),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-            child: CustomTitleSeeAllWidget(
-              title: 'President',
-              seeAllOnTap: () {},
-              image: AppImage.president,
-              child: SizedBox(),
-            ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: CustomPresidentCard(
-              image:
-                  'https://images.unsplash.com/photo-1633332755192-727a05c4013d?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D',
-              name: 'Ronald Richards',
-              position: 'Vise-President of Commity',
-              des:
-                  'It is a long established fact that. It is a long established fact that. ',
-            ),
-          ),
-          Gap(15),
-          CustomDivider(),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-            child: CustomTitleSeeAllWidget(
-              title: 'Vise - President',
-              seeAllOnTap: () {},
-              image: AppImage.president,
-              child: SizedBox(),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: CustomPresidentCard(
-              image:
-                  'https://images.unsplash.com/photo-1633332755192-727a05c4013d?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D',
-              name: 'Ronald Richards',
-              position: 'Vise-President of Commity',
-              des:
-                  'It is a long established fact that. It is a long established fact that. ',
-            ),
-          ),
-          Gap(15),
-          CustomDivider(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-            child: CustomTitleSeeAllWidget(
-              title: 'Yuva - Team',
-              seeAllOnTap: () {},
-              image: AppImage.president,
-              child: SizedBox(),
-            ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: GridView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 7,
-                mainAxisSpacing: 13,
-
-                mainAxisExtent: 16.h,
-              ),
-              itemCount: 3,
-              itemBuilder: (BuildContext context, int index) {
-                return CustomTeamCard(
-                  image:
-                      'https://images.unsplash.com/photo-1633332755192-727a05c4013d?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D',
-                  name: 'Albert Flores',
-                  position: 'Yuva - Team of Commity',
-                );
-              },
-            ),
-          ),
-
-          Gap(15),
-          CustomDivider(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-            child: CustomTitleSeeAllWidget(
-              title: 'User Team',
-              seeAllOnTap: () {},
-              image: AppImage.president,
-              child: SizedBox(),
-            ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: GridView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 7,
-                mainAxisSpacing: 13,
-
-                mainAxisExtent: 16.h,
-              ),
-              itemCount: 3,
-              itemBuilder: (BuildContext context, int index) {
-                return CustomTeamCard(
-                  image:
-                      'https://images.unsplash.com/photo-1633332755192-727a05c4013d?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D',
-                  name: 'Albert Flores',
-                  position: 'Yuva - Team of Commity',
-                );
-              },
-            ),
-          ),
-          Gap(16),
-        ],
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Gap(10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 15,
+                        ),
+                        child: CustomTitleSeeAllWidget(
+                          title: formattedTitle,
+                          seeAllOnTap: () {
+                            if (value is List) {
+                              Navigator.pushNamed(
+                                context,
+                                AppPage.comitySeeAllScreen,
+                                arguments: {
+                                  'comityData': value,
+                                  'formattedTitle': formattedTitle,
+                                },
+                              );
+                            }
+                          },
+                          image: AppImage.president,
+                          child:
+                              value is List
+                                  ? Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 20,
+                                      // top: 10,
+                                      bottom: 10,
+                                    ),
+                                    child: SvgPicture.asset(
+                                      AppImage.rightArrow,
+                                    ),
+                                  )
+                                  : SizedBox(),
+                        ),
+                      ),
+                      value is List
+                          ? Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 3,
+                                    crossAxisSpacing: 7,
+                                    mainAxisSpacing: 13,
+                                    mainAxisExtent: 16.h,
+                                  ),
+                              itemCount: value.length,
+                              itemBuilder: (context, index) {
+                                final member = value[index];
+                                return CustomTeamCard(
+                                  image: member['photo'],
+                                  name: member['name'],
+                                  position: formattedTitle,
+                                );
+                              },
+                            ),
+                          )
+                          : Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: CustomPresidentCard(
+                              image: value['photo'],
+                              name: value['name'],
+                              position: formattedTitle,
+                              des: 'Mobile: ${value['mobile_no']}',
+                            ),
+                          ),
+                      Gap(15),
+                      CustomDivider(),
+                    ],
+                  );
+                }).toList(),
+          );
+        },
       ),
     );
+  }
+
+  String _formatTitle(String key) {
+    return key
+        .replaceAll('_', ' ') // snake_case to words
+        .replaceAllMapped(
+          RegExp(r'(^\w|\s\w)'),
+          (match) => match.group(0)!.toUpperCase(),
+        ); // Capitalize first letter of each word
   }
 }

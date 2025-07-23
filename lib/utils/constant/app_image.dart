@@ -21,6 +21,13 @@ class AppImage {
   static String schemaDetails = 'assets/image/schema-details.svg';
   static String pdf = 'assets/image/pdf.svg';
   static String president = 'assets/image/president.svg';
+  static String editProfile = 'assets/image/edit_profile.svg';
+  static String editMember = 'assets/image/edit_member.svg';
+  static String memberId = 'assets/image/member_id.svg';
+  static String addMember = 'assets/image/add_member.svg';
+  static String camera = 'assets/image/camera.svg';
+  static String gallery = 'assets/image/gallery.svg';
+  static String imageError = 'assets/image/image_error.jpg';
 }
 
 class AppLogo {

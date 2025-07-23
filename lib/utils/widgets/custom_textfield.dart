@@ -1,6 +1,8 @@
 // import 'package:country_code_picker/country_code_picker.dart';
+import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
+import 'package:svt_ppm/utils/widgets/custom_filed_box.dart';
 // import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -17,6 +19,7 @@ class CustomTextField extends StatelessWidget {
   final int? line;
   final int? maxLength;
   final Color? fillColor;
+  final Color? borderColor;
   final void Function()? onTap;
   final void Function(String)? onChanged;
 
@@ -27,11 +30,12 @@ class CustomTextField extends StatelessWidget {
     this.isPassword = false,
     this.readOnly = false,
     this.prefixIcon,
+    this.borderColor,
     this.suffixIcon,
     this.maxLength,
     this.onChanged,
     this.color,
-    required this.labelText ,
+    required this.labelText,
     this.focusNode,
     this.fillColor,
     this.keyboardType = TextInputType.text,
@@ -83,19 +87,27 @@ class CustomTextField extends StatelessWidget {
 
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: AppColor.themePrimaryColor),
+              borderSide: BorderSide(
+                color: borderColor ?? AppColor.themePrimaryColor,
+              ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: AppColor.themePrimaryColor),
+              borderSide: BorderSide(
+                color: borderColor ?? AppColor.themePrimaryColor,
+              ),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: AppColor.themePrimaryColor),
+              borderSide: BorderSide(
+                color: borderColor ?? AppColor.themePrimaryColor,
+              ),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: AppColor.themePrimaryColor),
+              borderSide: BorderSide(
+                color: borderColor ?? AppColor.themePrimaryColor,
+              ),
             ),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
@@ -108,91 +120,71 @@ class CustomTextField extends StatelessWidget {
   }
 }
 
-// class CustomCountyTextfield extends StatelessWidget {
-//   final TextEditingController controller;
-//   final void Function(CountryCode) onChanged;
-//   final String initialSelection;
-//   const CustomCountyTextfield({
-//     super.key,
-//     required this.controller,
-//     required this.onChanged,
-//     required this.initialSelection,
-//   });
-//   @override
-//   Widget build(BuildContext context) {
-//     return CustomTextField(
-//       hintText: 'Number',
-//       keyboardType: TextInputType.number,
-//       controller: controller,
-//       prefixIcon: CountryCodePicker(
-//         margin: const EdgeInsets.only(right: 10),
-//         onChanged: onChanged,
-//         initialSelection: initialSelection,
-//         favorite: const ["+91", "IN"],
-//         showCountryOnly: false,
-//         showOnlyCountryWhenClosed: false,
-//         alignLeft: false,
-//       ),
-//     );
-//   }
-// }
+class CustomDropWonFiled<T> extends StatelessWidget {
+  final String text;
+  final T? initialItem;
+  final String? hintText;
+  final String title;
+  final List<T> items;
+  final dynamic Function(T?) onChanged;
+  final Color? selectColor;
+  final Widget Function(BuildContext, T, bool, void Function())?
+  listItemBuilder;
+  const CustomDropWonFiled({
+    super.key,
+    required this.text,
+    this.initialItem,
+    this.hintText,
+    this.selectColor,
+    this.listItemBuilder,
+    required this.items,
+    required this.title,
+    required this.onChanged,
+  });
 
-// class CustomTypeAheadField<T> extends StatelessWidget {
-//   final TextEditingController controller;
-//   final List<T> Function(String) suggestionsCallback;
-//   final void Function(T) onSelected;
-//   final String hintText;
-//   final Widget Function(BuildContext, T) itemBuilder;
+  @override
+  Widget build(BuildContext context) {
+    return CustomFieldBox(
+      title: title,
+      fontSize: 12,
+      padding: EdgeInsets.zero,
+      children: [
+        CustomDropdown<T>(
+          hintText: hintText,
 
-//   const CustomTypeAheadField({
-//     super.key,
-//     required this.controller,
-//     required this.suggestionsCallback,
-//     required this.onSelected,
-//     required this.hintText,
-//     required this.itemBuilder,
-//   });
+          closedHeaderPadding: EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 14,
+          ),
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return TypeAheadField<T>(
-//       suggestionsCallback: suggestionsCallback,
-//       controller: controller,
-//       builder: (context, controller, focusNode) {
-//         return CustomTextField(
-//           controller: controller,
-//           hintText: hintText,
-//           focusNode: focusNode,
-//           suffixIcon: Icon(
-//             Icons.arrow_drop_down_rounded,
-//             color: AppColor.themePrimary2Color,
-//           ),
-//         );
-//       },
-//       itemBuilder: itemBuilder,
-//       onSelected: onSelected,
-//     );
-//   }
-// }
+          decoration: CustomDropdownDecoration(
+            closedBorder: Border.all(color: AppColor.transparentColor),
 
-// class City {
-//   final String name;
-//   final String country;
+            hintStyle: TextStyle(
+              fontFamily: 'Caros Soft',
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: AppColor.hintColor,
+            ),
+            headerStyle: TextStyle(
+              fontFamily: 'Caros Soft',
+              fontSize: 12,
+              color: selectColor,
+              fontWeight: FontWeight.w500,
+            ),
+            listItemStyle: TextStyle(
+              fontFamily: 'Caros Soft',
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          listItemBuilder: listItemBuilder,
+          items: items,
+          initialItem: initialItem,
 
-//   City({required this.name, required this.country});
-// }
-
-// class CityService {
-//   static List<City> cities = [
-//     City(name: 'New York', country: 'USA'),
-//     City(name: 'London', country: 'UK'),
-//     City(name: 'Paris', country: 'France'),
-//     City(name: 'Tokyo', country: 'Japan'),
-//   ];
-
-//   static List<City> find(String query) {
-//     return cities
-//         .where((city) => city.name.toLowerCase().contains(query.toLowerCase()))
-//         .toList();
-//   }
-// }
+          onChanged: onChanged,
+        ),
+      ],
+    );
+  }
+}

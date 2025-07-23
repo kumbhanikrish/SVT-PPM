@@ -14,6 +14,7 @@ class CustomMainCard extends StatelessWidget {
   final String title;
   final String des;
   final String joinText;
+  final void Function() onTap;
   const CustomMainCard({
     super.key,
     required this.image,
@@ -21,6 +22,7 @@ class CustomMainCard extends StatelessWidget {
     required this.title,
     required this.des,
     required this.joinText,
+    required this.onTap,
     this.width,
   });
   @override
@@ -80,14 +82,17 @@ class CustomMainCard extends StatelessWidget {
                   ),
                 ),
 
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Center(
-                    child: CustomText(
-                      text: joinText,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w600,
-                      color: AppColor.whiteColor,
+                child: InkWell(
+                  onTap: onTap,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Center(
+                      child: CustomText(
+                        text: joinText,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                        color: AppColor.whiteColor,
+                      ),
                     ),
                   ),
                 ),
@@ -111,6 +116,7 @@ class CustomCard extends StatelessWidget {
   final bool showButton;
   final BorderRadiusGeometry? borderRadius;
   final BorderRadiusGeometry? imageBorderRadius;
+  final void Function()? onTap;
 
   const CustomCard({
     super.key,
@@ -123,6 +129,7 @@ class CustomCard extends StatelessWidget {
     this.width,
     this.borderRadius,
     this.imageBorderRadius,
+    this.onTap,
     this.showButton = true,
   });
   @override
@@ -207,14 +214,17 @@ class CustomCard extends StatelessWidget {
                     ),
                   ),
 
-                  child: Padding(
-                    padding: const EdgeInsets.all(7),
-                    child: Center(
-                      child: CustomText(
-                        text: joinText,
-                        fontSize: 10,
-                        fontWeight: FontWeight.w600,
-                        color: AppColor.whiteColor,
+                  child: InkWell(
+                    onTap: onTap,
+                    child: Padding(
+                      padding: const EdgeInsets.all(7),
+                      child: Center(
+                        child: CustomText(
+                          text: joinText,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                          color: AppColor.whiteColor,
+                        ),
                       ),
                     ),
                   ),
@@ -369,5 +379,153 @@ class CustomTeamCard extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class KitCard extends StatelessWidget {
+  final String image;
+  final String title;
+  final String status;
+  final String joinText;
+  final bool showButton;
+  final BorderRadiusGeometry? borderRadius;
+  final void Function()? onTap;
+  void Function()? cardOnTap;
+
+  KitCard({
+    super.key,
+    required this.image,
+    required this.title,
+    required this.status,
+    required this.joinText,
+    this.borderRadius,
+    this.onTap,
+    this.cardOnTap,
+    this.showButton = true,
+  });
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: cardOnTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: borderRadius ?? BorderRadius.circular(12),
+          color: AppColor.fillColor,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            children: [
+              CustomCachedImage(
+                imageUrl: image,
+                height: 80,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              Gap(10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomText(
+                      text: title,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+
+                    status.isNotEmpty
+                        ? Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color:
+                                  status == 'Pending'
+                                      ? AppColor.amberColor.withOpacity(0.1)
+                                      : status == 'Rejected'
+                                      ? AppColor.redColor.withOpacity(0.1)
+                                      : AppColor.greenColor.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(3),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 5,
+                            ),
+                            child: CustomText(
+                              text: status,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color:
+                                  status == 'Pending'
+                                      ? AppColor.amberColor
+                                      : status == 'Rejected'
+                                      ? AppColor.redColor
+                                      : AppColor.greenColor,
+                            ),
+                          ),
+                        )
+                        : showButton == true
+                        ? Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppColor.themePrimaryColor,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+
+                            child: InkWell(
+                              onTap: onTap,
+                              child: Padding(
+                                padding: const EdgeInsets.all(7),
+                                child: Center(
+                                  child: CustomText(
+                                    text: joinText,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColor.whiteColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                        : Container(),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    // Container(
+    // decoration: BoxDecoration(
+    //   borderRadius: borderRadius ?? BorderRadius.circular(5),
+    //   color: AppColor.fillColor,
+    // ),
+    //   margin: EdgeInsets.only(right: 6),
+    //   child: InkWell(
+    //     onTap: cardOnTap,
+    //     child: Column(
+    //       children: <Widget>[
+
+    //         Column(
+    //           crossAxisAlignment: CrossAxisAlignment.start,
+    //           children: <Widget>[
+    //             Gap(5),
+
+    //
+    //
+    //             Gap(7),
+    //             if (showButton == true) ...[
+    //               Gap(22),
+
+    //             ],
+    //           ],
+    //         ),
+    //       ],
+    //     ),
+    //   ),
+    // );
   }
 }

@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:svt_ppm/module/auth/model/login_model.dart';
 
 class LocalDataSaver {
   Future clearAllData() async {
@@ -19,5 +21,22 @@ class LocalDataSaver {
     return sharedPreference.getString('authToken') ?? '';
   }
 
- 
+  // ✅ Save LoginModel as JSON string
+  Future<void> setLoginData(LoginModel loginModel) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    final jsonString = jsonEncode(loginModel.toJson());
+    await sharedPreferences.setString('login_data', jsonString);
+    log("LoginModel saved.");
+  }
+
+  // ✅ Get LoginModel from storage
+  Future<LoginModel> getLoginModel() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    final jsonString = sharedPreferences.getString('login_data');
+    if (jsonString != null) {
+      final jsonMap = jsonDecode(jsonString);
+      return LoginModel.fromJson(jsonMap);
+    }
+    throw Exception("LoginModel not found");
+  }
 }

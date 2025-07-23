@@ -17,6 +17,7 @@ class CustomListTile extends StatelessWidget {
   final double? fontSize;
   final double? height;
   final BorderRadiusGeometry? borderRadius;
+  final Widget? leading;
   const CustomListTile({
     super.key,
     required this.text,
@@ -27,6 +28,7 @@ class CustomListTile extends StatelessWidget {
     this.height,
     this.leadingColor,
     this.trailing,
+    this.leading,
     this.tileColor,
     this.textColor,
     this.fontWeight,
@@ -37,8 +39,8 @@ class CustomListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      splashColor: AppColor.hintColor,
-      highlightColor: AppColor.hintColor,
+      splashColor: AppColor.dividerColor,
+      highlightColor: AppColor.dividerColor,
       borderRadius: BorderRadius.circular(15),
 
       child: ListTile(
@@ -49,7 +51,7 @@ class CustomListTile extends StatelessWidget {
         ),
         leading:
             leadingImage.isEmpty
-                ? null
+                ? leading
                 : SvgPicture.asset(
                   leadingImage,
                   color: leadingColor ?? AppColor.themePrimaryColor,

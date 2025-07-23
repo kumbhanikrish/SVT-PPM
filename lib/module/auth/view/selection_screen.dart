@@ -6,11 +6,13 @@ import 'package:svt_ppm/utils/widgets/custom_app_bar.dart';
 import 'package:svt_ppm/utils/widgets/custom_text.dart';
 
 class SelectionScreen extends StatelessWidget {
-  const SelectionScreen({super.key});
+  final dynamic arguments;
+  const SelectionScreen({super.key, this.arguments});
   @override
   Widget build(BuildContext context) {
+    bool addMember = arguments['addMember'];
     return Scaffold(
-      appBar: CustomAppBar(title: 'Select User Type'),
+      appBar: CustomAppBar(title: 'Select User Type', actions: []),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
         child: Column(
@@ -26,12 +28,12 @@ class SelectionScreen extends StatelessWidget {
                     Navigator.pushNamed(
                       context,
                       AppPage.signupScreen,
-                      arguments: {'old': false},
+                      arguments: {'old': false, 'addMember': addMember},
                     );
                   },
                   child: Center(
                     child: CustomText(
-                      text: 'New Register',
+                      text: addMember ? 'New Member' : 'New Register',
                       color: AppColor.whiteColor,
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -52,12 +54,12 @@ class SelectionScreen extends StatelessWidget {
                     Navigator.pushNamed(
                       context,
                       AppPage.signupScreen,
-                      arguments: {'old': true},
+                      arguments: {'old': true, 'addMember': addMember},
                     );
                   },
                   child: Center(
                     child: CustomText(
-                      text: 'Old Register',
+                      text: addMember ? 'Old Member' : 'Old Register',
                       color: AppColor.whiteColor,
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
