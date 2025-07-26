@@ -45,13 +45,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     HomeCubit homeCubit = BlocProvider.of<HomeCubit>(context);
     AuthCubit authCubit = BlocProvider.of<AuthCubit>(context);
 
-    homeCubit.memberFamily(context);
+    homeCubit.memberFamily(context, pageName: 'profile');
     return Scaffold(
       appBar: CustomAppBar(
         title: 'Profile',
         notificationOnTap: () {},
         actions: [
           CustomIconButton(
+            color: AppColor.themePrimaryColor,
             icon: Icons.logout,
             onPressed: () {
               authCubit.logout(context);
@@ -248,8 +249,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   mainAxisSize:
                                                       MainAxisSize.min,
                                                   children: [
-                                                    SvgPicture.asset(
-                                                      AppImage.editMember,
+                                                    InkWell(
+                                                      onTap: () {
+                                                        Navigator.pushNamed(
+                                                          context,
+                                                          AppPage.signupScreen,
+                                                          arguments: {
+                                                            'addMember': true,
+                                                            'edit': true,
+                                                            'member': member,
+                                                          },
+                                                        );
+                                                      },
+                                                      child: SvgPicture.asset(
+                                                        AppImage.editMember,
+                                                      ),
                                                     ),
                                                     Gap(10),
                                                     SvgPicture.asset(

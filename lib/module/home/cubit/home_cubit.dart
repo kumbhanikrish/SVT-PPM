@@ -31,8 +31,11 @@ class HomeCubit extends Cubit<HomeState> {
     emit(GetHomeState(homeModel: homeModel, noOfMemberList: noOfMemberList));
   }
 
-  memberFamily(BuildContext context) async {
-    Response response = await homeRepo.getMemberFamily(context);
+  memberFamily(BuildContext context, {required String pageName}) async {
+    Response response = await homeRepo.getMemberFamily(
+      context,
+      pageName: pageName,
+    );
     if (state is GetHomeState) {
       homeModel = (state as GetHomeState).homeModel;
     }

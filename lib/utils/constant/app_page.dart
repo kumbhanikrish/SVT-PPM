@@ -13,4 +13,5 @@ class AppPage {
   static String profileScreen = '/profileScreen';
   static String editProfileScreen = '/editProfileScreen';
   static String comitySeeAllScreen = '/comitySeeAllScreen';
+  static String schemaContentScreen = '/schemaContentScreen';
 }

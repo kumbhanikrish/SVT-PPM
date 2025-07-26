@@ -8,7 +8,6 @@ import 'package:sizer/sizer.dart';
 import 'package:svt_ppm/module/app_features/cubit/kits/kits_cubit.dart';
 import 'package:svt_ppm/module/auth/cubit/auth_cubit.dart';
 import 'package:svt_ppm/utils/constant/app_image.dart';
-import 'package:svt_ppm/utils/constant/app_page.dart';
 import 'package:svt_ppm/utils/formatter/format.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
 import 'package:svt_ppm/utils/widgets/custom_bottomsheet.dart';
@@ -29,6 +28,7 @@ class _KitScreenState extends State<KitScreen> {
   @override
   void initState() {
     KitsCubit kitsCubit = BlocProvider.of<KitsCubit>(context);
+    kitsCubit.init();
     kitsCubit.getKitsData(context);
     super.initState();
   }
@@ -45,81 +45,89 @@ class _KitScreenState extends State<KitScreen> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children:
-                kitsData.entries.map((entry) {
-                  final String year = entry.key;
-                  final List<dynamic> members = entry.value;
+                kitsData.isEmpty ||
+                        kitsData.values.every(
+                          (members) => (members as List).isEmpty,
+                        )
+                    ? [CustomEmpty()]
+                    : kitsData.entries.map((entry) {
+                      final String year = entry.key;
+                      final List<dynamic> members = entry.value;
 
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Year Title
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: CustomText(
-                          text: year,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-
-                      // Grid of members
-                      members.isEmpty
-                          ? CustomEmpty()
-                          : ListView.separated(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: members.length,
-
-                            itemBuilder: (context, index) {
-                              final member = members[index];
-                              return KitCard(
-                                cardOnTap: () {
-                                  customKitsRegistered(
-                                    context,
-                                    resultPhoto: member['result_photo'] ?? '',
-                                    memberId: member['id'],
-                                    show: true,
-                                  );
-                                },
-                                image: member['photo'],
-                                title: member['name'],
-
-                                joinText:
-                                    member['is_registered'] == false
-                                        ? 'Apply'
-                                        : 'Registered',
-                                status:
-                                    member['is_registered'] == true
-                                        ? capitalize(member['status'])
-                                        : '',
-                                showButton:
-                                    member['is_registered'] == false
-                                        ? true
-                                        : member['status'] == 'rejected'
-                                        ? true
-                                        : false,
-                                onTap: () {
-                                  customKitsRegistered(
-                                    context,
-                                    resultPhoto: member['result_photo'] ?? '',
-                                    memberId: member['id'] ?? 0,
-                                    show: false,
-                                  );
-                                },
-                              );
-                            },
-                            separatorBuilder: (
-                              BuildContext context,
-                              int index,
-                            ) {
-                              return Gap(10);
-                            },
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Year Title
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: CustomText(
+                              text: year,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
 
-                      const Gap(24),
-                    ],
-                  );
-                }).toList(),
+                          // Grid of members
+                          members.isEmpty
+                              ? CustomEmpty()
+                              : ListView.separated(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: members.length,
+
+                                itemBuilder: (context, index) {
+                                  final member = members[index];
+                                  return KitCard(
+                                    cardOnTap: () {
+                                      customKitsRegistered(
+                                        context,
+                                        resultPhoto:
+                                            member['result_photo'] ?? '',
+                                        memberId: member['id'],
+                                        show: true,
+                                        status: member['status'],
+                                      );
+                                    },
+                                    image: member['photo'],
+                                    title: member['name'],
+
+                                    joinText:
+                                        member['is_registered'] == false
+                                            ? 'Apply'
+                                            : 'Registered',
+                                    status:
+                                        member['is_registered'] == true
+                                            ? capitalize(member['status'])
+                                            : '',
+                                    showButton:
+                                        member['is_registered'] == false
+                                            ? true
+                                            : member['status'] == 'rejected'
+                                            ? true
+                                            : false,
+                                    onTap: () {
+                                      customKitsRegistered(
+                                        context,
+                                        resultPhoto:
+                                            member['result_photo'] ?? '',
+                                        memberId: member['id'] ?? 0,
+                                        status: member['status'] ?? '',
+
+                                        show: false,
+                                      );
+                                    },
+                                  );
+                                },
+                                separatorBuilder: (
+                                  BuildContext context,
+                                  int index,
+                                ) {
+                                  return Gap(10);
+                                },
+                              ),
+                        ],
+                      );
+                    }).toList(),
           );
         },
       ),
@@ -132,6 +140,7 @@ customKitsRegistered(
   required String resultPhoto,
   required int memberId,
   required bool show,
+  required String status,
 }) {
   FrontImageCubit frontImageCubit = BlocProvider.of<FrontImageCubit>(context);
   KitsCubit kitsCubit = BlocProvider.of<KitsCubit>(context);
@@ -142,7 +151,7 @@ customKitsRegistered(
     child: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       child:
-          show
+          show && status != 'rejected'
               ? CustomCachedImage(
                 imageUrl: resultPhoto,
                 height: 40.h,

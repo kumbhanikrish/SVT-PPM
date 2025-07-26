@@ -4,19 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
-import 'package:sizer/sizer.dart';
 import 'package:svt_ppm/module/app_features/cubit/schemas/schemas_cubit.dart';
 import 'package:svt_ppm/module/app_features/model/schemas_model.dart';
 import 'package:svt_ppm/utils/constant/app_image.dart';
+import 'package:svt_ppm/utils/constant/app_page.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
-import 'package:svt_ppm/utils/widgets/custom_bottomsheet.dart';
 import 'package:svt_ppm/utils/widgets/custom_list_tile.dart';
 import 'package:svt_ppm/utils/widgets/custom_text.dart';
 import 'package:svt_ppm/utils/widgets/custom_widget.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
+
 import 'package:open_file/open_file.dart';
 
 class SchemaSection extends StatefulWidget {
@@ -35,44 +33,6 @@ class _SchemaSectionState extends State<SchemaSection> {
 
     schemasCubit.getSchemasData(context);
     super.initState();
-  }
-
-  Future<void> generateAndDownloadPdf({
-    required String title,
-    required String content,
-  }) async {
-    final pdf = pw.Document();
-
-    pdf.addPage(
-      pw.Page(
-        build:
-            (pw.Context context) => pw.Column(
-              crossAxisAlignment: pw.CrossAxisAlignment.start,
-              children: [
-                pw.Text(
-                  title,
-                  style: pw.TextStyle(
-                    fontSize: 24,
-                    fontWeight: pw.FontWeight.bold,
-                  ),
-                ),
-                pw.SizedBox(height: 20),
-                pw.Text(content, style: pw.TextStyle(fontSize: 14)),
-              ],
-            ),
-      ),
-    );
-
-    try {
-      final dir = await getApplicationDocumentsDirectory();
-      final file = File('${dir.path}/$title.pdf');
-
-      await file.writeAsBytes(await pdf.save());
-
-      await OpenFile.open(file.path); // Opens the PDF file
-    } catch (e) {
-      log('Error generating PDF: $e');
-    }
   }
 
   @override
@@ -107,10 +67,14 @@ class _SchemaSectionState extends State<SchemaSection> {
                       itemBuilder: (context, index) {
                         return CustomListTile(
                           onTap: () {
-                            customSchemaContent(
+                            Navigator.pushNamed(
                               context,
-                              title: schemasList[index].title,
-                              template: schemasList[index].template,
+                              AppPage.schemaContentScreen,
+                              arguments: {
+                                'template': schemasList[index].template,
+                                'title': schemasList[index].title,
+                                'schemaId': schemasList[index].id,
+                              },
                             );
                           },
                           borderRadius: BorderRadius.circular(15),
@@ -139,24 +103,24 @@ class _SchemaSectionState extends State<SchemaSection> {
   }
 }
 
-customSchemaContent(
-  BuildContext context, {
-  required String template,
+Future<void> generateAndDownloadPdf({
   required String title,
-}) {
-  customBottomSheet(
-    context,
-    title: title,
-    child: SizedBox(
-      height: 50.h,
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 25),
-          child: Column(children: [CustomHTMLText(text: template)]),
-        ),
-      ),
-    ),
-    showButton: false,
-    buttonOnTap: () {},
-  );
+  required String content, // This is HTML content
+}) async {
+  try {
+    // Get the app's document directory
+    // final dir = await getApplicationDocumentsDirectory();
+
+    // // Convert HTML content to PDF
+    // final pdfFile = await FlutterHtmlToPdf.convertFromHtmlContent(
+    //   content,
+    //   dir.path,
+    //   "$title.pdf",
+    // );
+
+    // Open the generated PDF
+    // await OpenFile.open(pdfFile.path);
+  } catch (e) {
+    log('Error generating PDF: $e');
+  }
 }

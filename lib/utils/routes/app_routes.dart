@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:svt_ppm/module/app_features/view/app_feature_screen.dart';
-import 'package:svt_ppm/module/app_features/view/comity_see_all_screen.dart';
-import 'package:svt_ppm/module/app_features/view/exam_form_screen.dart';
-import 'package:svt_ppm/module/app_features/view/kit_detail_screen.dart';
+import 'package:svt_ppm/module/app_features/view/exam/exam_form_screen.dart';
+import 'package:svt_ppm/module/app_features/view/kit/kit_detail_screen.dart';
+import 'package:svt_ppm/module/app_features/view/schema/schema_content_screen.dart';
 import 'package:svt_ppm/module/auth/view/auth_screen.dart';
 import 'package:svt_ppm/module/auth/view/selection_Screen.dart';
 import 'package:svt_ppm/module/auth/view/signup_screen.dart';
@@ -40,8 +40,8 @@ final Map<String, WidgetBuilder> appRoutes = {
       (context) => EditProfileScreen(
         argument: ModalRoute.of(context)?.settings.arguments,
       ),
-  AppPage.comitySeeAllScreen:
-      (context) => ComitySeeAllScreen(
+  AppPage.schemaContentScreen:
+      (context) => SchemaContentScreen(
         argument: ModalRoute.of(context)?.settings.arguments,
       ),
 

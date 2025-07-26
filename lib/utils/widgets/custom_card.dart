@@ -443,6 +443,10 @@ class KitCard extends StatelessWidget {
                                       ? AppColor.amberColor.withOpacity(0.1)
                                       : status == 'Rejected'
                                       ? AppColor.redColor.withOpacity(0.1)
+                                      : status == 'Delivered'
+                                      ? AppColor.themePrimaryColor.withOpacity(
+                                        0.1,
+                                      )
                                       : AppColor.greenColor.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(3),
                             ),
@@ -459,6 +463,8 @@ class KitCard extends StatelessWidget {
                                       ? AppColor.amberColor
                                       : status == 'Rejected'
                                       ? AppColor.redColor
+                                      : status == 'Delivered'
+                                      ? AppColor.themePrimaryColor
                                       : AppColor.greenColor,
                             ),
                           ),

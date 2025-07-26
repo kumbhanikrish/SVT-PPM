@@ -93,7 +93,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     );
 
     if (response.data['success'] == true) {
-      homeCubit.memberFamily(context);
+      homeCubit.memberFamily(context, pageName: 'profile');
       Navigator.pop(context);
       Navigator.pop(context);
     }

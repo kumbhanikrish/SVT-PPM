@@ -20,6 +20,7 @@ class CustomTextField extends StatelessWidget {
   final int? maxLength;
   final Color? fillColor;
   final Color? borderColor;
+  final TextCapitalization? textCapitalization;
   final void Function()? onTap;
   final void Function(String)? onChanged;
 
@@ -38,6 +39,7 @@ class CustomTextField extends StatelessWidget {
     required this.labelText,
     this.focusNode,
     this.fillColor,
+    this.textCapitalization,
     this.keyboardType = TextInputType.text,
     this.line = 1,
     this.onTap,
@@ -62,6 +64,8 @@ class CustomTextField extends StatelessWidget {
           onChanged: onChanged,
           cursorColor: AppColor.themePrimaryColor,
           style: TextStyle(color: AppColor.themePrimaryColor),
+          textCapitalization:
+              textCapitalization ?? TextCapitalization.sentences,
           decoration: InputDecoration(
             floatingLabelBehavior: FloatingLabelBehavior.always,
             hintText: hintText,

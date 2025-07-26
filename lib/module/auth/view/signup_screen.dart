@@ -7,12 +7,14 @@ import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sizer/sizer.dart';
 import 'package:svt_ppm/module/auth/cubit/auth_cubit.dart';
+import 'package:svt_ppm/module/auth/model/login_model.dart';
 import 'package:svt_ppm/module/auth/view/auth_screen.dart';
 import 'package:svt_ppm/module/auth/view/widget/custom_login_widget.dart';
 import 'package:svt_ppm/module/profile/cubit/profile_cubit.dart';
 import 'package:svt_ppm/utils/constant/app_image.dart';
 import 'package:svt_ppm/utils/constant/app_page.dart';
 import 'package:svt_ppm/utils/enum/enums.dart';
+import 'package:svt_ppm/utils/formatter/format.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
 import 'package:svt_ppm/utils/widgets/custom_app_bar.dart';
 import 'package:svt_ppm/utils/widgets/custom_button.dart';
@@ -25,8 +27,9 @@ class SignupScreen extends StatelessWidget {
   const SignupScreen({super.key, this.data});
   @override
   Widget build(BuildContext context) {
-    bool old = data['old'];
-    bool addMember = data['addMember'];
+    bool old = data['old'] ?? false;
+    bool addMember = data['addMember'] ?? false;
+    bool edit = data['edit'] ?? false;
 
     TextEditingController firstNameController = TextEditingController();
     TextEditingController middleNameController = TextEditingController();
@@ -88,12 +91,28 @@ class SignupScreen extends StatelessWidget {
     profileImageCubit.removeImage();
     frontImageCubit.removeImage();
     backImageCubit.removeImage();
+
+    if (edit) {
+      LoginModel member = data['member'];
+
+      firstNameController.text = member.firstName;
+      middleNameController.text = member.middleName;
+      lastNameController.text = member.lastName;
+      mobileController.text = member.mobileNo;
+      emailController.text = member.email;
+
+      radioCubit.selectUserType(
+        userTypeFromString(member.gender) ?? UserType.male,
+      );
+    }
     return Scaffold(
       appBar:
           addMember
               ? CustomAppBar(
                 title:
-                    addMember == true && old == true
+                    edit && addMember == true
+                        ? 'Edit Member'
+                        : addMember == true && old == true
                         ? 'Old Member'
                         : addMember == true
                         ? 'New Member'
@@ -223,18 +242,21 @@ class SignupScreen extends StatelessWidget {
                       hintText: 'Enter Your Name',
                       labelText: 'First Name',
                       controller: firstNameController,
+                      textCapitalization: TextCapitalization.characters,
                     ),
                     Gap(20),
                     CustomTextField(
                       hintText: 'Enter Middle Name',
                       labelText: 'Middle Name',
                       controller: middleNameController,
+                      textCapitalization: TextCapitalization.characters,
                     ),
                     Gap(20),
                     CustomTextField(
                       hintText: 'Enter Last Name',
                       labelText: 'Last Name',
                       controller: lastNameController,
+                      textCapitalization: TextCapitalization.characters,
                     ),
                     Gap(20),
                     CustomTextField(
@@ -248,6 +270,7 @@ class SignupScreen extends StatelessWidget {
                       hintText: 'Enter Email',
                       labelText: 'Email',
                       controller: emailController,
+                      textCapitalization: TextCapitalization.characters,
                     ),
                     Gap(20),
                     Column(
@@ -335,6 +358,7 @@ class SignupScreen extends StatelessWidget {
                         hintText: 'Enter Village Name',
                         labelText: 'Village Name',
                         controller: villageController,
+                        textCapitalization: TextCapitalization.characters,
                       ),
                     ],
                     if (old == true) ...[
@@ -343,16 +367,20 @@ class SignupScreen extends StatelessWidget {
                         hintText: 'Old Member Number',
                         labelText: 'Enter Old Member Number',
                         controller: oldMemberNameController,
+                        textCapitalization: TextCapitalization.characters,
                       ),
                     ],
                     Gap(20),
-                    CustomTextField(
-                      hintText: 'Enter Address',
-                      labelText: 'Address',
-                      line: 3,
-                      controller: addressController,
-                    ),
-                    Gap(20),
+                    if (!addMember) ...[
+                      CustomTextField(
+                        hintText: 'Enter Address',
+                        labelText: 'Address',
+                        line: 3,
+                        controller: addressController,
+                        textCapitalization: TextCapitalization.characters,
+                      ),
+                      Gap(20),
+                    ],
 
                     if (old == true) ...[
                       // EXISTING OLD MEMBER UPLOAD (SINGLE)

@@ -105,4 +105,5 @@ dynamic providers = [
   BlocProvider(create: (context) => ProfileCubit()),
   BlocProvider(create: (context) => CommunityCubit()),
   BlocProvider(create: (context) => KitsCubit()),
+  BlocProvider(create: (context) => SelectMemberCubit()),
 ];

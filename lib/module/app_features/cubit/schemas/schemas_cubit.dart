@@ -2,7 +2,10 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:svt_ppm/module/app_features/model/schemas_model.dart';
+import 'package:svt_ppm/module/app_features/model/village_president_model.dart';
 import 'package:svt_ppm/module/app_features/repo/schemas_repo.dart';
+import 'package:svt_ppm/module/app_features/view/schema/schema_section.dart';
+import 'package:svt_ppm/module/app_features/view/widget/app_feature_widget.dart';
 
 part 'schemas_state.dart';
 
@@ -12,15 +15,99 @@ class SchemasCubit extends Cubit<SchemasState> {
   SchemasRepo schemasRepo = SchemasRepo();
 
   List<SchemasModel> schemasModel = [];
+  List<VillagePresidentModel> villagePresidentList = [];
 
   getSchemasData(BuildContext context) async {
     Response response = await schemasRepo.getSchemasData(context);
     if (response.data['success'] == true) {
+      if (state is GetSchemasState) {
+        villagePresidentList = (state as GetSchemasState).villagePresidentList;
+      }
       final data = response.data['data'];
       schemasModel =
           (data as List).map((e) => SchemasModel.fromJson(e)).toList();
     }
 
-    emit(GetSchemasState(schemasModel: schemasModel));
+    emit(
+      GetSchemasState(
+        schemasModel: schemasModel,
+        villagePresidentList: villagePresidentList,
+      ),
+    );
+  }
+
+  villagePresident(BuildContext context) async {
+    Response response = await schemasRepo.villagePresident(context);
+
+    if (response.data['success'] == true) {
+      if (state is GetSchemasState) {
+        schemasModel = (state as GetSchemasState).schemasModel;
+      }
+      final data = response.data['data'];
+      villagePresidentList =
+          (data as List).map((e) => VillagePresidentModel.fromJson(e)).toList();
+    }
+
+    emit(
+      GetSchemasState(
+        schemasModel: schemasModel,
+        villagePresidentList: villagePresidentList,
+      ),
+    );
+  }
+
+  schemasRegistration(
+    BuildContext context, {
+    required int schemaId,
+    required int memberId,
+    required Set<int> selectedVillagePresidentIds,
+  }) async {
+    Map<String, dynamic> params = {
+      "schema_id": schemaId,
+      "member_id": memberId,
+      "village_president_ids": selectedVillagePresidentIds.toList(),
+    };
+    Response response = await schemasRepo.schemasRegistration(
+      context,
+      params: params,
+    );
+
+    if (response.data['success'] == true) {
+      Navigator.pop(context);
+      Navigator.pop(context);
+      Navigator.pop(context);
+      showCustomDialog(
+        context,
+        title: response.data['data']['title'],
+        content: response.data['data']['template'],
+      );
+    }
+  }
+}
+
+class SelectMemberCubit extends Cubit<MemberSelectState> {
+  SelectMemberCubit() : super(MemberSelectInitial());
+
+  Set<int> selectedMemberIds = {};
+
+  void toggleMemberSelection(
+    int memberId, {
+    bool single = false,
+    bool value = false,
+  }) {
+    if (single) {
+      selectedMemberIds = {memberId};
+    } else {
+      if (selectedMemberIds.contains(memberId)) {
+        selectedMemberIds.remove(memberId);
+      } else {
+        selectedMemberIds.add(memberId);
+      }
+    }
+    emit(MemberSelectionChanged(selectedMemberIds));
+  }
+
+  void init() {
+    emit(MemberSelectionChanged({}));
   }
 }

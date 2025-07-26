@@ -19,6 +19,7 @@ class KitsRepo {
       AppApi.kitsRegistration,
       params,
       isFormData: true,
+      showSuccessMessage: true,
     );
 
     return response;

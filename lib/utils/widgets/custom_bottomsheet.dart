@@ -6,6 +6,7 @@ import 'package:svt_ppm/utils/widgets/custom_button.dart';
 customBottomSheet(
   BuildContext context, {
   required String title,
+  String? buttonName,
   required Widget child,
   required bool showButton,
   required void Function() buttonOnTap,
@@ -55,7 +56,10 @@ customBottomSheet(
             if (showButton) ...[
               Padding(
                 padding: const EdgeInsets.all(16),
-                child: CustomButton(text: 'Submit', onTap: buttonOnTap),
+                child: CustomButton(
+                  text: buttonName ?? 'Submit',
+                  onTap: buttonOnTap,
+                ),
               ),
             ],
           ],

@@ -44,4 +44,8 @@ class KitsCubit extends Cubit<KitsState> {
     }
     return response;
   }
+
+  init() {
+    emit(GetKitsState(kitData: {}));
+  }
 }

@@ -12,4 +12,27 @@ class SchemasRepo {
 
     return response;
   }
+
+  Future<Response> villagePresident(BuildContext context) async {
+    Response response = await apiServices.getDynamicData(
+      context,
+      AppApi.villagePresident,
+    );
+
+    return response;
+  }
+
+  Future<Response> schemasRegistration(
+    BuildContext context, {
+    required Map<String, dynamic> params,
+  }) async {
+    Response response = await apiServices.postDynamicData(
+      context,
+      AppApi.schemasRegistration,
+      params,
+      showSuccessMessage: true,
+    );
+
+    return response;
+  }
 }

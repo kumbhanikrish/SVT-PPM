@@ -7,6 +7,7 @@ import 'package:svt_ppm/module/app_features/cubit/community/community_cubit.dart
 import 'package:svt_ppm/utils/constant/app_image.dart';
 import 'package:svt_ppm/utils/constant/app_page.dart';
 import 'package:svt_ppm/utils/widgets/custom_card.dart';
+import 'package:svt_ppm/utils/widgets/custom_text.dart';
 import 'package:svt_ppm/utils/widgets/custom_widget.dart';
 
 class ComitySection extends StatefulWidget {
@@ -80,34 +81,40 @@ class _ComitySectionState extends State<ComitySection> {
                         ),
                       ),
                       value is List
-                          ? Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: GridView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 3,
-                                    crossAxisSpacing: 7,
-                                    mainAxisSpacing: 13,
-                                    mainAxisExtent: 16.h,
-                                  ),
-                              itemCount: value.length,
-                              itemBuilder: (context, index) {
-                                final member = value[index];
-                                return CustomTeamCard(
-                                  image: member['photo'],
-                                  name: member['name'],
-                                  position: formattedTitle,
-                                );
-                              },
-                            ),
-                          )
+                          ? value.isEmpty
+                              ? CustomEmpty()
+                              : Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                ),
+                                child: GridView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 3,
+                                        crossAxisSpacing: 7,
+                                        mainAxisSpacing: 13,
+                                        mainAxisExtent: 16.h,
+                                      ),
+                                  itemCount: value.length,
+                                  itemBuilder: (context, index) {
+                                    final member = value[index];
+                                    return CustomTeamCard(
+                                      image: member['photo'],
+                                      name: member['name'],
+                                      position: formattedTitle,
+                                    );
+                                  },
+                                ),
+                              )
+                          : value == null
+                          ? CustomEmpty()
                           : Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: CustomPresidentCard(
-                              image: value['photo'],
-                              name: value['name'],
+                              image: value['photo'] ?? '',
+                              name: value['name'] ?? '',
                               position: formattedTitle,
                               des: 'Mobile: ${value['mobile_no']}',
                             ),

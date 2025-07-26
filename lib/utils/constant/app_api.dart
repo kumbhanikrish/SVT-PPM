@@ -13,6 +13,8 @@ class AppApi {
 
   /// Schema Flow
   static String schema = 'schemas';
+  static String villagePresident = 'village-president';
+  static String schemasRegistration = 'schemas-registration';
 
   /// Kit Flow
   static String kits = 'kits';

@@ -10,10 +10,13 @@ class HomeRepo {
     return response;
   }
 
-  Future<Response> getMemberFamily(BuildContext context) async {
+  Future<Response> getMemberFamily(
+    BuildContext context, {
+    required String pageName,
+  }) async {
     Response response = await apiServices.getDynamicData(
       context,
-      AppApi.memberFamily,
+      '${AppApi.memberFamily}?page_name=$pageName',
     );
 
     return response;
@@ -27,6 +30,7 @@ class HomeRepo {
       context,
       AppApi.eventsRegistration,
       params,
+      showSuccessMessage: true,
     );
 
     return response;

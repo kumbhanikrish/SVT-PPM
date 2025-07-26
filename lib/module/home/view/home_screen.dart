@@ -26,7 +26,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final ValueNotifier<LoginModel?> loginModelNotifier = ValueNotifier(null);
   HomeModel homeModel = HomeModel(broadcasts: [], events: []);
-
+  Set<int> selectedMemberIds = {};
   Future<void> loadLoginData() async {
     final model = await localDataSaver.getLoginModel();
     loginModelNotifier.value = model;
@@ -117,6 +117,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           customNoOfMemberBottomSheet(
                                             context,
                                             eventId: event.id,
+                                            extra: true,
+                                            
                                           );
                                         },
 

@@ -28,7 +28,7 @@ class ComitySeeAllScreen extends StatelessWidget {
             final member = comityData[index];
             return CustomTeamCard(
               image: member['photo'],
-              name: member['name'],
+              name: member['name'],  
               position: formattedTitle,
             );
           },

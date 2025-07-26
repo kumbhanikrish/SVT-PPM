@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:svt_ppm/module/app_features/view/comity_section.dart';
-import 'package:svt_ppm/module/app_features/view/exam_screen.dart';
-import 'package:svt_ppm/module/app_features/view/kit_screen.dart';
-import 'package:svt_ppm/module/app_features/view/schema_section.dart';
+import 'package:svt_ppm/module/app_features/view/comity/comity_section.dart';
+import 'package:svt_ppm/module/app_features/view/exam/exam_screen.dart';
+import 'package:svt_ppm/module/app_features/view/kit/kit_screen.dart';
+import 'package:svt_ppm/module/app_features/view/schema/schema_section.dart';
 import 'package:svt_ppm/utils/widgets/custom_app_bar.dart';
 
 class AppFeatureScreen extends StatelessWidget {
@@ -29,7 +29,7 @@ class AppFeatureScreen extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: CustomAppBar(title: title, notificationOnTap: () {}),
+      appBar: CustomAppBar(title: title, notificationOnTap: () {}, actions: []),
       body: buildScreen(title),
     );
   }
