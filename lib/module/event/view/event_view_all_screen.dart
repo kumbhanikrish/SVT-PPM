@@ -1,36 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:svt_ppm/module/event/view/current_event_section.dart';
-import 'package:svt_ppm/module/event/view/past_event_section.dart';
-import 'package:svt_ppm/module/event/view/upcoming_event_section.dart';
-import 'package:svt_ppm/utils/constant/app_image.dart';
-import 'package:svt_ppm/utils/widgets/custom_app_bar.dart';
-import 'package:svt_ppm/utils/widgets/custom_widget.dart';
+import 'package:sizer/sizer.dart';
 
-class EventViewAllScreen extends StatelessWidget {
+import 'package:svt_ppm/utils/constant/app_page.dart';
+import 'package:svt_ppm/utils/widgets/custom_app_bar.dart';
+import 'package:svt_ppm/utils/widgets/custom_card.dart';
+
+class EventViewAllScreen extends StatefulWidget {
   final dynamic data;
   const EventViewAllScreen({super.key, this.data});
+
+  @override
+  State<EventViewAllScreen> createState() => _EventViewAllScreenState();
+}
+
+class _EventViewAllScreenState extends State<EventViewAllScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    String title = data['title'];
+    String title = widget.data['title'];
 
-    Widget buildScreen(String title) {
-      switch (title) {
-        case 'Upcoming Event':
-          return UpcomingEventSection();
-        case 'Current Event':
-          return CurrentEventSection();
-
-        case 'Past Event':
-          return PastEventSection();
-
-        default:
-          return Container();
-      }
-    }
+    List<dynamic> homeSeeAllData = widget.data['homeSeeAllData'];
 
     return Scaffold(
-      appBar: CustomAppBar(title: title, notificationOnTap: () {}),
+      appBar: CustomAppBar(title: title, notificationOnTap: () {}, actions: []),
       body: Padding(
         padding: const EdgeInsets.only(
           left: 16,
@@ -40,17 +37,39 @@ class EventViewAllScreen extends StatelessWidget {
         ),
         child: Column(
           children: <Widget>[
-            CustomTitleSeeAllWidget(
-              title: title,
-              seeAllOnTap: () {},
-              image:
-                  title == 'Past Event'
-                      ? AppImage.pastEvent
-                      : AppImage.dateTime,
-              child: SizedBox(),
-            ),
             Gap(16),
-            buildScreen(title),
+            Expanded(
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 13,
+                  mainAxisExtent: 23.h,
+                ),
+                itemCount: homeSeeAllData.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final homeData = homeSeeAllData[index];
+                  return CustomCard(
+                    cardOnTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        AppPage.eventBroadcastDetailScreen,
+                        arguments: {
+                          'homeData': homeData,
+                          'title': '$title Detail',
+                        },
+                      );
+                    },
+                    image: homeData['image'],
+                    date: homeData['date'],
+                    title: homeData['title'],
+                    des: homeData['place'],
+                    showButton: homeData['applied'] == false ? true : false,
+                    joinText: 'Join Event',
+                    time: '',
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),

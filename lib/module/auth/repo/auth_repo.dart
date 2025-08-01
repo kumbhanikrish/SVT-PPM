@@ -60,16 +60,26 @@ class AuthRepo {
 
     return response;
   }
-   Future<Response> logout(
+
+  Future<Response> logout(
     BuildContext context, {
     required Map<String, dynamic> params,
   }) async {
     Response response = await apiServices.postDynamicData(
       context,
       AppApi.logout,
-      showSuccessMessage: true, 
+      showSuccessMessage: true,
 
       params,
+    );
+
+    return response;
+  }
+
+  Future<Response> village(BuildContext context) async {
+    Response response = await apiServices.getDynamicData(
+      context,
+      AppApi.village,
     );
 
     return response;

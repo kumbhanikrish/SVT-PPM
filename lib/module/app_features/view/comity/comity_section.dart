@@ -6,6 +6,8 @@ import 'package:sizer/sizer.dart';
 import 'package:svt_ppm/module/app_features/cubit/community/community_cubit.dart';
 import 'package:svt_ppm/utils/constant/app_image.dart';
 import 'package:svt_ppm/utils/constant/app_page.dart';
+import 'package:svt_ppm/utils/formatter/format.dart';
+import 'package:svt_ppm/utils/theme/colors.dart';
 import 'package:svt_ppm/utils/widgets/custom_card.dart';
 import 'package:svt_ppm/utils/widgets/custom_text.dart';
 import 'package:svt_ppm/utils/widgets/custom_widget.dart';
@@ -27,115 +29,122 @@ class _ComitySectionState extends State<ComitySection> {
 
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> committeeData = {};
-    return SingleChildScrollView(
-      child: BlocBuilder<CommunityCubit, CommunityState>(
-        builder: (context, state) {
-          if (state is GetCommunityMembersState) {
-            committeeData = state.communityMembersModel;
-          }
-          return Column(
-            children:
-                committeeData.entries.map((entry) {
-                  final String key = entry.key;
-                  final dynamic value = entry.value;
-                  String formattedTitle = _formatTitle(key);
+    CommunityCubit communityCubit = BlocProvider.of<CommunityCubit>(context);
 
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Gap(10),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 15,
-                        ),
-                        child: CustomTitleSeeAllWidget(
-                          title: formattedTitle,
-                          seeAllOnTap: () {
-                            if (value is List) {
-                              Navigator.pushNamed(
-                                context,
-                                AppPage.comitySeeAllScreen,
-                                arguments: {
-                                  'comityData': value,
-                                  'formattedTitle': formattedTitle,
-                                },
-                              );
-                            }
-                          },
-                          image: AppImage.president,
-                          child:
-                              value is List
-                                  ? Padding(
-                                    padding: const EdgeInsets.only(
-                                      left: 20,
-                                      // top: 10,
-                                      bottom: 10,
-                                    ),
-                                    child: SvgPicture.asset(
-                                      AppImage.rightArrow,
-                                    ),
-                                  )
-                                  : SizedBox(),
-                        ),
-                      ),
-                      value is List
-                          ? value.isEmpty
-                              ? CustomEmpty()
-                              : Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                ),
-                                child: GridView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 3,
-                                        crossAxisSpacing: 7,
-                                        mainAxisSpacing: 13,
-                                        mainAxisExtent: 16.h,
-                                      ),
-                                  itemCount: value.length,
-                                  itemBuilder: (context, index) {
-                                    final member = value[index];
-                                    return CustomTeamCard(
-                                      image: member['photo'],
-                                      name: member['name'],
-                                      position: formattedTitle,
-                                    );
-                                  },
-                                ),
-                              )
-                          : value == null
-                          ? CustomEmpty()
-                          : Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: CustomPresidentCard(
-                              image: value['photo'] ?? '',
-                              name: value['name'] ?? '',
-                              position: formattedTitle,
-                              des: 'Mobile: ${value['mobile_no']}',
-                            ),
+    Map<String, dynamic> committeeData = {};
+    return RefreshIndicator(
+      backgroundColor: AppColor.whiteColor,
+      color: AppColor.themePrimaryColor,
+      elevation: 0,
+      onRefresh: () {
+        return communityCubit.getCommunityMembers(context);
+      },
+      child: SingleChildScrollView(
+        child: BlocBuilder<CommunityCubit, CommunityState>(
+          builder: (context, state) {
+            if (state is GetCommunityMembersState) {
+              committeeData = state.communityMembersModel;
+            }
+            return Column(
+              children:
+                  committeeData.entries.map((entry) {
+                    final String key = entry.key;
+                    final dynamic value = entry.value;
+                    String formattedTitle = formatTitle(key);
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Gap(10),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 15,
                           ),
-                      Gap(15),
-                      CustomDivider(),
-                    ],
-                  );
-                }).toList(),
-          );
-        },
+                          child: CustomTitleSeeAllWidget(
+                            title: formattedTitle,
+                            seeAllOnTap: () {
+                              if (value is List) {
+                                Navigator.pushNamed(
+                                  context,
+                                  AppPage.comitySeeAllScreen,
+                                  arguments: {
+                                    'comityData': value,
+                                    'formattedTitle': formattedTitle,
+                                  },
+                                );
+                              }
+                            },
+                            image: AppImage.president,
+                            child:
+                                value is List
+                                    ? Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: 20,
+                                        // top: 10,
+                                        bottom: 10,
+                                      ),
+                                      child: SvgPicture.asset(
+                                        AppImage.rightArrow,
+                                      ),
+                                    )
+                                    : SizedBox(),
+                          ),
+                        ),
+                        value is List
+                            ? value.isEmpty
+                                ? CustomEmpty()
+                                : Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                  ),
+                                  child: GridView.builder(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          crossAxisSpacing: 7,
+                                          mainAxisSpacing: 13,
+                                          mainAxisExtent: 21.h,
+                                        ),
+                                    itemCount: value.length,
+                                    itemBuilder: (context, index) {
+                                      final member = value[index];
+                                      return CustomTeamCard(
+                                        image: member['photo'],
+                                        name: member['name'],
+                                        number: member['mobile_no'],
+
+                                        position: member['village_name'],
+                                      );
+                                    },
+                                  ),
+                                )
+                            : value == null
+                            ? CustomEmpty()
+                            : Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
+                              child: CustomPresidentCard(
+                                image: value['photo'] ?? '',
+                                name: value['name'] ?? '',
+                                position: value['village_name'],
+
+                                des: 'Mobile: ${value['mobile_no']}',
+                              ),
+                            ),
+                        Gap(15),
+                        CustomDivider(),
+                      ],
+                    );
+                  }).toList(),
+            );
+          },
+        ),
       ),
     );
-  }
-
-  String _formatTitle(String key) {
-    return key
-        .replaceAll('_', ' ') // snake_case to words
-        .replaceAllMapped(
-          RegExp(r'(^\w|\s\w)'),
-          (match) => match.group(0)!.toUpperCase(),
-        ); // Capitalize first letter of each word
   }
 }

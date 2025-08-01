@@ -17,7 +17,7 @@ class KitDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Kit', notificationOnTap: () {}),
+      appBar: CustomAppBar(title: 'Kit', notificationOnTap: () {}, actions: []),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
         child: Column(

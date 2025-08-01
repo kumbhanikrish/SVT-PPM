@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:svt_ppm/module/app_features/model/schemas_model.dart';
 import 'package:svt_ppm/module/app_features/model/village_president_model.dart';
 import 'package:svt_ppm/module/app_features/repo/schemas_repo.dart';
-import 'package:svt_ppm/module/app_features/view/schema/schema_section.dart';
-import 'package:svt_ppm/module/app_features/view/widget/app_feature_widget.dart';
+import 'package:svt_ppm/utils/widgets/custom_downloader.dart';
+import 'package:svt_ppm/utils/widgets/custom_success_dialog.dart';
 
 part 'schemas_state.dart';
 
@@ -73,13 +73,36 @@ class SchemasCubit extends Cubit<SchemasState> {
     );
 
     if (response.data['success'] == true) {
+      if (state is GetSchemasState) {
+        schemasModel = (state as GetSchemasState).schemasModel;
+        villagePresidentList = (state as GetSchemasState).villagePresidentList;
+      }
+
+      for (var i = 0; i < schemasModel.length; i++) {
+        if (schemasModel[i].id == schemaId) {
+          schemasModel[i].isApplied = true;
+        }
+      }
       Navigator.pop(context);
       Navigator.pop(context);
       Navigator.pop(context);
       showCustomDialog(
         context,
-        title: response.data['data']['title'],
-        content: response.data['data']['template'],
+        buttonText: 'Download PDF',
+        title: 'Register',
+        subTitle: 'Schemas Registration Successfully',
+        onTap: () {
+          generateAndDownloadPdf(
+            title: response.data['data']['title'],
+            content: response.data['data']['template'],
+          );
+        },
+      );
+      emit(
+        GetSchemasState(
+          schemasModel: schemasModel,
+          villagePresidentList: villagePresidentList,
+        ),
       );
     }
   }

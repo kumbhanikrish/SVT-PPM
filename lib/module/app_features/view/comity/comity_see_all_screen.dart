@@ -11,25 +11,30 @@ class ComitySeeAllScreen extends StatelessWidget {
     List<dynamic> comityData = argument['comityData'];
     String formattedTitle = argument['formattedTitle'];
     return Scaffold(
-      appBar: CustomAppBar(title: formattedTitle, notificationOnTap: () {}),
+      appBar: CustomAppBar(
+        title: formattedTitle,
+        notificationOnTap: () {},
+        actions: [],
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 25),
         child: GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
+            crossAxisCount: 2,
             crossAxisSpacing: 7,
             mainAxisSpacing: 13,
-            mainAxisExtent: 16.h,
+            mainAxisExtent: 21.h,
           ),
           itemCount: comityData.length,
           itemBuilder: (context, index) {
             final member = comityData[index];
             return CustomTeamCard(
               image: member['photo'],
-              name: member['name'],  
-              position: formattedTitle,
+              name: member['name'],
+              number: member['mobile_no'],
+              position: member['village_name'],
             );
           },
         ),

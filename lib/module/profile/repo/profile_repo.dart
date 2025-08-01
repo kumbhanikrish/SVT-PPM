@@ -7,13 +7,13 @@ class ProfileRepo {
   Future<Response> addMemberFamily(
     BuildContext context, {
     required Map<String, dynamic> data,
+    required String memberId,
   }) async {
     Response response = await apiServices.postDynamicData(
       context,
-      AppApi.memberFamily,
+      '${AppApi.memberFamily}$memberId',
       data,
       isFormData: true,
-      showSuccessMessage: true,
     );
 
     return response;

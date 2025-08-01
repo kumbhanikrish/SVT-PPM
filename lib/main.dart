@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:svt_ppm/local_data/local_data_sever.dart';
 import 'package:svt_ppm/module/app_features/cubit/community/community_cubit.dart';
+import 'package:svt_ppm/module/app_features/cubit/exam/exam_cubit.dart';
 import 'package:svt_ppm/module/app_features/cubit/kits/kits_cubit.dart';
 import 'package:svt_ppm/module/app_features/cubit/schemas/schemas_cubit.dart';
 import 'package:svt_ppm/module/auth/cubit/auth_cubit.dart';
@@ -106,4 +107,7 @@ dynamic providers = [
   BlocProvider(create: (context) => CommunityCubit()),
   BlocProvider(create: (context) => KitsCubit()),
   BlocProvider(create: (context) => SelectMemberCubit()),
+  BlocProvider(create: (context) => VillageCubit()),
+  BlocProvider(create: (context) => ExamCubit()),
+  BlocProvider(create: (context) => LanguageCubit()),
 ];

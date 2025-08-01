@@ -15,6 +15,7 @@ import 'package:svt_ppm/utils/widgets/custom_app_bar.dart';
 import 'package:svt_ppm/utils/widgets/custom_button.dart';
 import 'package:svt_ppm/utils/widgets/custom_filed_box.dart';
 import 'package:svt_ppm/utils/widgets/custom_image.dart';
+import 'package:svt_ppm/utils/widgets/custom_success_dialog.dart';
 import 'package:svt_ppm/utils/widgets/custom_text.dart';
 import 'package:svt_ppm/utils/widgets/custom_textfield.dart';
 
@@ -50,12 +51,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: CustomAppBar(
         title: 'Profile',
         notificationOnTap: () {},
+
+        leading: CustomIconButton(
+          icon: Icons.arrow_back,
+          color: AppColor.themePrimaryColor,
+          onPressed: () {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              AppPage.homeScreen,
+              (route) => false,
+            );
+          },
+        ),
         actions: [
           CustomIconButton(
             color: AppColor.themePrimaryColor,
             icon: Icons.logout,
             onPressed: () {
-              authCubit.logout(context);
+              showCustomDialog(
+                context,
+
+                title: 'Logout',
+                subTitle: 'Are you sure you want to logout?',
+                buttonText: 'Logout',
+                onTap: () {
+                  Navigator.pop(context);
+                  authCubit.logout(context);
+                },
+              );
             },
           ),
         ],
@@ -124,6 +147,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         Gap(7),
                                         CustomText(
                                           text: model?.mobileNo ?? '',
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColor.hintColor,
+                                        ),
+                                        Gap(7),
+                                        CustomText(
+                                          text: model?.memberId ?? '',
                                           fontSize: 12,
                                           fontWeight: FontWeight.w500,
                                           color: AppColor.hintColor,
@@ -266,8 +296,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                       ),
                                                     ),
                                                     Gap(10),
-                                                    SvgPicture.asset(
-                                                      AppImage.memberId,
+                                                    InkWell(
+                                                      onTap: () {
+                                                        Navigator.pushNamed(
+                                                          context,
+                                                          AppPage
+                                                              .showProofScreen,
+                                                          arguments: {
+                                                            'frontProof':
+                                                                member
+                                                                    .idProofFront,
+                                                            'backProof':
+                                                                member
+                                                                    .idProofBack,
+                                                          },
+                                                        );
+                                                      },
+                                                      child: SvgPicture.asset(
+                                                        AppImage.memberId,
+                                                      ),
                                                     ),
                                                     Gap(10),
                                                   ],

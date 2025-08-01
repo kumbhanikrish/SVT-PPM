@@ -10,6 +10,20 @@ class HomeRepo {
     return response;
   }
 
+  Future<Response> getHomeSeeAll(
+    BuildContext context, {
+    required Map<String, dynamic> params,
+  }) async {
+    Response response = await apiServices.postDynamicData(
+      context,
+      AppApi.home,
+
+      params,
+    );
+
+    return response;
+  }
+
   Future<Response> getMemberFamily(
     BuildContext context, {
     required String pageName,

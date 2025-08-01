@@ -25,6 +25,7 @@ class Broadcast {
   final String title;
   final String date;
   final String place;
+  final bool applied;
 
   Broadcast({
     required this.id,
@@ -32,6 +33,7 @@ class Broadcast {
     required this.title,
     required this.date,
     required this.place,
+    required this.applied,
   });
 
   factory Broadcast.fromJson(Map<String, dynamic> json) => Broadcast(
@@ -40,6 +42,7 @@ class Broadcast {
     title: json["title"],
     date: json["date"],
     place: json["place"],
+    applied: json["applied"] ?? false,
   );
 
   Map<String, dynamic> toJson() => {
@@ -48,5 +51,6 @@ class Broadcast {
     "title": title,
     "date": date,
     "place": place,
+    "applied": applied,
   };
 }

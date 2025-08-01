@@ -1,158 +1,241 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:sizer/sizer.dart';
+import 'package:svt_ppm/module/app_features/cubit/exam/exam_cubit.dart';
+import 'package:svt_ppm/module/app_features/view/exam/exam_custom_widget.dart';
 import 'package:svt_ppm/utils/constant/app_image.dart';
 import 'package:svt_ppm/utils/constant/app_page.dart';
+import 'package:svt_ppm/utils/formatter/format.dart';
+import 'package:svt_ppm/utils/theme/colors.dart';
 import 'package:svt_ppm/utils/widgets/custom_card.dart';
+import 'package:svt_ppm/utils/widgets/custom_downloader.dart';
+import 'package:svt_ppm/utils/widgets/custom_text.dart';
 import 'package:svt_ppm/utils/widgets/custom_widget.dart';
 
-class ExamScreen extends StatelessWidget {
+class ExamScreen extends StatefulWidget {
   const ExamScreen({super.key});
+
+  @override
+  State<ExamScreen> createState() => _ExamScreenState();
+}
+
+class _ExamScreenState extends State<ExamScreen> {
+  Map<String, dynamic> examData = {};
+
+  @override
+  void initState() {
+    ExamCubit examCubit = BlocProvider.of<ExamCubit>(context);
+    examCubit.init();
+    examCubit.getExamData(context);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Gap(25),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: CustomTitleSeeAllWidget(
-              title: 'Upcoming Exam (GK)',
-              image: AppImage.president,
-              seeAllOnTap: () {},
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
-                child: SvgPicture.asset(AppImage.rightArrow),
-              ),
-            ),
-          ),
+    ExamCubit examCubit = BlocProvider.of<ExamCubit>(context);
 
-          Gap(20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: GridView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 7,
-                mainAxisSpacing: 13,
+    return RefreshIndicator(
+      backgroundColor: AppColor.whiteColor,
+      color: AppColor.themePrimaryColor,
+      elevation: 0,
+      onRefresh: () {
+        return examCubit.getExamData(context);
+      },
+      child: BlocBuilder<ExamCubit, ExamState>(
+        builder: (context, state) {
+          if (state is GetExamState) {
+            examData = state.examData;
+          }
+          return examData.isEmpty ||
+                  examData.values.every((members) => (members as List).isEmpty)
+              ? CustomEmpty()
+              : SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children:
+                      examData.entries.map((entry) {
+                        final String year = entry.key;
+                        final List<dynamic> members = entry.value;
 
-                mainAxisExtent: 22.h,
-              ),
-              itemCount: 3,
-              itemBuilder: (BuildContext context, int index) {
-                return CustomCard(
-                  image:
-                      'https://images.unsplash.com/photo-1633332755192-727a05c4013d?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D',
-                  date: '15/05/2025',
-                  title: 'Albert Flores',
-                  des: 'Yuva - Team of Comity',
-                  joinText: 'Apply',
-                  time: '12:00pm',
-                  onTap: () {
-                    Navigator.pushNamed(context, AppPage.examFormScreen);
-                  },
-                );
-              },
-            ),
-          ),
+                        String formattedTitle = formatTitle(year);
 
-          CustomDivider(),
-          Gap(10),
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Year Title
+                            Gap(10),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 15,
+                              ),
+                              child: CustomTitleSeeAllWidget(
+                                title: formattedTitle,
+                                seeAllOnTap: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    AppPage.examSeeAllScreen,
+                                    arguments: {
+                                      'examData': members,
+                                      'formattedTitle': formattedTitle,
+                                    },
+                                  );
+                                },
+                                image: '',
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 20,
+                                    // top: 10,
+                                    bottom: 10,
+                                  ),
+                                  child: SvgPicture.asset(AppImage.rightArrow),
+                                ),
+                              ),
+                            ),
 
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: CustomTitleSeeAllWidget(
-              title: 'Current Exam (GK)',
-              image: AppImage.president,
-              seeAllOnTap: () {},
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
-                child: SvgPicture.asset(AppImage.rightArrow),
-              ),
-            ),
-          ),
-          Gap(20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: GridView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 7,
-                mainAxisSpacing: 13,
+                            // Grid of members
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                ),
+                                child: SizedBox(
+                                  width: 100.w,
+                                  height: 23.h,
+                                  child:
+                                      members.isEmpty
+                                          ? CustomEmpty()
+                                          : GridView.builder(
+                                            scrollDirection: Axis.horizontal,
+                                            physics:
+                                                const BouncingScrollPhysics(), // optional smooth scroll
 
-                mainAxisExtent: 22.h,
-              ),
-              itemCount: 3,
-              itemBuilder: (BuildContext context, int index) {
-                return CustomCard(
-                  image:
-                      'https://images.unsplash.com/photo-1633332755192-727a05c4013d?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D',
-                  date: '15/05/2025',
-                  title: 'Albert Flores',
-                  des: 'Yuva - Team of Comity',
-                  joinText: 'Apply',
-                  time: '12:00pm',
-                  onTap: () {
-                    Navigator.pushNamed(context, AppPage.examFormScreen);
-                  },
-                );
-              },
-            ),
-          ),
+                                            gridDelegate:
+                                                SliverGridDelegateWithFixedCrossAxisCount(
+                                                  crossAxisCount: 1,
+                                                  crossAxisSpacing: 7,
+                                                  mainAxisSpacing: 7,
+                                                  mainAxisExtent: 21.h,
+                                                ),
+                                            itemCount: members.length,
+                                            itemBuilder: (context, index) {
+                                              final member = members[index];
+                                              return CustomCard(
+                                                image: member['photo'],
+                                                date:
+                                                    member['exam_date'] ??
+                                                    getCurrentDateFormat(),
+                                                title: member['name'],
+                                                des:
+                                                    member['place'] ??
+                                                    'No Place',
+                                                joinText:
+                                                    member['result'] != null
+                                                        ? 'Result'
+                                                        : member['hall_ticket'] !=
+                                                            null
+                                                        ? 'Hall Ticket'
+                                                        : member['is_registered'] ==
+                                                            true
+                                                        ? 'Edit'
+                                                        : 'Apply',
+                                                time: formatTo12Hour(
+                                                  time24h: member['exam_time'],
+                                                ),
+                                                onTap: () {
+                                                  if (member['hall_ticket'] !=
+                                                      null) {
+                                                    generateAndDownloadPdf(
+                                                      title: '',
+                                                      content:
+                                                          member['hall_ticket'],
+                                                    );
+                                                  } else if (member['result'] !=
+                                                      null) {
+                                                    generateAndDownloadPdf(
+                                                      title: '',
+                                                      content: member['result'],
+                                                    );
+                                                  } else {
+                                                    languageBottomSheet(
+                                                      context,
+                                                      memberId: member['id'],
+                                                    );
+                                                  }
+                                                },
+                                              );
+                                            },
+                                          ),
+                                ),
 
-          CustomDivider(),
-          Gap(10),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: CustomTitleSeeAllWidget(
-              title: 'Old Participant Exam (GK)',
-              image: AppImage.president,
-              seeAllOnTap: () {},
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
-                child: SvgPicture.asset(AppImage.rightArrow),
-              ),
-            ),
-          ),
-          Gap(20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: GridView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 7,
-                mainAxisSpacing: 13,
+                                // Row(
+                                //   children:
 
-                mainAxisExtent: 19.h,
-              ),
-              itemCount: 3,
-              itemBuilder: (BuildContext context, int index) {
-                return CustomCard(
-                  image:
-                      'https://images.unsplash.com/photo-1633332755192-727a05c4013d?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D',
-                  date: '15/05/2025',
-                  title: 'Albert Flores',
-                  des: 'Yuva - Team of Comity',
-                  joinText: 'Apply',
-                  time: '12:00pm',
-                  imageBorderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(15),
-                    topRight: Radius.circular(15),
-                  ),
-                  showButton: false,
-                );
-              },
-            ),
-          ),
-          Gap(10.h),
-        ],
+                                //   List.generate(members.length, (
+                                //     index,
+                                //   ) {
+                                //     final member = members[index];
+                                //     return
+
+                                //     CustomCard(
+                                //       width: 236,
+
+                                //       image: member['photo'],
+                                //       date:
+                                //           member['exam_date'] ??
+                                //           getCurrentDateFormat(),
+                                //       title: member['name'],
+                                //       des: member['place'] ?? 'No Place',
+                                //       joinText:
+                                //           member['result'] != null
+                                //               ? 'Result'
+                                //               : member['hall_ticket'] !=
+                                //                   null
+                                //               ? 'Hall Ticket'
+                                //               : member['is_registered'] ==
+                                //                   true
+                                //               ? 'Edit'
+                                //               : 'Apply',
+                                //       time: formatTo12Hour(
+                                //         time24h: member['exam_time'],
+                                //       ),
+                                //       onTap: () {
+                                //         if (member['hall_ticket'] !=
+                                //             null) {
+                                //           customResultAndHallTicketBottomSheet(
+                                //             context,
+                                //             result: member['hall_ticket'],
+                                //           );
+                                //         } else if (member['result'] !=
+                                //             null) {
+                                //           customResultAndHallTicketBottomSheet(
+                                //             context,
+                                //             hallTicket: member['result'],
+                                //           );
+                                //         } else {
+                                //           languageBottomSheet(
+                                //             context,
+                                //             memberId: member['id'],
+                                //           );
+                                //         }
+                                //       },
+                                //     );
+
+                                //   }),
+                                // ),
+                              ),
+                            ),
+                            Gap(15),
+                            CustomDivider(),
+                          ],
+                        );
+                      }).toList(),
+                ),
+              );
+        },
       ),
     );
   }

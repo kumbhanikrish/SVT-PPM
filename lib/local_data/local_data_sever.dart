@@ -21,6 +21,16 @@ class LocalDataSaver {
     return sharedPreference.getString('authToken') ?? '';
   }
 
+  Future setVerificationId(String verificationId) async {
+    SharedPreferences sharedPreference = await SharedPreferences.getInstance();
+    sharedPreference.setString('verificationId', verificationId);
+  }
+
+  Future<String> getVerificationId() async {
+    SharedPreferences sharedPreference = await SharedPreferences.getInstance();
+    return sharedPreference.getString('verificationId') ?? '';
+  }
+
   // ✅ Save LoginModel as JSON string
   Future<void> setLoginData(LoginModel loginModel) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();

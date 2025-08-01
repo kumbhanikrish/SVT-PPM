@@ -99,12 +99,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           fontSize: fontSize ?? 18,
         ),
         bottom: bottom,
-        leading:
-            leading ??
-            Padding(
-              padding: const EdgeInsets.only(left: 16, bottom: 10),
-              child: Image.asset(AppLogo.smallLogo),
-            ),
+        leading: leading,
+
         actions:
             actions ??
             [

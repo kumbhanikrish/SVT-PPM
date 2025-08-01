@@ -9,9 +9,12 @@ class AppPage {
   static String eventViewAllScreen = '/eventViewAllScreen';
   static String appFeatureScreen = '/appFeatureScreen';
   static String kitDetailScreen = '/kitDetailScreen';
-  static String examFormScreen = '/examFormScreen';
   static String profileScreen = '/profileScreen';
   static String editProfileScreen = '/editProfileScreen';
   static String comitySeeAllScreen = '/comitySeeAllScreen';
   static String schemaContentScreen = '/schemaContentScreen';
+  static String homeEventDetailScreen = '/homeEventDetailScreen';
+  static String eventBroadcastDetailScreen = '/eventBroadcastDetailScreen';
+  static String showProofScreen = '/showProofScreen';
+  static String examSeeAllScreen = '/examSeeAllScreen';
 }

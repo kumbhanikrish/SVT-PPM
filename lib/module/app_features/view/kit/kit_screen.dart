@@ -35,100 +35,111 @@ class _KitScreenState extends State<KitScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+    KitsCubit kitsCubit = BlocProvider.of<KitsCubit>(context);
+
+    return RefreshIndicator(
+      backgroundColor: AppColor.whiteColor,
+      color: AppColor.themePrimaryColor,
+      elevation: 0,
+      onRefresh: () {
+        return kitsCubit.getKitsData(context);
+      },
       child: BlocBuilder<KitsCubit, KitsState>(
         builder: (context, state) {
           if (state is GetKitsState) {
             kitsData = state.kitData;
           }
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children:
-                kitsData.isEmpty ||
-                        kitsData.values.every(
-                          (members) => (members as List).isEmpty,
-                        )
-                    ? [CustomEmpty()]
-                    : kitsData.entries.map((entry) {
-                      final String year = entry.key;
-                      final List<dynamic> members = entry.value;
+          return kitsData.isEmpty ||
+                  kitsData.values.every((members) => (members as List).isEmpty)
+              ? CustomEmpty()
+              : SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 24,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children:
+                      kitsData.entries.map((entry) {
+                        final String year = entry.key;
+                        final List<dynamic> members = entry.value;
 
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Year Title
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 16),
-                            child: CustomText(
-                              text: year,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-
-                          // Grid of members
-                          members.isEmpty
-                              ? CustomEmpty()
-                              : ListView.separated(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: members.length,
-
-                                itemBuilder: (context, index) {
-                                  final member = members[index];
-                                  return KitCard(
-                                    cardOnTap: () {
-                                      customKitsRegistered(
-                                        context,
-                                        resultPhoto:
-                                            member['result_photo'] ?? '',
-                                        memberId: member['id'],
-                                        show: true,
-                                        status: member['status'],
-                                      );
-                                    },
-                                    image: member['photo'],
-                                    title: member['name'],
-
-                                    joinText:
-                                        member['is_registered'] == false
-                                            ? 'Apply'
-                                            : 'Registered',
-                                    status:
-                                        member['is_registered'] == true
-                                            ? capitalize(member['status'])
-                                            : '',
-                                    showButton:
-                                        member['is_registered'] == false
-                                            ? true
-                                            : member['status'] == 'rejected'
-                                            ? true
-                                            : false,
-                                    onTap: () {
-                                      customKitsRegistered(
-                                        context,
-                                        resultPhoto:
-                                            member['result_photo'] ?? '',
-                                        memberId: member['id'] ?? 0,
-                                        status: member['status'] ?? '',
-
-                                        show: false,
-                                      );
-                                    },
-                                  );
-                                },
-                                separatorBuilder: (
-                                  BuildContext context,
-                                  int index,
-                                ) {
-                                  return Gap(10);
-                                },
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Year Title
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 16),
+                              child: CustomText(
+                                text: year,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
                               ),
-                        ],
-                      );
-                    }).toList(),
-          );
+                            ),
+
+                            // Grid of members
+                            members.isEmpty
+                                ? CustomEmpty()
+                                : ListView.separated(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: members.length,
+
+                                  itemBuilder: (context, index) {
+                                    final member = members[index];
+                                    return KitCard(
+                                      cardOnTap: () {
+                                        customKitsRegistered(
+                                          context,
+                                          resultPhoto:
+                                              member['result_photo'] ?? '',
+                                          memberId: member['id'],
+                                          show: true,
+                                          status: member['status'],
+                                        );
+                                      },
+                                      image: member['photo'],
+                                      title: member['name'],
+                                      rejectReason: member['remarks'],
+                                      joinText:
+                                          member['is_registered'] == false
+                                              ? 'Apply'
+                                              : 'Registered',
+                                      status:
+                                          member['is_registered'] == true
+                                              ? capitalize(member['status'])
+                                              : '',
+                                      showButton:
+                                          member['is_registered'] == false
+                                              ? true
+                                              : member['status'] == 'rejected'
+                                              ? true
+                                              : false,
+                                      onTap: () {
+                                        customKitsRegistered(
+                                          context,
+                                          resultPhoto:
+                                              member['result_photo'] ?? '',
+                                          memberId: member['id'] ?? 0,
+                                          status: member['status'] ?? '',
+
+                                          show: false,
+                                        );
+                                      },
+                                    );
+                                  },
+                                  separatorBuilder: (
+                                    BuildContext context,
+                                    int index,
+                                  ) {
+                                    return Gap(10);
+                                  },
+                                ),
+                          ],
+                        );
+                      }).toList(),
+                ),
+              );
         },
       ),
     );

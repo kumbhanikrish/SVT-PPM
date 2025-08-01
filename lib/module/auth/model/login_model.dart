@@ -11,7 +11,7 @@ class LoginModel {
   final String email;
   final String villageName;
   final String address;
-  final int isNewMember;
+  final dynamic isNewMember;
   final dynamic oldMemberId;
   final dynamic oldMemberIdCard;
   final String idProofFront;
@@ -24,6 +24,8 @@ class LoginModel {
   final dynamic deletedAt;
   final String token;
   final String name;
+  final String relation;
+  final String standard;
   final int familyHeadId;
 
   LoginModel({
@@ -36,6 +38,8 @@ class LoginModel {
     required this.gender,
     required this.mobileNo,
     required this.whatsappNo,
+    required this.relation,
+    required this.standard,
     required this.email,
     required this.villageName,
     required this.address,
@@ -64,6 +68,8 @@ class LoginModel {
     middleName: json["middle_name"],
     lastName: json["last_name"],
     gender: json["gender"],
+    relation: json["relation"] ?? '',
+    standard: json["standard"] ?? '',
     mobileNo: json["mobile_no"],
     whatsappNo: json["whatsapp_no"] ?? '',
     email: json["email"],
@@ -104,6 +110,8 @@ class LoginModel {
     "id_proof_back": idProofBack,
     "active": active,
     "password": password,
+    "standard": standard,
+    "relation": relation,
     "remember_token": rememberToken,
     "created_at": createdAt.toIso8601String(),
     "updated_at": updatedAt.toIso8601String(),

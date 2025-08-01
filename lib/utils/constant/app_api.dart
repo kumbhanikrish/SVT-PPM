@@ -5,6 +5,7 @@ class AppApi {
   static String verifyOtp = 'auth/verify-otp';
   static String register = 'auth/register';
   static String logout = 'auth/logout';
+  static String village = 'village';
 
   /// Home Flow
   static String home = 'home';
@@ -22,4 +23,8 @@ class AppApi {
 
   /// Community Flow
   static String communityMembers = 'community-members';
+
+  /// Exam Flow
+  static String exam = 'user-exams';
+  static String examsRegistration = 'exams-registration';
 }

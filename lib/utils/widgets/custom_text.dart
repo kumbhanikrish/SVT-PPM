@@ -46,14 +46,20 @@ class CustomTitleName extends StatelessWidget {
   final String text;
   final bool icon;
   final double? fontSize;
+  final FontWeight? fontWeight;
   final String? image;
+  final Color? color;
+  final Color? textColor;
 
   const CustomTitleName({
     super.key,
     required this.title,
     required this.text,
     this.image,
+    this.color,
     this.fontSize,
+    this.textColor,
+    this.fontWeight,
     this.icon = false,
   });
   @override
@@ -62,10 +68,16 @@ class CustomTitleName extends StatelessWidget {
       children: <Widget>[
         if (icon == true) ...[
           SvgPicture.asset(image ?? ''),
+          Gap(5),
         ] else ...[
-          CustomText(text: title, fontSize: fontSize ?? 10),
+          CustomText(
+            text: title,
+            fontSize: fontSize ?? 10,
+            fontWeight: fontWeight ?? FontWeight.w400,
+            color: color,
+          ),
           if (title.isNotEmpty) ...[
-            CustomText(text: ':', fontSize: fontSize ?? 10),
+            CustomText(text: ':', fontSize: fontSize ?? 10, color: color),
           ],
         ],
         const Gap(2),
@@ -75,9 +87,10 @@ class CustomTitleName extends StatelessWidget {
             padding: const EdgeInsets.only(top: 1),
             child: CustomText(
               text: text,
-              color: AppColor.hintColor,
+              color: textColor ?? AppColor.hintColor,
               fontSize: fontSize ?? 10,
               overflow: true,
+              fontWeight: fontWeight ?? FontWeight.w400,
             ),
           ),
         ),

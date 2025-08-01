@@ -97,7 +97,7 @@ class ApiServices {
         return response;
       }
     } on DioException catch (e) {
-      _handleDioError(context, e);
+      _handleDioError(context, e, loginEndPoint: url);
     } catch (e) {
       await EasyLoading.dismiss();
       log("Unhandled Error: $e");
@@ -145,6 +145,7 @@ class ApiServices {
     DioException e, {
     String loginEndPoint = '',
   }) async {
+    log('loginEndPoint ::$loginEndPoint');
     await EasyLoading.dismiss();
     final statusCode = e.response?.statusCode;
     final responseData = e.response?.data;
@@ -152,7 +153,9 @@ class ApiServices {
     log("DioException: $responseData, Status Code: $statusCode");
 
     // Handle 401 Unauthorized
-    if (statusCode == 401 && loginEndPoint != AppApi.checkMember) {
+    if (statusCode == 401 &&
+        loginEndPoint != AppApi.checkMember &&
+        loginEndPoint != AppApi.verifyOtp) {
       await dataSaver.setAuthToken('');
       Navigator.pushNamedAndRemoveUntil(
         context,

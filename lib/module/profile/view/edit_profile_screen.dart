@@ -6,9 +6,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:sizer/sizer.dart';
 import 'package:svt_ppm/module/auth/cubit/auth_cubit.dart';
 import 'package:svt_ppm/module/auth/model/login_model.dart';
+import 'package:svt_ppm/module/auth/model/village_model.dart';
+import 'package:svt_ppm/module/auth/view/signup_screen.dart';
+import 'package:svt_ppm/module/profile/cubit/profile_cubit.dart';
+import 'package:svt_ppm/module/profile/view/widget/custom_profile_widget.dart';
 import 'package:svt_ppm/utils/constant/app_image.dart';
 import 'package:svt_ppm/utils/enum/enums.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
@@ -35,19 +38,71 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   TextEditingController mobileController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController addressController = TextEditingController();
-  TextEditingController villageController = TextEditingController();
+  List<VillageModel> villageList = [];
+
+  @override
+  void initState() {
+    VillageCubit villageCubit = BlocProvider.of<VillageCubit>(context);
+    villageCubit.fetchVillage(context);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    LoginModel userData = widget.argument['userData'];
+    VillageCubit villageCubit = BlocProvider.of<VillageCubit>(context);
 
+    LoginModel userData = widget.argument['userData'];
+    SelectRelationCubit selectRelationCubit =
+        BlocProvider.of<SelectRelationCubit>(context);
+    SelectStandardCubit selectStandardCubit =
+        BlocProvider.of<SelectStandardCubit>(context);
+    ProfileCubit profileCubit = BlocProvider.of<ProfileCubit>(context);
+    AuthCubit authCubit = BlocProvider.of<AuthCubit>(context);
+
+    String initialRelation = userData.relation;
+    String initialStandard = userData.standard;
     firstNameController.text = userData.firstName;
     middleNameController.text = userData.middleName;
     lastNameController.text = userData.lastName;
     mobileController.text = userData.mobileNo;
     emailController.text = userData.email;
     addressController.text = userData.address;
-    villageController.text = userData.villageName;
 
+    if (villageCubit.state is VillageLoaded) {
+      villageList = (villageCubit.state as VillageLoaded).villageList;
+    }
+    // log('villageList :: ${villageList.first}');
+
+    // villageController.text = userData.villageName;
+    if (relationList.isNotEmpty) {
+      initialRelation = relationList.firstWhere(
+        (item) => item == userData.relation,
+        orElse: () => relationList.last,
+      );
+    }
+
+    if (standardList.isNotEmpty && userData.standard.isNotEmpty) {
+      initialStandard = standardList.firstWhere(
+        (item) => item == userData.standard,
+        orElse: () => '',
+      );
+    }
+    log('initialRelation :: ${userData.standard}');
+
+    // if (villageList.isNotEmpty) {
+
+    // }
+
+    log('userData.villageName ::${userData.relation}');
+    villageCubit.setVillageName(name: userData.villageName);
+    selectRelationCubit.updateValue(
+      relationValue:
+          userData.relation.isEmpty ? initialRelation : userData.relation,
+    );
+    selectStandardCubit.updateValue(
+      standardValue:
+          userData.standard.isEmpty ? initialStandard : userData.standard,
+    );
     log('User Data: ${userData.gender}');
 
     RadioCubit radioCubit = BlocProvider.of<RadioCubit>(context);
@@ -58,9 +113,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     ProfileImageCubit profileImageCubit = BlocProvider.of<ProfileImageCubit>(
       context,
     );
-    ImageUploadCubit imageUploadCubit = BlocProvider.of<ImageUploadCubit>(
-      context,
-    );
+
     return Scaffold(
       appBar: CustomAppBar(title: 'Edit Profile', actions: []),
       body: Padding(
@@ -130,11 +183,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 hintText: 'Enter Your Name',
                 labelText: 'First Name',
                 controller: firstNameController,
+                textCapitalization: TextCapitalization.characters,
               ),
               Gap(20),
               CustomTextField(
                 hintText: 'Enter Middle Name',
                 labelText: 'Middle Name',
+                textCapitalization: TextCapitalization.characters,
+
                 controller: middleNameController,
               ),
               Gap(20),
@@ -142,11 +198,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 hintText: 'Enter Last Name',
                 labelText: 'Last Name',
                 controller: lastNameController,
+                textCapitalization: TextCapitalization.characters,
               ),
               Gap(20),
               CustomTextField(
                 hintText: 'Enter Mobile Number',
                 labelText: 'Mobile Number',
+                keyboardType: TextInputType.number,
                 controller: mobileController,
               ),
               Gap(20),
@@ -154,8 +212,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 hintText: 'Enter Email',
                 labelText: 'Email',
                 controller: emailController,
+                textCapitalization: TextCapitalization.characters,
               ),
-              Gap(20),
+              Gap(10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -202,10 +261,64 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
 
                   Gap(20),
-                  CustomTextField(
-                    hintText: 'Enter Village Name',
-                    labelText: 'Village Name',
-                    controller: villageController,
+
+                  BlocBuilder<VillageCubit, VillageState>(
+                    builder: (context, state) {
+                      VillageModel? initialVillage;
+                      if (state is VillageLoaded) {
+                        villageList = state.villageList;
+                        initialVillage = villageList.firstWhere(
+                          (item) => item.key == userData.villageName,
+                          orElse: () => villageList.first,
+                        );
+                      }
+                      return CustomDropWonFiled<VillageModel>(
+                        text: '',
+
+                        title: 'Village',
+                        hintText: 'Select Village',
+
+                        initialItem: initialVillage,
+                        selectColor: AppColor.themePrimaryColor,
+                        items: villageList,
+
+                        onChanged: (value) {
+                          log('value?.key ??  ::${value?.key ?? ''}');
+                          villageCubit.setVillageName(name: value?.key ?? '');
+                        },
+                      );
+                    },
+                  ),
+                  Gap(20),
+                  CustomDropWonFiled<String>(
+                    text: '',
+                    title: 'Relation',
+                    initialItem: initialRelation,
+                    hintText: 'Select Relation',
+                    selectColor: AppColor.themePrimaryColor,
+                    items: relationList,
+
+                    onChanged: (value) {
+                      selectRelationCubit.updateValue(
+                        relationValue: value ?? '',
+                      );
+                    },
+                  ),
+                  Gap(20),
+                  CustomDropWonFiled<String>(
+                    text: '',
+                    title: 'Standard',
+                    initialItem:
+                        userData.standard.isEmpty ? null : initialStandard,
+                    hintText: 'Select Standard',
+                    selectColor: AppColor.themePrimaryColor,
+                    items: standardList,
+
+                    onChanged: (value) {
+                      selectStandardCubit.updateValue(
+                        standardValue: value ?? '',
+                      );
+                    },
                   ),
                   Gap(20),
                   CustomTextField(
@@ -213,99 +326,100 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     labelText: 'Address',
                     line: 3,
                     controller: addressController,
+                    textCapitalization: TextCapitalization.characters,
                   ),
                   Gap(20),
 
-                  Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      BlocBuilder<ImageUploadCubit, File?>(
-                        builder: (context, imageFile) {
-                          return InkWell(
-                            borderRadius: BorderRadius.circular(12),
-                            onTap: () {
-                              if (imageFile == null) {
-                                imageUploadCubit.pickImage();
-                              }
-                            },
-                            child: Container(
-                              height: 25.h,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: AppColor.themePrimaryColor,
-                                  width: 1,
-                                ),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child:
-                                  imageFile == null
-                                      ? Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: <Widget>[
-                                          SvgPicture.asset(
-                                            AppImage.uploadImage,
-                                          ),
-                                          Gap(10),
-                                          const CustomText(
-                                            text: 'Upload ID Proof',
-                                            fontSize: 12,
-                                          ),
-                                        ],
-                                      )
-                                      : Stack(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(20),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              child: Image.file(
-                                                imageFile,
-                                                width: 100.w,
-                                                fit: BoxFit.fill,
-                                              ),
-                                            ),
-                                          ),
-                                          Positioned(
-                                            top: 8,
-                                            right: 8,
-                                            child: InkWell(
-                                              onTap: () {
-                                                imageUploadCubit.removeImage();
-                                              },
-                                              child: const CircleAvatar(
-                                                radius: 14,
-                                                backgroundColor: Colors.black54,
-                                                child: Icon(
-                                                  Icons.close,
-                                                  size: 16,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                            ),
-                          );
-                        },
-                      ),
-                      Positioned(
-                        top: -10,
-                        left: 20,
-                        child: Container(
-                          decoration: BoxDecoration(color: AppColor.whiteColor),
-                          padding: EdgeInsets.symmetric(horizontal: 2),
-                          child: const CustomText(
-                            text: 'Old Member Card',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  // Stack(
+                  //   clipBehavior: Clip.none,
+                  //   children: [
+                  //     BlocBuilder<ImageUploadCubit, File?>(
+                  //       builder: (context, imageFile) {
+                  //         return InkWell(
+                  //           borderRadius: BorderRadius.circular(12),
+                  //           onTap: () {
+                  //             if (imageFile == null) {
+                  //               imageUploadCubit.pickImage();
+                  //             }
+                  //           },
+                  //           child: Container(
+                  //             height: 25.h,
+                  //             decoration: BoxDecoration(
+                  //               border: Border.all(
+                  //                 color: AppColor.themePrimaryColor,
+                  //                 width: 1,
+                  //               ),
+                  //               borderRadius: BorderRadius.circular(12),
+                  //             ),
+                  //             child:
+                  //                 imageFile == null
+                  //                     ? Row(
+                  //                       mainAxisAlignment:
+                  //                           MainAxisAlignment.center,
+                  //                       children: <Widget>[
+                  //                         SvgPicture.asset(
+                  //                           AppImage.uploadImage,
+                  //                         ),
+                  //                         Gap(10),
+                  //                         const CustomText(
+                  //                           text: 'Upload ID Proof',
+                  //                           fontSize: 12,
+                  //                         ),
+                  //                       ],
+                  //                     )
+                  //                     : Stack(
+                  //                       children: [
+                  //                         Padding(
+                  //                           padding: const EdgeInsets.all(20),
+                  //                           child: ClipRRect(
+                  //                             borderRadius:
+                  //                                 BorderRadius.circular(12),
+                  //                             child: Image.file(
+                  //                               imageFile,
+                  //                               width: 100.w,
+                  //                               fit: BoxFit.fill,
+                  //                             ),
+                  //                           ),
+                  //                         ),
+                  //                         Positioned(
+                  //                           top: 8,
+                  //                           right: 8,
+                  //                           child: InkWell(
+                  //                             onTap: () {
+                  //                               imageUploadCubit.removeImage();
+                  //                             },
+                  //                             child: const CircleAvatar(
+                  //                               radius: 14,
+                  //                               backgroundColor: Colors.black54,
+                  //                               child: Icon(
+                  //                                 Icons.close,
+                  //                                 size: 16,
+                  //                                 color: Colors.white,
+                  //                               ),
+                  //                             ),
+                  //                           ),
+                  //                         ),
+                  //                       ],
+                  //                     ),
+                  //           ),
+                  //         );
+                  //       },
+                  //     ),
+                  //     Positioned(
+                  //       top: -10,
+                  //       left: 20,
+                  //       child: Container(
+                  //         decoration: BoxDecoration(color: AppColor.whiteColor),
+                  //         padding: EdgeInsets.symmetric(horizontal: 2),
+                  //         child: const CustomText(
+                  //           text: 'Old Member Card',
+                  //           fontSize: 14,
+                  //           fontWeight: FontWeight.w600,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               ),
             ],
@@ -313,7 +427,76 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        child: CustomButton(text: 'Update', onTap: () {}),
+        child: BlocBuilder<VillageCubit, VillageState>(
+          builder: (context, state) {
+            String villageName = '';
+            if (state is VillageLoaded) {
+              villageName = state.villageName;
+            }
+
+            return CustomButton(
+              text: 'Update',
+              onTap: () async {
+                if (userData.mobileNo == mobileController.text) {
+                  profileCubit.addMemberFamily(
+                    context,
+                    memberId: userData.id,
+                    edit: true,
+                    editProfile: true,
+                    firstName: firstNameController.text,
+                    middleName: middleNameController.text,
+                    lastName: lastNameController.text,
+                    mobileNo: mobileController.text,
+                    email: emailController.text,
+                    address: addressController.text,
+                    villageName: villageName,
+                    relation:
+                        selectRelationCubit.state.isNotEmpty
+                            ? selectRelationCubit.state[0].toLowerCase() +
+                                selectRelationCubit.state.substring(1)
+                            : '',
+                    standard:
+                        selectStandardCubit.state.isNotEmpty
+                            ? selectStandardCubit.state[0].toLowerCase() +
+                                selectStandardCubit.state.substring(1)
+                            : '',
+                    gender:
+                        radioCubit.state == UserType.male ? 'Male' : 'Female',
+                    photo: profileImageCubit.state?.path ?? userData.photo,
+                  );
+                } else {
+                  mobileVerification(
+                    context,
+                    profileCubit: profileCubit,
+                    number: mobileController.text,
+                    authCubit: authCubit,
+                    memberId: userData.id,
+                    firstName: firstNameController.text,
+                    middleName: middleNameController.text,
+                    lastName: lastNameController.text,
+                    mobileNo: mobileController.text,
+                    email: emailController.text,
+                    address: addressController.text,
+                    villageName: villageName,
+                    relation:
+                        selectRelationCubit.state.isNotEmpty
+                            ? selectRelationCubit.state[0].toLowerCase() +
+                                selectRelationCubit.state.substring(1)
+                            : '',
+                    standard:
+                        selectStandardCubit.state.isNotEmpty
+                            ? selectStandardCubit.state[0].toLowerCase() +
+                                selectStandardCubit.state.substring(1)
+                            : '',
+                    gender:
+                        radioCubit.state == UserType.male ? 'Male' : 'Female',
+                    photo: profileImageCubit.state?.path ?? userData.photo,
+                  );
+                }
+              },
+            );
+          },
+        ),
       ),
     );
   }

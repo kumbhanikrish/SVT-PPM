@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -8,8 +9,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sizer/sizer.dart';
 import 'package:svt_ppm/module/auth/cubit/auth_cubit.dart';
 import 'package:svt_ppm/module/auth/model/login_model.dart';
+import 'package:svt_ppm/module/auth/model/village_model.dart';
 import 'package:svt_ppm/module/auth/view/auth_screen.dart';
-import 'package:svt_ppm/module/auth/view/widget/custom_login_widget.dart';
 import 'package:svt_ppm/module/profile/cubit/profile_cubit.dart';
 import 'package:svt_ppm/utils/constant/app_image.dart';
 import 'package:svt_ppm/utils/constant/app_page.dart';
@@ -18,9 +19,36 @@ import 'package:svt_ppm/utils/formatter/format.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
 import 'package:svt_ppm/utils/widgets/custom_app_bar.dart';
 import 'package:svt_ppm/utils/widgets/custom_button.dart';
+import 'package:svt_ppm/utils/widgets/custom_image.dart';
 import 'package:svt_ppm/utils/widgets/custom_radio_list_tile.dart';
 import 'package:svt_ppm/utils/widgets/custom_text.dart';
 import 'package:svt_ppm/utils/widgets/custom_textfield.dart';
+
+List<String> relationList = [
+  'Father',
+  'Mother',
+  'Son',
+  'Daughter',
+  'Brother',
+  'Spouse',
+  'Self',
+];
+List<String> standardList = [
+  'Playgroup',
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  '10',
+  '11',
+  '12',
+  'College',
+];
 
 class SignupScreen extends StatelessWidget {
   final dynamic data;
@@ -30,7 +58,7 @@ class SignupScreen extends StatelessWidget {
     bool old = data['old'] ?? false;
     bool addMember = data['addMember'] ?? false;
     bool edit = data['edit'] ?? false;
-
+    LoginModel? member;
     TextEditingController firstNameController = TextEditingController();
     TextEditingController middleNameController = TextEditingController();
     TextEditingController lastNameController = TextEditingController();
@@ -38,12 +66,13 @@ class SignupScreen extends StatelessWidget {
     TextEditingController emailController = TextEditingController();
     TextEditingController addressController = TextEditingController();
     TextEditingController oldMemberNameController = TextEditingController();
-    TextEditingController villageController = TextEditingController();
+    // TextEditingController villageController = TextEditingController();
 
     StepperCubit stepperCubit = BlocProvider.of<StepperCubit>(context);
     RadioCubit radioCubit = BlocProvider.of<RadioCubit>(context);
     FrontImageCubit frontImageCubit = BlocProvider.of<FrontImageCubit>(context);
     BackImageCubit backImageCubit = BlocProvider.of<BackImageCubit>(context);
+    VillageCubit villageCubit = BlocProvider.of<VillageCubit>(context);
     ProfileImageCubit profileImageCubit = BlocProvider.of<ProfileImageCubit>(
       context,
     );
@@ -57,32 +86,12 @@ class SignupScreen extends StatelessWidget {
         BlocProvider.of<SelectRelationCubit>(context);
     SelectStandardCubit selectStandardCubit =
         BlocProvider.of<SelectStandardCubit>(context);
+    List<VillageModel> villageList = [];
 
-    List<String> relationList = [
-      'Father',
-      'Mother',
-      'Son',
-      'Daughter',
-      'Brother',
-      'Spouse',
-      'Self',
-    ];
-    List<String> standardList = [
-      'Playgroup',
-      '1',
-      '2',
-      '3',
-      '4',
-      '5',
-      '6',
-      '7',
-      '8',
-      '9',
-      '10',
-      '11',
-      '12',
-      'College',
-    ];
+    String villageName = '';
+
+    String initialRelation = '';
+    String initialStandard = '';
     stepperCubit.init();
     radioCubit.init();
     selectRelationCubit.init();
@@ -91,19 +100,39 @@ class SignupScreen extends StatelessWidget {
     profileImageCubit.removeImage();
     frontImageCubit.removeImage();
     backImageCubit.removeImage();
-
+    if (!addMember && !edit) {
+      villageCubit.fetchVillage(context);
+    }
     if (edit) {
-      LoginModel member = data['member'];
+      member = data['member'];
 
-      firstNameController.text = member.firstName;
-      middleNameController.text = member.middleName;
-      lastNameController.text = member.lastName;
-      mobileController.text = member.mobileNo;
-      emailController.text = member.email;
+      firstNameController.text = member?.firstName ?? '';
+      middleNameController.text = member?.middleName ?? '';
+      lastNameController.text = member?.lastName ?? '';
+      mobileController.text = member?.mobileNo ?? '';
+      emailController.text = member?.email ?? '';
 
+      initialRelation = member?.relation ?? '';
+      initialStandard = member?.standard ?? '';
+
+      if (relationList.isNotEmpty && (member?.standard ?? '').isNotEmpty) {
+        initialRelation = relationList.firstWhere(
+          (item) => item == member?.relation,
+          orElse: () => relationList.first,
+        );
+      }
+      if (standardList.isNotEmpty && (member?.standard ?? '').isNotEmpty) {
+        initialStandard = standardList.firstWhere(
+          (item) => item == member?.standard,
+          orElse: () => standardList.first,
+        );
+      }
       radioCubit.selectUserType(
-        userTypeFromString(member.gender) ?? UserType.male,
+        userTypeFromString(member?.gender) ?? UserType.male,
       );
+
+      selectRelationCubit.updateValue(relationValue: member?.relation ?? '');
+      selectStandardCubit.updateValue(standardValue: member?.standard ?? '');
     }
     return Scaffold(
       appBar:
@@ -198,10 +227,23 @@ class SignupScreen extends StatelessWidget {
                                           ? Image.file(
                                             pickedImage,
                                             fit: BoxFit.cover,
+                                            width: 150,
+                                            height: 150,
+                                          )
+                                          : (member?.photo ?? '').isNotEmpty
+                                          ? CustomCachedImage(
+                                            imageUrl: member?.photo ?? '',
+                                            width: 150,
+                                            height: 150,
+                                            borderRadius: BorderRadius.circular(
+                                              50,
+                                            ),
                                           )
                                           : Image.asset(
                                             AppImage.user,
                                             fit: BoxFit.cover,
+                                            width: 150,
+                                            height: 150,
                                           ),
                                 ),
                               );
@@ -326,6 +368,10 @@ class SignupScreen extends StatelessWidget {
                       CustomDropWonFiled<String>(
                         text: '',
                         title: 'Relation',
+                        initialItem:
+                            (member?.relation ?? '').isEmpty
+                                ? null
+                                : initialRelation,
                         hintText: 'Select Relation',
                         selectColor: AppColor.themePrimaryColor,
                         items: relationList,
@@ -340,6 +386,10 @@ class SignupScreen extends StatelessWidget {
                       CustomDropWonFiled<String>(
                         text: '',
                         title: 'Standard',
+                        initialItem:
+                            (member?.standard ?? '').isEmpty
+                                ? null
+                                : initialStandard,
                         hintText: 'Select Standard',
                         selectColor: AppColor.themePrimaryColor,
                         items: standardList,
@@ -354,11 +404,29 @@ class SignupScreen extends StatelessWidget {
 
                     if (!addMember) ...[
                       Gap(20),
-                      CustomTextField(
-                        hintText: 'Enter Village Name',
-                        labelText: 'Village Name',
-                        controller: villageController,
-                        textCapitalization: TextCapitalization.characters,
+
+                      BlocBuilder<VillageCubit, VillageState>(
+                        builder: (context, state) {
+                          if (state is VillageLoaded) {
+                            villageList = state.villageList;
+                          }
+
+                          return CustomDropWonFiled<VillageModel>(
+                            text: '',
+
+                            title: 'Village',
+                            hintText: 'Select Village',
+                            selectColor: AppColor.themePrimaryColor,
+                            items: villageList,
+
+                            onChanged: (value) {
+                              log('value?.key ??  ::${value?.key ?? ''}');
+                              villageCubit.setVillageName(
+                                name: value?.key ?? '',
+                              );
+                            },
+                          );
+                        },
                       ),
                     ],
                     if (old == true) ...[
@@ -507,22 +575,8 @@ class SignupScreen extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       child:
-                                          frontImage == null
-                                              ? Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: <Widget>[
-                                                  SvgPicture.asset(
-                                                    AppImage.uploadImage,
-                                                  ),
-                                                  Gap(10),
-                                                  const CustomText(
-                                                    text: 'Upload Front Side',
-                                                    fontSize: 12,
-                                                  ),
-                                                ],
-                                              )
-                                              : Stack(
+                                          frontImage != null
+                                              ? Stack(
                                                 children: [
                                                   Padding(
                                                     padding:
@@ -562,6 +616,50 @@ class SignupScreen extends StatelessWidget {
                                                     ),
                                                   ),
                                                 ],
+                                              )
+                                              : member?.idProofFront != null &&
+                                                  (member?.idProofFront ?? '')
+                                                      .isNotEmpty
+                                              ? InkWell(
+                                                onTap: () {
+                                                  frontImageCubit.pickImage();
+                                                },
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(
+                                                    20,
+                                                  ),
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          12,
+                                                        ),
+                                                    child: Image.network(
+                                                      member?.idProofFront ??
+                                                          '',
+                                                      width: 100.w,
+                                                      fit: BoxFit.fill,
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                              : InkWell(
+                                                onTap: () {
+                                                  frontImageCubit.pickImage();
+                                                },
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: <Widget>[
+                                                    SvgPicture.asset(
+                                                      AppImage.uploadImage,
+                                                    ),
+                                                    const Gap(10),
+                                                    const CustomText(
+                                                      text: 'Upload Front Side',
+                                                      fontSize: 12,
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                     ),
                                   );
@@ -609,22 +707,8 @@ class SignupScreen extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       child:
-                                          backImage == null
-                                              ? Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: <Widget>[
-                                                  SvgPicture.asset(
-                                                    AppImage.uploadImage,
-                                                  ),
-                                                  Gap(10),
-                                                  const CustomText(
-                                                    text: 'Upload Back Side',
-                                                    fontSize: 12,
-                                                  ),
-                                                ],
-                                              )
-                                              : Stack(
+                                          backImage != null
+                                              ? Stack(
                                                 children: [
                                                   Padding(
                                                     padding:
@@ -664,6 +748,49 @@ class SignupScreen extends StatelessWidget {
                                                     ),
                                                   ),
                                                 ],
+                                              )
+                                              : member?.idProofBack != null &&
+                                                  (member?.idProofBack ?? '')
+                                                      .isNotEmpty
+                                              ? InkWell(
+                                                onTap: () {
+                                                  backImageCubit.pickImage();
+                                                },
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(
+                                                    20,
+                                                  ),
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          12,
+                                                        ),
+                                                    child: Image.network(
+                                                      member?.idProofBack ?? '',
+                                                      width: 100.w,
+                                                      fit: BoxFit.fill,
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                              : InkWell(
+                                                onTap: () {
+                                                  backImageCubit.pickImage();
+                                                },
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: <Widget>[
+                                                    SvgPicture.asset(
+                                                      AppImage.uploadImage,
+                                                    ),
+                                                    const Gap(10),
+                                                    const CustomText(
+                                                      text: 'Upload Back Side',
+                                                      fontSize: 12,
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                     ),
                                   );
@@ -692,83 +819,105 @@ class SignupScreen extends StatelessWidget {
 
                     Gap(40),
 
-                    CustomButton(
-                      text: 'Submit',
-                      onTap:
-                          addMember
-                              ? () {
-                                profileCubit.addMemberFamily(
-                                  context,
-                                  firstName: firstNameController.text,
-                                  middleName: middleNameController.text,
-                                  lastName: lastNameController.text,
-                                  mobileNo: mobileController.text,
-                                  email: emailController.text,
-                                  address: addressController.text,
+                    BlocBuilder<VillageCubit, VillageState>(
+                      builder: (context, state) {
+                        if (state is VillageLoaded) {
+                          villageName = state.villageName;
+                        }
 
-                                  oldMemberId: oldMemberNameController.text,
-                                  gender:
-                                      radioCubit.state == UserType.male
-                                          ? 'Male'
-                                          : 'Female',
-                                  photo: profileImageCubit.state?.path ?? '',
-                                  old: old,
-                                  oldMemberIdCard:
-                                      imageUploadCubit.state?.path ?? '',
-                                  idProofBack: backImageCubit.state?.path ?? '',
-                                  idProofFront:
-                                      frontImageCubit.state?.path ?? '',
-                                  relation:
-                                      selectRelationCubit.state.isNotEmpty
-                                          ? selectRelationCubit.state[0]
-                                                  .toLowerCase() +
-                                              selectRelationCubit.state
-                                                  .substring(1)
-                                          : '',
-                                  standard:
-                                      selectStandardCubit.state.isNotEmpty
-                                          ? selectStandardCubit.state[0]
-                                                  .toLowerCase() +
-                                              selectStandardCubit.state
-                                                  .substring(1)
-                                          : '',
-                                );
-                              }
-                              : () {
-                                authCubit.register(
-                                  context,
-                                  firstName: firstNameController.text,
-                                  middleName: middleNameController.text,
-                                  lastName: lastNameController.text,
-                                  mobileNo: mobileController.text,
-                                  email: emailController.text,
-                                  address: addressController.text,
-                                  villageName: villageController.text,
-                                  oldMemberId: oldMemberNameController.text,
-                                  gender:
-                                      radioCubit.state == UserType.male
-                                          ? 'Male'
-                                          : 'Female',
-                                  photo: profileImageCubit.state?.path ?? '',
-                                  old: old,
-                                  oldMemberIdCard:
-                                      imageUploadCubit.state?.path ?? '',
-                                  idProofBack: backImageCubit.state?.path ?? '',
-                                  idProofFront:
-                                      frontImageCubit.state?.path ?? '',
-                                );
-                              },
+                        return CustomButton(
+                          text: 'Submit',
+                          onTap:
+                              addMember
+                                  ? () {
+                                    profileCubit.addMemberFamily(
+                                      context,
+                                      memberId: member?.id ?? 0,
+                                      edit: edit,
+                                      firstName: firstNameController.text,
+                                      middleName: middleNameController.text,
+                                      lastName: lastNameController.text,
+                                      mobileNo: mobileController.text,
+                                      email: emailController.text,
+                                      address: addressController.text,
+
+                                      oldMemberId: oldMemberNameController.text,
+                                      gender:
+                                          radioCubit.state == UserType.male
+                                              ? 'Male'
+                                              : 'Female',
+                                      photo:
+                                          profileImageCubit.state?.path ??
+                                          member?.photo ??
+                                          '',
+                                      old: old,
+                                      oldMemberIdCard:
+                                          imageUploadCubit.state?.path ??
+                                          member?.oldMemberIdCard ??
+                                          '',
+                                      idProofBack:
+                                          backImageCubit.state?.path ??
+                                          member?.idProofBack ??
+                                          '',
+                                      idProofFront:
+                                          frontImageCubit.state?.path ??
+                                          member?.idProofFront ??
+                                          '',
+                                      relation:
+                                          selectRelationCubit.state.isNotEmpty
+                                              ? selectRelationCubit.state[0]
+                                                      .toLowerCase() +
+                                                  selectRelationCubit.state
+                                                      .substring(1)
+                                              : '',
+                                      standard:
+                                          selectStandardCubit.state.isNotEmpty
+                                              ? selectStandardCubit.state[0]
+                                                      .toLowerCase() +
+                                                  selectStandardCubit.state
+                                                      .substring(1)
+                                              : '',
+                                    );
+                                  }
+                                  : () {
+                                    authCubit.register(
+                                      context,
+                                      firstName: firstNameController.text,
+                                      middleName: middleNameController.text,
+                                      lastName: lastNameController.text,
+                                      mobileNo: mobileController.text,
+                                      email: emailController.text,
+                                      address: addressController.text,
+                                      villageName: villageName,
+                                      oldMemberId: oldMemberNameController.text,
+                                      gender:
+                                          radioCubit.state == UserType.male
+                                              ? 'Male'
+                                              : 'Female',
+                                      photo:
+                                          profileImageCubit.state?.path ?? '',
+                                      old: old,
+                                      oldMemberIdCard:
+                                          imageUploadCubit.state?.path ?? '',
+                                      idProofBack:
+                                          backImageCubit.state?.path ?? '',
+                                      idProofFront:
+                                          frontImageCubit.state?.path ?? '',
+                                    );
+                                  },
+                        );
+                      },
                     ),
 
                     if (addMember == false) ...[
                       Gap(32),
-                      customSignUpWith(),
-                      Gap(25),
-                      customGoogleAndAppleLogin(
-                        googleOnTap: () {},
-                        appleOnTap: () {},
-                      ),
-                      Gap(25),
+                      // customSignUpWith(),
+                      // Gap(25),
+                      // customGoogleAndAppleLogin(
+                      //   googleOnTap: () {},
+                      //   appleOnTap: () {},
+                      // ),
+                      // Gap(25),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[

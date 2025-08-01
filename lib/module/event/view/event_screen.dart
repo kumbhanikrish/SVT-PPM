@@ -1,166 +1,184 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:sizer/sizer.dart';
+import 'package:svt_ppm/module/home/cubit/home_cubit.dart';
 import 'package:svt_ppm/utils/constant/app_image.dart';
 import 'package:svt_ppm/utils/constant/app_page.dart';
+import 'package:svt_ppm/utils/formatter/format.dart';
+import 'package:svt_ppm/utils/theme/colors.dart';
 import 'package:svt_ppm/utils/widgets/custom_app_bar.dart';
 import 'package:svt_ppm/utils/widgets/custom_card.dart';
+import 'package:svt_ppm/utils/widgets/custom_text.dart';
 import 'package:svt_ppm/utils/widgets/custom_widget.dart';
 
-class EventScreen extends StatelessWidget {
-  const EventScreen({super.key});
+class EventScreen extends StatefulWidget {
+  final dynamic argument;
+  const EventScreen({super.key, this.argument});
+
+  @override
+  State<EventScreen> createState() => _EventScreenState();
+}
+
+class _EventScreenState extends State<EventScreen> {
+  @override
+  void initState() {
+    HomeCubit homeCubit = BlocProvider.of<HomeCubit>(context);
+
+    homeCubit.getHomeSeeAll(context, type: widget.argument['title']);
+    super.initState();
+  }
+
+  Map<String, dynamic> homeSeeAllData = {};
+
   @override
   Widget build(BuildContext context) {
+    HomeCubit homeCubit = BlocProvider.of<HomeCubit>(context);
+
     return Scaffold(
-      appBar: CustomAppBar(title: 'Event', notificationOnTap: () {}),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Gap(25),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: CustomTitleSeeAllWidget(
-                title: 'Upcoming Event',
-                image: AppImage.dateTime,
-                seeAllOnTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    AppPage.eventViewAllScreen,
-                    arguments: {'title': 'Upcoming Event'},
-                  );
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
-                  child: SvgPicture.asset(AppImage.rightArrow),
-                ),
-              ),
-            ),
-            Gap(20),
-            Padding(
-              padding: const EdgeInsets.only(left: 16, right: 10),
-              child: GridView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
+      appBar: CustomAppBar(
+        title: widget.argument['title'] == 'events' ? 'Events' : 'BoardCast',
+        notificationOnTap: () {},
+        actions: [],
+      ),
+      body: RefreshIndicator(
+        backgroundColor: AppColor.whiteColor,
+        color: AppColor.themePrimaryColor,
+        elevation: 0,
+        onRefresh: () {
+          return homeCubit.getHomeSeeAll(
+            context,
+            type: widget.argument['title'],
+          );
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              BlocBuilder<HomeCubit, HomeState>(
+                builder: (context, state) {
+                  if (state is GetHomeState) {
+                    homeSeeAllData = state.homeSeeAllModel;
+                  }
+                  return Column(
+                    children:
+                        homeSeeAllData.entries.map((entry) {
+                          final String key = entry.key;
+                          final dynamic value = entry.value;
+                          String formattedTitle = formatTitle(key);
 
-                  mainAxisExtent: 22.h,
-                ),
-                itemCount: 3,
-                itemBuilder: (BuildContext context, int index) {
-                  return CustomCard(
-                    image:
-                        'https://www.singaporeflyer.com/storage/meeting-events/June2021/yttsLF5xhRz8fvrnwpLa.png',
-                    date: '15/05/2025',
-                    title: 'Albert Flores',
-                    des: 'Yuva - Team of Comity',
-                    joinText: 'Join Event',
-                    time: '12:00pm',
-                  );
-                },
-              ),
-            ),
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Gap(10),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                ),
+                                child: CustomTitleSeeAllWidget(
+                                  title: formattedTitle,
+                                  image: AppImage.dateTime,
+                                  seeAllOnTap: () {
+                                    if (value is List) {
+                                      Navigator.pushNamed(
+                                        context,
+                                        AppPage.eventViewAllScreen,
+                                        arguments: {
+                                          'title': formattedTitle,
+                                          'homeSeeAllData': value,
+                                        },
+                                      );
+                                    }
+                                  },
+                                  child:
+                                      value is List
+                                          ? Padding(
+                                            padding: const EdgeInsets.only(
+                                              left: 20,
+                                              top: 10,
+                                              bottom: 10,
+                                            ),
+                                            child: SvgPicture.asset(
+                                              AppImage.rightArrow,
+                                            ),
+                                          )
+                                          : SizedBox(),
+                                ),
+                              ),
+                              Gap(10),
+                              value is List
+                                  ? value.isEmpty
+                                      ? CustomEmpty()
+                                      : Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 16,
+                                        ),
+                                        child: SizedBox(
+                                          width: 100.w,
+                                          height: 23.h,
+                                          child: GridView.builder(
+                                            shrinkWrap: true,
+                                            scrollDirection: Axis.horizontal,
+                                            physics:
+                                                const BouncingScrollPhysics(),
+                                            gridDelegate:
+                                                SliverGridDelegateWithFixedCrossAxisCount(
+                                                  crossAxisCount: 1,
+                                                  crossAxisSpacing: 7,
+                                                  mainAxisSpacing: 13,
 
-            CustomDivider(),
+                                                  mainAxisExtent: 22.h,
+                                                ),
+                                            itemCount: value.length,
+                                            itemBuilder: (context, index) {
+                                              final homeSeeAllData =
+                                                  value[index];
+                                              return CustomCard(
+                                                cardOnTap: () {
+                                                  Navigator.pushNamed(
+                                                    context,
+                                                    AppPage
+                                                        .eventBroadcastDetailScreen,
+                                                    arguments: {
+                                                      'homeData':
+                                                          homeSeeAllData,
+                                                      'title':
+                                                          widget.argument['title'] ==
+                                                                  'events'
+                                                              ? 'Event Detail'
+                                                              : 'BoardCast Detail',
+                                                    },
+                                                  );
+                                                },
+                                                image: homeSeeAllData['image'],
+                                                date: homeSeeAllData['date'],
+                                                title: homeSeeAllData['title'],
+                                                des: homeSeeAllData['place'],
+                                                showButton:
+                                                    homeSeeAllData['applied'] ==
+                                                            false
+                                                        ? true
+                                                        : false,
+                                                joinText: 'Join Event',
+                                                time: '',
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      )
+                                  : SizedBox(),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: CustomTitleSeeAllWidget(
-                title: 'Current Event',
-                image: AppImage.dateTime,
-                seeAllOnTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    AppPage.eventViewAllScreen,
-                    arguments: {'title': 'Current Event'},
-                  );
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
-                  child: SvgPicture.asset(AppImage.rightArrow),
-                ),
-              ),
-            ),
-            Gap(20),
-            Padding(
-              padding: const EdgeInsets.only(left: 16, right: 10),
-              child: GridView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-
-                  mainAxisExtent: 22.h,
-                ),
-                itemCount: 3,
-                itemBuilder: (BuildContext context, int index) {
-                  return CustomCard(
-                    image:
-                        'https://www.singaporeflyer.com/storage/meeting-events/June2021/yttsLF5xhRz8fvrnwpLa.png',
-                    date: '15/05/2025',
-                    title: 'Albert Flores',
-                    des: 'Yuva - Team of Comity',
-                    joinText: 'Join Event',
-                    time: '12:00pm',
-                  );
-                },
-              ),
-            ),
-
-            CustomDivider(),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: CustomTitleSeeAllWidget(
-                title: 'Past Event',
-                seeAllOnTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    AppPage.eventViewAllScreen,
-                    arguments: {'title': 'Past Event'},
-                  );
-                },
-                image: AppImage.pastEvent,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
-                  child: SvgPicture.asset(AppImage.rightArrow),
-                ),
-              ),
-            ),
-            Gap(20),
-            Padding(
-              padding: const EdgeInsets.only(left: 16, right: 10),
-              child: GridView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-
-                  mainAxisExtent: 19.h,
-                ),
-                itemCount: 3,
-                itemBuilder: (BuildContext context, int index) {
-                  return CustomCard(
-                    borderRadius: BorderRadius.circular(15),
-                    imageBorderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(15),
-                      topRight: Radius.circular(15),
-                    ),
-                    showButton: false,
-                    image:
-                        'https://www.singaporeflyer.com/storage/meeting-events/June2021/yttsLF5xhRz8fvrnwpLa.png',
-                    date: '15/05/2025',
-                    title: 'Albert Flores',
-                    des: 'Yuva - Team of Comity',
-                    joinText: 'Join Event',
-                    time: '12:00pm',
+                              CustomDivider(),
+                            ],
+                          );
+                        }).toList(),
                   );
                 },
               ),
-            ),
-            Gap(10),
-          ],
+
+              Gap(60.h),
+            ],
+          ),
         ),
       ),
     );

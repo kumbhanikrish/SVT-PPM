@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:svt_ppm/module/auth/view/widget/custom_login_widget.dart';
 import 'package:svt_ppm/utils/constant/app_page.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
 import 'package:svt_ppm/utils/widgets/custom_button.dart';
@@ -43,11 +42,11 @@ class LoginScreen extends StatelessWidget {
         Gap(40),
         CustomButton(text: 'Login with OTP', onTap: loginOnTap),
         Gap(32),
-        customSignUpWith(),
-        Gap(25),
+        // customSignUpWith(),
+        // Gap(25),
 
-        customGoogleAndAppleLogin(googleOnTap: () {}, appleOnTap: () {}),
-        Gap(25),
+        // customGoogleAndAppleLogin(googleOnTap: () {}, appleOnTap: () {}),
+        // Gap(25),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[

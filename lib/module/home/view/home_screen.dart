@@ -10,6 +10,7 @@ import 'package:svt_ppm/module/home/model/static_model.dart';
 import 'package:svt_ppm/module/home/view/widget/custom_home_widget.dart';
 import 'package:svt_ppm/utils/constant/app_image.dart';
 import 'package:svt_ppm/utils/constant/app_page.dart';
+import 'package:svt_ppm/utils/theme/colors.dart';
 import 'package:svt_ppm/utils/widgets/custom_app_bar.dart';
 import 'package:svt_ppm/utils/widgets/custom_card.dart';
 import 'package:svt_ppm/utils/widgets/custom_image.dart';
@@ -35,6 +36,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     loadLoginData();
+    HomeCubit homeCubit = BlocProvider.of<HomeCubit>(context);
+    homeCubit.getHomeData(context);
     super.initState();
   }
 
@@ -48,10 +51,10 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
 
     HomeCubit homeCubit = BlocProvider.of<HomeCubit>(context);
-    homeCubit.getHomeData(context);
+
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'SVTPPM App',
+        title: 'SVTPPM',
         actions: [
           ValueListenableBuilder<LoginModel?>(
             valueListenable: loginModelNotifier,
@@ -76,170 +79,221 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Gap(12),
         ],
+
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 16, bottom: 10),
+          child: Image.asset(AppLogo.smallLogo),
+        ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Gap(25),
+      body: RefreshIndicator(
+        backgroundColor: AppColor.whiteColor,
+        color: AppColor.themePrimaryColor,
+        elevation: 0,
+        onRefresh: () {
+          return homeCubit.getHomeData(context);
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Gap(25),
 
-            BlocBuilder<HomeCubit, HomeState>(
-              builder: (context, state) {
-                if (state is GetHomeState) {
-                  homeModel = state.homeModel;
-                }
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: CustomTitleSeeAllWidget(
-                        title: 'List of Event',
-                        seeAllOnTap: () {
-                          Navigator.pushNamed(context, AppPage.eventScreen);
-                        },
+              BlocBuilder<HomeCubit, HomeState>(
+                builder: (context, state) {
+                  if (state is GetHomeState) {
+                    homeModel = state.homeModel;
+                  }
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: CustomTitleSeeAllWidget(
+                          title: 'List of Event',
+                          seeAllOnTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              AppPage.eventScreen,
+                              arguments: {'title': 'events'},
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                    Gap(20),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 6, left: 16),
-                        child:
-                            homeModel.events.isEmpty
-                                ? CustomEmpty()
-                                : Row(
-                                  children: List.generate(
-                                    homeModel.events.length,
-                                    (index) {
-                                      Broadcast event = homeModel.events[index];
-                                      return CustomMainCard(
-                                        onTap: () {
-                                          customNoOfMemberBottomSheet(
-                                            context,
-                                            eventId: event.id,
-                                            extra: true,
-                                            
-                                          );
-                                        },
+                      Gap(20),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 6, left: 16),
+                          child:
+                              homeModel.events.isEmpty
+                                  ? CustomEmpty()
+                                  : Row(
+                                    children: List.generate(
+                                      homeModel.events.length,
+                                      (index) {
+                                        Broadcast event =
+                                            homeModel.events[index];
+                                        return CustomMainCard(
+                                          cardOnTap: () {
+                                            Navigator.pushNamed(
+                                              context,
+                                              AppPage.homeEventDetailScreen,
+                                              arguments: {
+                                                'homeData': event,
 
-                                        image: event.image,
-                                        date: event.date,
-                                        title: event.title,
-                                        des: event.place,
-                                        joinText: 'Join Event',
-                                      );
-                                    },
+                                                'title': 'Event Detail',
+                                              },
+                                            );
+                                          },
+                                          showButton:
+                                              event.applied == false
+                                                  ? true
+                                                  : false,
+                                          onTap: () {
+                                            customNoOfMemberBottomSheet(
+                                              context,
+                                              eventId: event.id,
+                                              extra: true,
+                                            );
+                                          },
+
+                                          image: event.image,
+                                          date: event.date,
+                                          title: event.title,
+                                          des: event.place,
+
+                                          joinText: 'Join Event',
+                                        );
+                                      },
+                                    ),
                                   ),
-                                ),
+                        ),
                       ),
-                    ),
 
-                    Gap(24),
-                    CustomDivider(),
-                    Gap(24),
+                      Gap(24),
+                      CustomDivider(),
+                      Gap(24),
 
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: CustomTitleSeeAllWidget(
-                        title: 'Broadcast message',
-                        seeAllOnTap: () {
-                          Navigator.pushNamed(context, AppPage.eventScreen);
-                        },
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: CustomTitleSeeAllWidget(
+                          title: 'Broadcast message',
+                          seeAllOnTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              AppPage.eventScreen,
+
+                              arguments: {'title': 'broadcasts'},
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                    Gap(20),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 6, left: 16),
-                        child:
-                            homeModel.broadcasts.isEmpty
-                                ? CustomEmpty()
-                                : Row(
-                                  children: List.generate(
-                                    homeModel.broadcasts.length,
-                                    (index) {
-                                      Broadcast broadcast =
-                                          homeModel.broadcasts[index];
-                                      return CustomMainCard(
-                                        image: broadcast.image,
-                                        date: broadcast.date,
-                                        title: broadcast.title,
-                                        des: broadcast.place,
-                                        onTap: () {},
-                                        joinText: 'Join Event',
-                                      );
-                                    },
+                      Gap(20),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 6, left: 16),
+                          child:
+                              homeModel.broadcasts.isEmpty
+                                  ? CustomEmpty()
+                                  : Row(
+                                    children: List.generate(
+                                      homeModel.broadcasts.length,
+                                      (index) {
+                                        Broadcast broadcast =
+                                            homeModel.broadcasts[index];
+                                        return CustomMainCard(
+                                          showButton: broadcast.applied,
+                                          image: broadcast.image,
+                                          date: broadcast.date,
+                                          title: broadcast.title,
+                                          des: broadcast.place,
+                                          onTap: () {},
+                                          joinText: 'Join Event',
+                                          cardOnTap: () {
+                                            Navigator.pushNamed(
+                                              context,
+                                              AppPage.homeEventDetailScreen,
+                                              arguments: {
+                                                'homeData': broadcast,
+                                                'title': 'Broadcast Detail',
+                                              },
+                                            );
+                                          },
+                                        );
+                                      },
+                                    ),
                                   ),
-                                ),
+                        ),
                       ),
-                    ),
-                    Gap(24),
-                    CustomDivider(),
+                      Gap(24),
+                      CustomDivider(),
 
-                    Gap(24),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: CustomTitleSeeAllWidget(
-                        title: 'App Features',
-                        seeAllOnTap: () {},
+                      Gap(24),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: CustomTitleSeeAllWidget(
+                          title: 'App Features',
+                          seeAllOnTap: () {},
+
+                          child: SizedBox(),
+                        ),
                       ),
-                    ),
-                  ],
-                );
-              },
-            ),
-            Gap(20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: GridView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 8,
-                  crossAxisSpacing: 8,
-                  mainAxisExtent: 17.h,
-                ),
-                itemCount: appFeaturesList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return CustomAppFeatureCard(
-                    onTap: () {
-                      if (index == 0) {
-                        Navigator.pushNamed(
-                          context,
-                          AppPage.appFeatureScreen,
-                          arguments: {'title': 'Schema'},
-                        );
-                      } else if (index == 1) {
-                        Navigator.pushNamed(
-                          context,
-                          AppPage.appFeatureScreen,
-                          arguments: {'title': 'Kit'},
-                        );
-                      } else if (index == 2) {
-                        Navigator.pushNamed(
-                          context,
-                          AppPage.appFeatureScreen,
-                          arguments: {'title': 'Exam (GK)'},
-                        );
-                      } else {
-                        Navigator.pushNamed(
-                          context,
-                          AppPage.appFeatureScreen,
-                          arguments: {'title': 'Comity'},
-                        );
-                      }
-                    },
-                    image: appFeaturesList[index].image,
-                    title: appFeaturesList[index].title,
+                    ],
                   );
                 },
               ),
-            ),
+              Gap(20),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 8,
+                    crossAxisSpacing: 8,
+                    mainAxisExtent: 17.h,
+                  ),
+                  itemCount: appFeaturesList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return CustomAppFeatureCard(
+                      onTap: () {
+                        if (index == 0) {
+                          Navigator.pushNamed(
+                            context,
+                            AppPage.appFeatureScreen,
+                            arguments: {'title': 'Schema'},
+                          );
+                        } else if (index == 1) {
+                          Navigator.pushNamed(
+                            context,
+                            AppPage.appFeatureScreen,
+                            arguments: {'title': 'Kit'},
+                          );
+                        } else if (index == 2) {
+                          Navigator.pushNamed(
+                            context,
+                            AppPage.appFeatureScreen,
+                            arguments: {'title': 'Exam (GK)'},
+                          );
+                        } else {
+                          Navigator.pushNamed(
+                            context,
+                            AppPage.appFeatureScreen,
+                            arguments: {'title': 'Comity'},
+                          );
+                        }
+                      },
+                      image: appFeaturesList[index].image,
+                      title: appFeaturesList[index].title,
+                    );
+                  },
+                ),
+              ),
 
-            Gap(20),
-          ],
+              Gap(20.h),
+            ],
+          ),
         ),
       ),
     );

@@ -24,8 +24,10 @@ class CustomTitleSeeAllWidget extends StatelessWidget {
         Expanded(
           child: Row(
             children: <Widget>[
-              SvgPicture.asset(image ?? AppImage.calendar),
-              Gap(10),
+              if ((image ?? '').isNotEmpty) ...[
+                SvgPicture.asset(image ?? AppImage.calendar),
+                Gap(10),
+              ],
               CustomText(
                 text: title,
 

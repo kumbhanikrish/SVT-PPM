@@ -10,7 +10,12 @@ import 'package:svt_ppm/utils/widgets/custom_text.dart';
 
 class OtpVerificationScreen extends StatelessWidget {
   final String number;
-  OtpVerificationScreen({super.key, required this.number});
+  final bool showButton;
+  OtpVerificationScreen({
+    super.key,
+    required this.number,
+    this.showButton = true,
+  });
   final TextEditingController pinController = TextEditingController();
 
   @override
@@ -66,7 +71,9 @@ class OtpVerificationScreen extends StatelessWidget {
               fontWeight: FontWeight.w600,
               fontSize: 12,
             ),
+
             const Gap(5),
+
             InkWell(
               onTap: () {
                 authCubit.sendOtp(context, number: number, login: false);
@@ -80,17 +87,20 @@ class OtpVerificationScreen extends StatelessWidget {
             ),
           ],
         ),
+
         const Gap(30),
-        CustomButton(
-          text: 'Verify OTP',
-          onTap: () {
-            authCubit.verifyOtp(
-              context,
-              number: number,
-              otp: pinController.text,
-            );
-          },
-        ),
+        if (showButton) ...[
+          CustomButton(
+            text: 'Verify OTP',
+            onTap: () {
+              authCubit.verifyOtp(
+                context,
+                number: number,
+                otp: pinController.text,
+              );
+            },
+          ),
+        ],
       ],
     );
   }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:svt_ppm/module/auth/model/login_model.dart';
 import 'package:svt_ppm/module/home/model/home_model.dart';
 import 'package:svt_ppm/module/home/repo/home_repo.dart';
+import 'package:svt_ppm/utils/widgets/custom_success_dialog.dart';
 
 part 'home_state.dart';
 
@@ -13,6 +14,8 @@ class HomeCubit extends Cubit<HomeState> {
 
   List<LoginModel> noOfMemberList = [];
 
+  Map<String, dynamic> homeSeeAllModel = {};
+
   HomeRepo homeRepo = HomeRepo();
 
   getHomeData(BuildContext context) async {
@@ -20,6 +23,7 @@ class HomeCubit extends Cubit<HomeState> {
 
     if (state is GetHomeState) {
       noOfMemberList = (state as GetHomeState).noOfMemberList;
+      homeSeeAllModel = (state as GetHomeState).homeSeeAllModel;
     }
 
     if (response.data['success'] == true) {
@@ -28,7 +32,35 @@ class HomeCubit extends Cubit<HomeState> {
       homeModel = HomeModel.fromJson(data);
     }
 
-    emit(GetHomeState(homeModel: homeModel, noOfMemberList: noOfMemberList));
+    emit(
+      GetHomeState(
+        homeModel: homeModel,
+        noOfMemberList: noOfMemberList,
+        homeSeeAllModel: homeSeeAllModel,
+      ),
+    );
+  }
+
+  getHomeSeeAll(BuildContext context, {required String type}) async {
+    Map<String, dynamic> params = {'type': type};
+    Response response = await homeRepo.getHomeSeeAll(context, params: params);
+
+    if (state is GetHomeState) {
+      noOfMemberList = (state as GetHomeState).noOfMemberList;
+      homeModel = (state as GetHomeState).homeModel;
+    }
+
+    if (response.data['success'] == true) {
+      final data = response.data['data'];
+
+      emit(
+        GetHomeState(
+          homeModel: homeModel,
+          noOfMemberList: noOfMemberList,
+          homeSeeAllModel: data,
+        ),
+      );
+    }
   }
 
   memberFamily(BuildContext context, {required String pageName}) async {
@@ -38,6 +70,7 @@ class HomeCubit extends Cubit<HomeState> {
     );
     if (state is GetHomeState) {
       homeModel = (state as GetHomeState).homeModel;
+      homeSeeAllModel = (state as GetHomeState).homeSeeAllModel;
     }
     if (response.data['success'] == true) {
       final data = response.data['data'];
@@ -46,7 +79,13 @@ class HomeCubit extends Cubit<HomeState> {
           (data as List).map((e) => LoginModel.fromJson(e)).toList();
     }
 
-    emit(GetHomeState(homeModel: homeModel, noOfMemberList: noOfMemberList));
+    emit(
+      GetHomeState(
+        homeModel: homeModel,
+        noOfMemberList: noOfMemberList,
+        homeSeeAllModel: homeSeeAllModel,
+      ),
+    );
   }
 
   eventsRegistration(
@@ -67,6 +106,13 @@ class HomeCubit extends Cubit<HomeState> {
 
     if (response.data['success'] == true) {
       Navigator.pop(context);
+
+      showCustomDialog(
+        context,
+        title: 'Success',
+        subTitle: 'Event Registered Successfully',
+        buttonText: 'OK',
+      );
       return response;
     }
   }

@@ -6,6 +6,7 @@ import 'package:svt_ppm/utils/theme/colors.dart';
 import 'package:svt_ppm/utils/widgets/custom_image.dart';
 import 'package:svt_ppm/utils/widgets/custom_text.dart';
 import 'package:svt_ppm/utils/widgets/custom_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CustomMainCard extends StatelessWidget {
   final String image;
@@ -14,7 +15,9 @@ class CustomMainCard extends StatelessWidget {
   final String title;
   final String des;
   final String joinText;
+  final bool showButton;
   final void Function() onTap;
+  final void Function() cardOnTap;
   const CustomMainCard({
     super.key,
     required this.image,
@@ -23,6 +26,8 @@ class CustomMainCard extends StatelessWidget {
     required this.des,
     required this.joinText,
     required this.onTap,
+    required this.showButton,
+    required this.cardOnTap,
     this.width,
   });
   @override
@@ -34,72 +39,82 @@ class CustomMainCard extends StatelessWidget {
         border: Border.all(width: 0.5, color: AppColor.themePrimaryColor),
       ),
       margin: EdgeInsets.only(right: 10),
-      child: Column(
-        children: <Widget>[
-          CustomCachedImage(
-            imageUrl: image,
-            height: 107,
-            width: 100.w,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(14),
-              topRight: Radius.circular(14),
+      child: InkWell(
+        onTap: cardOnTap,
+        child: Column(
+          children: <Widget>[
+            CustomCachedImage(
+              imageUrl: image,
+              height: 107,
+              width: 100.w,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(14),
+                topRight: Radius.circular(14),
+              ),
             ),
-          ),
 
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Gap(5),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: CustomTitleName(title: 'Date', text: date),
-              ),
-              CustomDivider(),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-
-                  children: <Widget>[
-                    CustomText(text: title, fontSize: 10),
-                    Gap(10),
-                    CustomText(
-                      text: des,
-                      color: AppColor.hintColor,
-                      fontSize: 10,
-                    ),
-                    Gap(7),
-                  ],
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Gap(5),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: CustomTitleName(
+                    title: 'Date',
+                    text: date,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
+                CustomDivider(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
 
-              Container(
-                decoration: BoxDecoration(
-                  color: AppColor.themePrimaryColor,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(15),
-                    bottomRight: Radius.circular(15),
+                    children: <Widget>[
+                      CustomText(text: title, fontSize: 14),
+                      Gap(10),
+                      CustomText(
+                        text: des,
+                        color: AppColor.hintColor,
+                        fontSize: 12,
+                      ),
+                      Gap(7),
+                    ],
                   ),
                 ),
 
-                child: InkWell(
-                  onTap: onTap,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Center(
-                      child: CustomText(
-                        text: joinText,
-                        fontSize: 10,
-                        fontWeight: FontWeight.w600,
-                        color: AppColor.whiteColor,
+                if (showButton) ...[
+                  Container(
+                    decoration: BoxDecoration(
+                      color: AppColor.themePrimaryColor,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(15),
+                        bottomRight: Radius.circular(15),
+                      ),
+                    ),
+
+                    child: InkWell(
+                      onTap: onTap,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Center(
+                          child: CustomText(
+                            text: joinText,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            color: AppColor.whiteColor,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
-            ],
-          ),
-        ],
+                ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -117,6 +132,8 @@ class CustomCard extends StatelessWidget {
   final BorderRadiusGeometry? borderRadius;
   final BorderRadiusGeometry? imageBorderRadius;
   final void Function()? onTap;
+  final void Function()? cardOnTap;
+  final double? height;
 
   const CustomCard({
     super.key,
@@ -127,112 +144,126 @@ class CustomCard extends StatelessWidget {
     required this.time,
     required this.joinText,
     this.width,
+    this.height,
     this.borderRadius,
     this.imageBorderRadius,
     this.onTap,
+    this.cardOnTap,
     this.showButton = true,
   });
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: height,
+      width: width,
       decoration: BoxDecoration(
         borderRadius: borderRadius ?? BorderRadius.circular(5),
         color: AppColor.fillColor,
       ),
       margin: EdgeInsets.only(right: 6),
-      child: Column(
-        children: <Widget>[
-          CustomCachedImage(
-            imageUrl: image,
-            height: 88,
-            width: 100.w,
-            borderRadius:
-                imageBorderRadius ??
-                BorderRadius.only(
-                  topLeft: Radius.circular(5),
-                  topRight: Radius.circular(5),
-                ),
-          ),
-
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Gap(5),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: CustomTitleName(
-                        image: AppImage.date,
-                        icon: showButton,
-                        title: 'Date',
-                        fontSize: 7,
-                        text: date,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 1),
-                      child: CustomText(
-                        text: time,
-                        fontSize: 7,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              CustomDivider(height: 10),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-
-                  children: <Widget>[
-                    CustomText(
-                      text: title,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    Gap(5),
-                    CustomText(
-                      text: des,
-                      color: AppColor.hintColor,
-                      fontSize: 8,
-                    ),
-                    Gap(7),
-                  ],
-                ),
-              ),
-              if (showButton == true) ...[
-                Container(
-                  decoration: BoxDecoration(
-                    color: AppColor.themePrimaryColor,
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(5),
-                      bottomRight: Radius.circular(5),
-                    ),
+      child: InkWell(
+        onTap: cardOnTap,
+        child: Column(
+          children: <Widget>[
+            CustomCachedImage(
+              imageUrl: image,
+              height: 88,
+              width: 100.w,
+              borderRadius:
+                  imageBorderRadius ??
+                  BorderRadius.only(
+                    topLeft: Radius.circular(5),
+                    topRight: Radius.circular(5),
                   ),
+            ),
 
-                  child: InkWell(
-                    onTap: onTap,
-                    child: Padding(
-                      padding: const EdgeInsets.all(7),
-                      child: Center(
-                        child: CustomText(
-                          text: joinText,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Gap(5),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: CustomTitleName(
+                          image: AppImage.date,
+                          icon: showButton,
+                          title: 'Date',
                           fontSize: 10,
+                          text: date,
                           fontWeight: FontWeight.w600,
-                          color: AppColor.whiteColor,
+                        ),
+                      ),
+
+                      if (time.isNotEmpty) ...[
+                        Padding(
+                          padding: const EdgeInsets.only(top: 1),
+                          child: CustomText(
+                            text: time,
+
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                CustomDivider(height: 10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+
+                    children: <Widget>[
+                      CustomText(
+                        text: title,
+                        fontSize: 12,
+                        maxLines: 1,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      Gap(5),
+                      CustomText(
+                        text: des,
+                        maxLines: showButton ? 1 : 3,
+                        color: AppColor.hintColor,
+                        fontSize: 10,
+                      ),
+                      Gap(7),
+                    ],
+                  ),
+                ),
+                if (showButton == true) ...[
+                  Container(
+                    decoration: BoxDecoration(
+                      color: AppColor.themePrimaryColor,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(5),
+                        bottomRight: Radius.circular(5),
+                      ),
+                    ),
+
+                    child: InkWell(
+                      onTap: onTap,
+                      child: Padding(
+                        padding: const EdgeInsets.all(7),
+                        child: Center(
+                          child: CustomText(
+                            text: joinText,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            color: AppColor.whiteColor,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
+                ],
               ],
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -334,9 +365,11 @@ class CustomTeamCard extends StatelessWidget {
   final String image;
   final String name;
   final String position;
+  final String number;
   const CustomTeamCard({
     super.key,
     required this.image,
+    required this.number,
     required this.name,
     required this.position,
   });
@@ -352,8 +385,8 @@ class CustomTeamCard extends StatelessWidget {
         child: Column(
           children: <Widget>[
             CustomCachedImage(
-              height: 74,
-              width: 74,
+              height: 85,
+              width: 85,
               borderRadius: BorderRadius.circular(15),
               imageUrl: image,
             ),
@@ -365,13 +398,34 @@ class CustomTeamCard extends StatelessWidget {
                   text: name,
                   fontWeight: FontWeight.w600,
                   fontSize: 12,
+                  maxLines: 1,
+                  textAlign: TextAlign.center,
+                  overflow: false,
                 ),
                 Gap(7),
                 CustomText(
                   text: position,
                   fontWeight: FontWeight.w400,
                   color: AppColor.hintColor,
-                  fontSize: 8,
+                  fontSize: 10,
+                ),
+                Gap(7),
+                InkWell(
+                  onTap: () async {
+                    final uri = Uri(scheme: 'tel', path: number);
+                    if (await canLaunchUrl(uri)) {
+                      await launchUrl(uri);
+                    } else {
+                      // Optionally show error
+                      print("Could not launch dialer");
+                    }
+                  },
+                  child: CustomText(
+                    text: number,
+                    fontWeight: FontWeight.w400,
+                    color: AppColor.hintColor,
+                    fontSize: 12,
+                  ),
                 ),
               ],
             ),
@@ -386,6 +440,7 @@ class KitCard extends StatelessWidget {
   final String image;
   final String title;
   final String status;
+  final String rejectReason;
   final String joinText;
   final bool showButton;
   final BorderRadiusGeometry? borderRadius;
@@ -398,6 +453,7 @@ class KitCard extends StatelessWidget {
     required this.title,
     required this.status,
     required this.joinText,
+    required this.rejectReason,
     this.borderRadius,
     this.onTap,
     this.cardOnTap,
@@ -495,6 +551,19 @@ class KitCard extends StatelessWidget {
                           ),
                         )
                         : Container(),
+
+                    status == 'Rejected'
+                        ? Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: CustomTitleName(
+                            text: rejectReason,
+                            title: 'Reason',
+                            color: AppColor.redColor,
+                            fontWeight: FontWeight.w600,
+                            textColor: AppColor.redColor.withOpacity(0.5),
+                          ),
+                        )
+                        : SizedBox.shrink(),
                   ],
                 ),
               ),

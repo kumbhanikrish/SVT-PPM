@@ -24,3 +24,15 @@ final class StoreWpNumberLoaded extends StoreWpNumberState {
   final String code;
   StoreWpNumberLoaded(this.code, {required this.flag});
 }
+
+// village state
+sealed class VillageState {}
+
+final class VillageInitial extends VillageState {}
+
+final class VillageLoaded extends VillageState {
+  final List<VillageModel> villageList;
+  final String villageName;
+
+  VillageLoaded({required this.villageList, required this.villageName});
+}

@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:svt_ppm/module/app_features/repo/kits_repo.dart';
+import 'package:svt_ppm/utils/widgets/custom_success_dialog.dart';
 
 part 'kits_state.dart';
 
@@ -41,6 +42,13 @@ class KitsCubit extends Cubit<KitsState> {
     if (response.data['success'] == true) {
       Navigator.pop(context);
       getKitsData(context);
+
+      showCustomDialog(
+        context,
+        title: 'Success',
+        subTitle: 'Kits Registered Successfully',
+        buttonText: 'OK',
+      );
     }
     return response;
   }

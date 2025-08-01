@@ -7,7 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:svt_ppm/main.dart';
 import 'package:svt_ppm/module/auth/model/login_model.dart';
+import 'package:svt_ppm/module/auth/model/village_model.dart';
 import 'package:svt_ppm/module/auth/repo/auth_repo.dart';
+import 'package:svt_ppm/services/api_services.dart';
 import 'package:svt_ppm/utils/constant/app_page.dart';
 import 'package:svt_ppm/utils/enum/enums.dart';
 import 'package:svt_ppm/utils/widgets/custom_error_toast.dart';
@@ -36,7 +38,7 @@ class AuthCubit extends Cubit<AuthState> {
       if (response.data['data']['is_member'] == true) {
         sendOtp(context, number: number, login: true);
       } else {
-        customErrorToast(context, text: 'Member not found');
+        customErrorToast(context, text: response.data['message']);
       }
     }
 
@@ -59,6 +61,10 @@ class AuthCubit extends Cubit<AuthState> {
     );
 
     if (response.data['success'] == true) {
+      await localDataSaver.setVerificationId(
+        response.data['data'].isNotEmpty ? response.data['data'] : '',
+      );
+
       if (login) {
         stepperCubit.nextStep(step: 1);
       }
@@ -73,10 +79,13 @@ class AuthCubit extends Cubit<AuthState> {
   }) async {
     // await messaging.requestPermission();
 
+    String verificationId = await dataSaver.getVerificationId();
+
     Map<String, dynamic> loginParams = {
       "mobile_no": number,
       "otp": otp,
       "data_requested": true,
+      'verificationId': verificationId,
     };
 
     final Response response = await authRepo.verifyOtp(
@@ -296,5 +305,37 @@ class RadioCubit extends Cubit<UserType> {
 
   init() {
     emit(UserType.male);
+  }
+}
+
+class VillageCubit extends Cubit<VillageState> {
+  VillageCubit() : super(VillageInitial());
+  AuthRepo authRepo = AuthRepo();
+
+  Future<void> fetchVillage(BuildContext context) async {
+    List<VillageModel> villageList = [];
+    String villageName = '';
+    final Response response = await authRepo.village(context);
+    if (response.data['success'] == true) {
+      if (state is VillageLoaded) {
+        villageName = (state as VillageLoaded).villageName;
+      }
+
+      final data = response.data['data'];
+
+      villageList =
+          (data as List).map((e) => VillageModel.fromJson(e)).toList();
+    }
+
+    emit(VillageLoaded(villageList: villageList, villageName: villageName));
+  }
+
+  void setVillageName({required String name}) {
+    if (state is VillageLoaded) {
+      final currentState = state as VillageLoaded;
+      emit(
+        VillageLoaded(villageList: currentState.villageList, villageName: name),
+      );
+    }
   }
 }
