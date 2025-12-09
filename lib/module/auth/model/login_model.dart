@@ -10,6 +10,7 @@ class LoginModel {
   final String whatsappNo;
   final String email;
   final String villageName;
+  final String villageCode;
   final String address;
   final dynamic isNewMember;
   final dynamic oldMemberId;
@@ -32,6 +33,7 @@ class LoginModel {
     required this.id,
     required this.memberId,
     required this.photo,
+    required this.villageCode,
     required this.firstName,
     required this.middleName,
     required this.lastName,
@@ -74,6 +76,7 @@ class LoginModel {
     whatsappNo: json["whatsapp_no"] ?? '',
     email: json["email"],
     villageName: json["village_name"],
+    villageCode: json["village_code"] ?? '',
     address: json["address"],
     isNewMember: json["is_new_member"],
     oldMemberId: json["old_member_id"],

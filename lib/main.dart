@@ -14,6 +14,7 @@ import 'package:svt_ppm/module/app_features/cubit/exam/exam_cubit.dart';
 import 'package:svt_ppm/module/app_features/cubit/kits/kits_cubit.dart';
 import 'package:svt_ppm/module/app_features/cubit/schemas/schemas_cubit.dart';
 import 'package:svt_ppm/module/auth/cubit/auth_cubit.dart';
+import 'package:svt_ppm/module/data_entry/cubit/data_entry_cubit.dart';
 import 'package:svt_ppm/module/home/cubit/home_cubit.dart';
 import 'package:svt_ppm/module/profile/cubit/profile_cubit.dart';
 import 'package:svt_ppm/services/api_services.dart';
@@ -62,7 +63,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'Flutter Demo',
             theme: ThemeData(
-              dialogTheme: DialogTheme(
+              dialogTheme: DialogThemeData(
                 backgroundColor: AppColor.whiteColor,
                 surfaceTintColor: AppColor.whiteColor,
               ),
@@ -77,7 +78,7 @@ class MyApp extends StatelessWidget {
                 surfaceTintColor: AppColor.whiteColor,
               ),
               scaffoldBackgroundColor: AppColor.whiteColor,
-              bottomAppBarTheme: BottomAppBarTheme(
+              bottomAppBarTheme: BottomAppBarThemeData(
                 color: AppColor.whiteColor,
                 surfaceTintColor: AppColor.whiteColor,
               ),
@@ -110,4 +111,6 @@ dynamic providers = [
   BlocProvider(create: (context) => VillageCubit()),
   BlocProvider(create: (context) => ExamCubit()),
   BlocProvider(create: (context) => LanguageCubit()),
+  BlocProvider(create: (context) => ChangeBorder2Cubit()),
+  BlocProvider(create: (context) => DataEntryCubit()),
 ];

@@ -9,7 +9,7 @@ customToast(
   return AnimatedSnackBar.material(
     text,
     type: animatedSnackBarType,
-    mobileSnackBarPosition: MobileSnackBarPosition.top,
+    mobileSnackBarPosition: MobileSnackBarPosition.bottom,
     desktopSnackBarPosition: DesktopSnackBarPosition.bottomLeft,
     snackBarStrategy: RemoveSnackBarStrategy(),
     duration: const Duration(seconds: 2),

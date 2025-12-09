@@ -4,6 +4,7 @@ class VillageModel with CustomDropdownListFilter {
   final int id;
   final String name;
   final String key;
+  final String code;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -11,6 +12,7 @@ class VillageModel with CustomDropdownListFilter {
     required this.id,
     required this.name,
     required this.key,
+    required this.code,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -19,6 +21,7 @@ class VillageModel with CustomDropdownListFilter {
     id: json["id"],
     name: json["name"],
     key: json["key"],
+    code: json["code"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
   );

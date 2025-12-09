@@ -36,6 +36,7 @@ class LoginScreen extends StatelessWidget {
           hintText: 'Enter Mobile Number',
           labelText: 'Mobile Number',
           keyboardType: TextInputType.number,
+          maxLength: 10,
 
           controller: numberController,
         ),

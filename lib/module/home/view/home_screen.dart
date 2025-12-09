@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:sizer/sizer.dart';
 import 'package:svt_ppm/main.dart';
@@ -80,11 +81,84 @@ class _HomeScreenState extends State<HomeScreen> {
           Gap(12),
         ],
 
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 16, bottom: 10),
-          child: Image.asset(AppLogo.smallLogo),
+        // leading: Padding(
+        //   padding: const EdgeInsets.only(left: 16, bottom: 10),
+        //   child: Image.asset(AppLogo.smallLogo),
+        // ),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            ValueListenableBuilder<LoginModel?>(
+              valueListenable: loginModelNotifier,
+              builder: (context, value, child) {
+                return UserAccountsDrawerHeader(
+                  decoration: BoxDecoration(color: AppColor.themePrimaryColor),
+                  accountName: CustomText(
+                    text: loginModelNotifier.value?.name ?? "",
+                    color: AppColor.whiteColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+
+                  accountEmail: CustomText(
+                    text: loginModelNotifier.value?.email ?? "",
+                    color: AppColor.whiteColor,
+                    fontSize: 14     ,
+                  ),
+                  currentAccountPicture: CircleAvatar(
+                    backgroundImage: NetworkImage(
+                      loginModelNotifier.value?.photo ?? "",
+                    ),
+                    backgroundColor: AppColor.whiteColor,
+                  ),
+                );
+              },
+            ),
+
+            ListTile(
+              leading: SvgPicture.asset(
+                AppImage.kitDistribution,
+                height: 35,
+                width: 35,
+              ),
+              title: CustomText(
+                text: 'Kit Distribution',
+                color: AppColor.blackColor,
+              ),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: SvgPicture.asset(
+                AppImage.examChecking,
+                height: 25,
+                width: 25,
+              ),
+              title: CustomText(
+                text: 'Exam Checking',
+
+                color: AppColor.blackColor,
+              ),
+              onTap: () {
+                Navigator.pushNamed(context, AppPage.profileScreen);
+              },
+            ),
+            ListTile(
+              leading: SvgPicture.asset(
+                AppImage.getEntry,
+                height: 25,
+                width: 25,
+              ),
+              title: CustomText(text: 'Get Entry', color: AppColor.blackColor),
+              onTap: () {},
+            ),
+          ],
         ),
       ),
+
       body: RefreshIndicator(
         backgroundColor: AppColor.whiteColor,
         color: AppColor.themePrimaryColor,

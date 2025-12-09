@@ -53,6 +53,7 @@ List<String> standardList = [
 class SignupScreen extends StatelessWidget {
   final dynamic data;
   const SignupScreen({super.key, this.data});
+
   @override
   Widget build(BuildContext context) {
     bool old = data['old'] ?? false;
@@ -66,6 +67,7 @@ class SignupScreen extends StatelessWidget {
     TextEditingController emailController = TextEditingController();
     TextEditingController addressController = TextEditingController();
     TextEditingController oldMemberNameController = TextEditingController();
+    TextEditingController occupationController = TextEditingController();
     // TextEditingController villageController = TextEditingController();
 
     StepperCubit stepperCubit = BlocProvider.of<StepperCubit>(context);
@@ -89,6 +91,7 @@ class SignupScreen extends StatelessWidget {
     List<VillageModel> villageList = [];
 
     String villageName = '';
+    String villageCode = '';
 
     String initialRelation = '';
     String initialStandard = '';
@@ -306,6 +309,7 @@ class SignupScreen extends StatelessWidget {
                       labelText: 'Mobile Number',
                       controller: mobileController,
                       keyboardType: TextInputType.phone,
+                      maxLength: 10,
                     ),
                     Gap(20),
                     CustomTextField(
@@ -400,6 +404,13 @@ class SignupScreen extends StatelessWidget {
                           );
                         },
                       ),
+                      Gap(20),
+
+                      CustomTextField(
+                        hintText: 'enter Occupation',
+                        labelText: 'Occupation',
+                        controller: occupationController,
+                      ),
                     ],
 
                     if (!addMember) ...[
@@ -423,6 +434,7 @@ class SignupScreen extends StatelessWidget {
                               log('value?.key ??  ::${value?.key ?? ''}');
                               villageCubit.setVillageName(
                                 name: value?.key ?? '',
+                                nameCode: value?.code ?? '',
                               );
                             },
                           );
@@ -823,6 +835,7 @@ class SignupScreen extends StatelessWidget {
                       builder: (context, state) {
                         if (state is VillageLoaded) {
                           villageName = state.villageName;
+                          villageCode = state.villageCode;
                         }
 
                         return CustomButton(
@@ -877,6 +890,7 @@ class SignupScreen extends StatelessWidget {
                                                   selectStandardCubit.state
                                                       .substring(1)
                                               : '',
+                                      occupation: occupationController.text,
                                     );
                                   }
                                   : () {
@@ -889,6 +903,7 @@ class SignupScreen extends StatelessWidget {
                                       email: emailController.text,
                                       address: addressController.text,
                                       villageName: villageName,
+                                      villageCode: villageCode,
                                       oldMemberId: oldMemberNameController.text,
                                       gender:
                                           radioCubit.state == UserType.male

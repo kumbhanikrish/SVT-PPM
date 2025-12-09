@@ -12,7 +12,6 @@ class AuthRepo {
       context,
       AppApi.checkMember,
       params,
-      showLoading: false,
     );
 
     return response;

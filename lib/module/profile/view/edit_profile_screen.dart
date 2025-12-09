@@ -84,7 +84,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     if (standardList.isNotEmpty && userData.standard.isNotEmpty) {
       initialStandard = standardList.firstWhere(
         (item) => item == userData.standard,
-        orElse: () => '',
+        orElse: () => standardList.first,
       );
     }
     log('initialRelation :: ${userData.standard}');
@@ -94,7 +94,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     // }
 
     log('userData.villageName ::${userData.relation}');
-    villageCubit.setVillageName(name: userData.villageName);
+    villageCubit.setVillageName(name: userData.villageName, nameCode: userData.villageCode);
     selectRelationCubit.updateValue(
       relationValue:
           userData.relation.isEmpty ? initialRelation : userData.relation,
@@ -206,6 +206,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 labelText: 'Mobile Number',
                 keyboardType: TextInputType.number,
                 controller: mobileController,
+                maxLength: 10,
               ),
               Gap(20),
               CustomTextField(
@@ -284,7 +285,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
                         onChanged: (value) {
                           log('value?.key ??  ::${value?.key ?? ''}');
-                          villageCubit.setVillageName(name: value?.key ?? '');
+                          villageCubit.setVillageName(
+                            name: value?.key ?? '',
+                            nameCode: value?.code ?? '',
+                          );
                         },
                       );
                     },

@@ -1,6 +1,7 @@
 // import 'package:country_code_picker/country_code_picker.dart';
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
 import 'package:svt_ppm/utils/widgets/custom_filed_box.dart';
 // import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -23,11 +24,14 @@ class CustomTextField extends StatelessWidget {
   final TextCapitalization? textCapitalization;
   final void Function()? onTap;
   final void Function(String)? onChanged;
+  final List<TextInputFormatter>? inputFormatters;
+  final String? Function(String?)? validator;
 
   const CustomTextField({
     super.key,
     required this.hintText,
     this.controller,
+    this.inputFormatters,
     this.isPassword = false,
     this.readOnly = false,
     this.prefixIcon,
@@ -40,6 +44,7 @@ class CustomTextField extends StatelessWidget {
     this.focusNode,
     this.fillColor,
     this.textCapitalization,
+    this.validator,
     this.keyboardType = TextInputType.text,
     this.line = 1,
     this.onTap,
@@ -51,6 +56,7 @@ class CustomTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextFormField(
+          validator: validator,
           controller: controller,
           obscureText: isPassword,
           keyboardType: keyboardType,
@@ -63,10 +69,12 @@ class CustomTextField extends StatelessWidget {
           onTap: onTap,
           onChanged: onChanged,
           cursorColor: AppColor.themePrimaryColor,
+          inputFormatters: inputFormatters,
           style: TextStyle(color: AppColor.themePrimaryColor),
           textCapitalization:
               textCapitalization ?? TextCapitalization.sentences,
           decoration: InputDecoration(
+            counterText: '',
             floatingLabelBehavior: FloatingLabelBehavior.always,
             hintText: hintText,
             labelText: labelText,
@@ -132,11 +140,13 @@ class CustomDropWonFiled<T> extends StatelessWidget {
   final List<T> items;
   final dynamic Function(T?) onChanged;
   final Color? selectColor;
+  final String? Function(T?)? validator;
   final Widget Function(BuildContext, T, bool, void Function())?
   listItemBuilder;
   const CustomDropWonFiled({
     super.key,
     required this.text,
+    this.validator,
     this.initialItem,
     this.hintText,
     this.selectColor,
@@ -160,7 +170,7 @@ class CustomDropWonFiled<T> extends StatelessWidget {
             horizontal: 16,
             vertical: 14,
           ),
-
+          validator: validator,
           decoration: CustomDropdownDecoration(
             closedBorder: Border.all(color: AppColor.transparentColor),
 

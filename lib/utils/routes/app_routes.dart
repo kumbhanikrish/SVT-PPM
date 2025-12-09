@@ -8,6 +8,7 @@ import 'package:svt_ppm/module/auth/view/auth_screen.dart';
 import 'package:svt_ppm/module/auth/view/selection_Screen.dart';
 import 'package:svt_ppm/module/auth/view/signup_screen.dart';
 import 'package:svt_ppm/module/auth/view/splash_screen.dart';
+import 'package:svt_ppm/module/data_entry/view/qr_code_scanner_screen.dart';
 import 'package:svt_ppm/module/event/view/event_broadcast_detail_screen.dart';
 import 'package:svt_ppm/module/event/view/home_event_detail_screen.dart';
 import 'package:svt_ppm/module/event/view/event_screen.dart';
@@ -68,6 +69,7 @@ final Map<String, WidgetBuilder> appRoutes = {
       (context) => ExamSeeAllScreen(
         argument: ModalRoute.of(context)?.settings.arguments,
       ),
+  AppPage.qrScannerScreen: (context) => QrScannerScreen(),
 
   // AppRoutes.referAndEarnScreen:
   //     (context) =>

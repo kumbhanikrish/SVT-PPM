@@ -33,6 +33,7 @@ final class VillageInitial extends VillageState {}
 final class VillageLoaded extends VillageState {
   final List<VillageModel> villageList;
   final String villageName;
+  final String villageCode;
 
-  VillageLoaded({required this.villageList, required this.villageName});
+  VillageLoaded({required this.villageList, required this.villageName, required this.villageCode});
 }

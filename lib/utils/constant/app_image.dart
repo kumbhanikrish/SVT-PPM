@@ -28,6 +28,9 @@ class AppImage {
   static String camera = 'assets/image/camera.svg';
   static String gallery = 'assets/image/gallery.svg';
   static String imageError = 'assets/image/image_error.jpg';
+  static String kitDistribution = 'assets/image/kit-distribution.svg';
+  static String examChecking = 'assets/image/exam-checking.svg';
+  static String getEntry = 'assets/image/get-entry.svg';
 }
 
 class AppLogo {

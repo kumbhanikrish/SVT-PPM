@@ -17,4 +17,5 @@ class AppPage {
   static String eventBroadcastDetailScreen = '/eventBroadcastDetailScreen';
   static String showProofScreen = '/showProofScreen';
   static String examSeeAllScreen = '/examSeeAllScreen';
+  static String qrScannerScreen = '/qrScannerScreen';
 }

@@ -118,18 +118,95 @@ class AuthCubit extends Cubit<AuthState> {
     required String address,
     required String gender,
     required String email,
+    required String villageCode,
     String? oldMemberId,
     String? oldMemberIdCard,
     String? idProofFront,
     String? idProofBack,
     required bool old,
   }) async {
+    // -------------------------------
+    // VALIDATIONS
+    // -------------------------------
+
+    // Required text fields
+    if (photo.isEmpty) {
+      return customErrorToast(context, text: "Please upload a photo");
+    }
+
+    if (firstName.isEmpty) {
+      return customErrorToast(context, text: "Please enter first name");
+    }
+    if (middleName.isEmpty) {
+      return customErrorToast(context, text: "Please enter middle name");
+    }
+    if (lastName.isEmpty) {
+      return customErrorToast(context, text: "Please enter last name");
+    }
+    if (mobileNo.isEmpty || mobileNo.length != 10) {
+      return customErrorToast(
+        context,
+        text: "Please enter valid 10-digit mobile number",
+      );
+    }
+    // Email validation
+    if (email.isNotEmpty &&
+        !RegExp(r"^[\w\-.]+@([\w-]+\.)+[\w-]{2,4}$").hasMatch(email)) {
+      return customErrorToast(context, text: "Please enter a valid email");
+    }
+    if (villageName.isEmpty) {
+      return customErrorToast(context, text: "Please enter village name");
+    }
+    if (address.isEmpty) {
+      return customErrorToast(context, text: "Please enter address");
+    }
+    if (gender.isEmpty) {
+      return customErrorToast(context, text: "Please select gender");
+    }
+    if (villageCode.isEmpty) {
+      return customErrorToast(context, text: "Please enter village code");
+    }
+
+    // Photo required
+
+    // Old Member Validations
+    if (old) {
+      if (oldMemberId == null || oldMemberId.isEmpty) {
+        return customErrorToast(context, text: "Please enter Old Member ID");
+      }
+
+      if (oldMemberIdCard == null || oldMemberIdCard.isEmpty) {
+        return customErrorToast(
+          context,
+          text: "Please upload Old Member ID Card",
+        );
+      }
+    }
+
+    // New Member Validations
+    if (!old) {
+      if (idProofFront == null || idProofFront.isEmpty) {
+        return customErrorToast(
+          context,
+          text: "Please upload ID Proof (Front)",
+        );
+      }
+
+      if (idProofBack == null || idProofBack.isEmpty) {
+        return customErrorToast(context, text: "Please upload ID Proof (Back)");
+      }
+    }
+
+    // -------------------------------
+    // CREATE PARAM MAP
+    // -------------------------------
     Map<String, dynamic> loginParams = {
       "first_name": firstName,
       "middle_name": middleName,
       "last_name": lastName,
       "mobile_no": mobileNo,
       "village_name": villageName,
+      "village_code": villageCode,
       "gender": gender,
       "email": email,
       "address": address,
@@ -137,7 +214,6 @@ class AuthCubit extends Cubit<AuthState> {
     };
 
     if (old) {
-      // ✅ Only include if valid
       if (oldMemberId != null && oldMemberId.isNotEmpty) {
         loginParams["old_member_id"] = oldMemberId;
       }
@@ -151,7 +227,6 @@ class AuthCubit extends Cubit<AuthState> {
         );
       }
     } else {
-      // New Member Files
       if (idProofFront != null &&
           idProofFront.isNotEmpty &&
           !idProofFront.startsWith('http')) {
@@ -178,6 +253,9 @@ class AuthCubit extends Cubit<AuthState> {
       );
     }
 
+    // -------------------------------
+    // API CALL
+    // -------------------------------
     final Response response = await authRepo.register(
       context,
       params: loginParams,
@@ -315,10 +393,12 @@ class VillageCubit extends Cubit<VillageState> {
   Future<void> fetchVillage(BuildContext context) async {
     List<VillageModel> villageList = [];
     String villageName = '';
+    String villageCode = '';
     final Response response = await authRepo.village(context);
     if (response.data['success'] == true) {
       if (state is VillageLoaded) {
         villageName = (state as VillageLoaded).villageName;
+        villageCode = (state as VillageLoaded).villageCode;
       }
 
       final data = response.data['data'];
@@ -327,14 +407,24 @@ class VillageCubit extends Cubit<VillageState> {
           (data as List).map((e) => VillageModel.fromJson(e)).toList();
     }
 
-    emit(VillageLoaded(villageList: villageList, villageName: villageName));
+    emit(
+      VillageLoaded(
+        villageList: villageList,
+        villageName: villageName,
+        villageCode: villageCode,
+      ),
+    );
   }
 
-  void setVillageName({required String name}) {
+  void setVillageName({required String name, required String nameCode}) {
     if (state is VillageLoaded) {
       final currentState = state as VillageLoaded;
       emit(
-        VillageLoaded(villageList: currentState.villageList, villageName: name),
+        VillageLoaded(
+          villageList: currentState.villageList,
+          villageName: name,
+          villageCode: nameCode,
+        ),
       );
     }
   }
