@@ -21,6 +21,16 @@ class LocalDataSaver {
     return sharedPreference.getString('authToken') ?? '';
   }
 
+  Future setLanguage(String language) async {
+    SharedPreferences sharedPreference = await SharedPreferences.getInstance();
+    sharedPreference.setString('language', language);
+  }
+
+  Future<String> getLanguage() async {
+    SharedPreferences sharedPreference = await SharedPreferences.getInstance();
+    return sharedPreference.getString('language') ?? '';
+  }
+
   Future setVerificationId(String verificationId) async {
     SharedPreferences sharedPreference = await SharedPreferences.getInstance();
     sharedPreference.setString('verificationId', verificationId);

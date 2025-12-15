@@ -59,12 +59,7 @@ class LoginScreen extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  AppPage.selectionScreen,
-
-                  arguments: {'addMember': false},
-                );
+                Navigator.pushNamed(context, AppPage.selectLanguageScreen);
               },
               child: CustomText(
                 text: ' Sign up',

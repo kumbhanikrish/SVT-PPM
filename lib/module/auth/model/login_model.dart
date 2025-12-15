@@ -26,6 +26,7 @@ class LoginModel {
   final String token;
   final String name;
   final String relation;
+  final String memberFamilyCard;
   final String standard;
   final int familyHeadId;
 
@@ -33,6 +34,7 @@ class LoginModel {
     required this.id,
     required this.memberId,
     required this.photo,
+    required this.memberFamilyCard,
     required this.villageCode,
     required this.firstName,
     required this.middleName,
@@ -72,6 +74,7 @@ class LoginModel {
     gender: json["gender"],
     relation: json["relation"] ?? '',
     standard: json["standard"] ?? '',
+    memberFamilyCard: json["memberFamilyCard"] ?? '',
     mobileNo: json["mobile_no"],
     whatsappNo: json["whatsapp_no"] ?? '',
     email: json["email"],
@@ -102,6 +105,7 @@ class LoginModel {
     "last_name": lastName,
     "gender": gender,
     "mobile_no": mobileNo,
+    "memberFamilyCard": memberFamilyCard,
     "whatsapp_no": whatsappNo,
     "email": email,
     "village_name": villageName,

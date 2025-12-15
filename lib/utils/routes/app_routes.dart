@@ -5,6 +5,7 @@ import 'package:svt_ppm/module/app_features/view/exam/exam_see_all_screen.dart';
 import 'package:svt_ppm/module/app_features/view/kit/kit_detail_screen.dart';
 import 'package:svt_ppm/module/app_features/view/schema/schema_content_screen.dart';
 import 'package:svt_ppm/module/auth/view/auth_screen.dart';
+import 'package:svt_ppm/module/auth/view/language_select_screen.dart';
 import 'package:svt_ppm/module/auth/view/selection_Screen.dart';
 import 'package:svt_ppm/module/auth/view/signup_screen.dart';
 import 'package:svt_ppm/module/auth/view/splash_screen.dart';
@@ -70,6 +71,7 @@ final Map<String, WidgetBuilder> appRoutes = {
         argument: ModalRoute.of(context)?.settings.arguments,
       ),
   AppPage.qrScannerScreen: (context) => QrScannerScreen(),
+  AppPage.selectLanguageScreen: (context) => LanguageSelectScreen(),
 
   // AppRoutes.referAndEarnScreen:
   //     (context) =>

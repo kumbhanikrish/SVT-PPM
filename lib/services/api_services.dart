@@ -20,11 +20,13 @@ class ApiServices {
   /// Build headers for all API requests
   Future<Map<String, String>> _buildHeaders() async {
     final token = await dataSaver.getAuthToken();
+    final language = await dataSaver.getLanguage();
     log("Auth Token: $token");
     return {
       "Content-device": "application/json",
       "Authorization": "Bearer $token",
       "Accept": "application/json",
+      "Accept-Language": language.isNotEmpty ? language : 'en',
     };
   }
 

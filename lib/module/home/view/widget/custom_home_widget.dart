@@ -16,6 +16,7 @@ void customNoOfMemberBottomSheet(
   BuildContext context, {
   bool single = false,
   bool extra = false,
+  bool seeAll = false,
   int eventId = 0,
 
   String? buttonName,
@@ -45,8 +46,10 @@ void customNoOfMemberBottomSheet(
                 (selectMemberCubit.state as MemberSelectionChanged)
                     .selectedMemberIds;
           }
+
           homeCubit.eventsRegistration(
             context,
+            seeAll: seeAll,
             eventId: eventId, // Example event ID
             memberIds: selectedMemberIds.toList(),
             extraMember: int.tryParse(extraMemberController.text) ?? 0,
@@ -84,8 +87,6 @@ void customNoOfMemberBottomSheet(
                                         : noOfMemberList
                                             .length, // +1 for "Extra Member"
                                 itemBuilder: (BuildContext context, int index) {
-                                  // Last item is "Extra Member"
-
                                   if (extra) {
                                     if (index == noOfMemberList.length) {
                                       return CustomListTile(
@@ -190,7 +191,6 @@ void customNoOfMemberBottomSheet(
                   ),
                 ),
 
-                /// 👇 Show TextField if "Extra Member" is selected
                 if (showExtraMemberInput) ...[
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16),
@@ -198,6 +198,7 @@ void customNoOfMemberBottomSheet(
                       hintText: 'Number of Extra Members',
                       labelText: 'Members',
                       controller: extraMemberController,
+                      keyboardType: TextInputType.number,
                     ),
                   ),
                 ],

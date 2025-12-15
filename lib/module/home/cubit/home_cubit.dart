@@ -93,6 +93,7 @@ class HomeCubit extends Cubit<HomeState> {
     required int eventId,
     required List<int> memberIds,
     required int extraMember,
+    required bool seeAll,
   }) async {
     Map<String, dynamic> params = {
       "event_id": eventId,
@@ -112,8 +113,30 @@ class HomeCubit extends Cubit<HomeState> {
         title: 'Success',
         subTitle: 'Event Registered Successfully',
         buttonText: 'OK',
+        onTap: () {
+          if (seeAll) {
+            getHomeSeeAll(context, type: 'events');
+          } else {
+            getHomeData(context);
+          }
+          Navigator.pop(context);
+        },
       );
       return response;
     }
+  }
+
+  init() {
+    if (state is GetHomeState) {
+      noOfMemberList = (state as GetHomeState).noOfMemberList;
+      homeModel = (state as GetHomeState).homeModel;
+    }
+    emit(
+      GetHomeState(
+        homeModel: homeModel,
+        noOfMemberList: noOfMemberList,
+        homeSeeAllModel: {},
+      ),
+    );
   }
 }

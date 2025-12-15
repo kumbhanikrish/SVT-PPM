@@ -100,7 +100,7 @@ class _KitScreenState extends State<KitScreen> {
                                       },
                                       image: member['photo'],
                                       title: member['name'],
-                                      rejectReason: member['remarks'],
+                                      rejectReason: member['remarks'] ?? '',
                                       joinText:
                                           member['is_registered'] == false
                                               ? 'Apply'

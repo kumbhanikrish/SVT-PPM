@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:sizer/sizer.dart';
+import 'package:svt_ppm/module/home/view/widget/custom_home_widget.dart';
 
 import 'package:svt_ppm/utils/constant/app_page.dart';
 import 'package:svt_ppm/utils/widgets/custom_app_bar.dart';
@@ -49,6 +50,17 @@ class _EventViewAllScreenState extends State<EventViewAllScreen> {
                 itemBuilder: (BuildContext context, int index) {
                   final homeData = homeSeeAllData[index];
                   return CustomCard(
+                    onTap:
+                        homeData['applied']
+                            ? null
+                            : () {
+                              customNoOfMemberBottomSheet(
+                                context,
+                                eventId: homeData['id'],
+                                extra: true,
+                                seeAll: true,
+                              );
+                            },
                     cardOnTap: () {
                       Navigator.pushNamed(
                         context,
@@ -63,9 +75,11 @@ class _EventViewAllScreenState extends State<EventViewAllScreen> {
                     date: homeData['date'],
                     title: homeData['title'],
                     des: homeData['place'],
-                    showButton: homeData['applied'] == false ? true : false,
-                    joinText: 'Join Event',
+                    showButton: true,
+                    joinText:
+                        homeData['applied'] == false ? 'Join Event' : 'Joined',
                     time: '',
+                    applied: homeData['applied'],
                   );
                 },
               ),

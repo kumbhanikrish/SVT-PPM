@@ -71,6 +71,12 @@ class _ComitySectionState extends State<ComitySection> {
                                   arguments: {
                                     'comityData': value,
                                     'formattedTitle': formattedTitle,
+                                    'showNo':
+                                        key == 'karobari' ||
+                                                key == 'working' ||
+                                                key == 'yuva_yoddha'
+                                            ? false
+                                            : true,
                                   },
                                 );
                               }
@@ -115,7 +121,12 @@ class _ComitySectionState extends State<ComitySection> {
                                       return CustomTeamCard(
                                         image: member['photo'],
                                         name: member['name'],
-                                        number: member['mobile_no'],
+                                        number:
+                                            key == 'karobari' ||
+                                                    key == 'working' ||
+                                                    key == 'yuva_yoddha'
+                                                ? ''
+                                                : member['mobile_no'],
 
                                         position: member['village_name'],
                                       );
@@ -133,7 +144,7 @@ class _ComitySectionState extends State<ComitySection> {
                                 name: value['name'] ?? '',
                                 position: value['village_name'],
 
-                                des: 'Mobile: ${value['mobile_no']}',
+                                // des: 'Mobile: ${value['mobile_no']}',
                               ),
                             ),
                         Gap(15),

@@ -298,17 +298,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     Gap(10),
                                                     InkWell(
                                                       onTap: () {
+                                                        log(
+                                                          'member.memberFamilyCard ::${member.memberFamilyCard}',
+                                                        );
                                                         Navigator.pushNamed(
                                                           context,
                                                           AppPage
                                                               .showProofScreen,
                                                           arguments: {
-                                                            'frontProof':
+                                                            'memberFamilyCard':
                                                                 member
-                                                                    .idProofFront,
-                                                            'backProof':
-                                                                member
-                                                                    .idProofBack,
+                                                                    .memberFamilyCard,
                                                           },
                                                         );
                                                       },

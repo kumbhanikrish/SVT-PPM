@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
@@ -49,65 +50,79 @@ List<String> standardList = [
   '12',
   'College',
 ];
+List<String> serialNoList = [
+  'A',
+  'B',
+  'C',
+  'D',
+  'E',
+  'F',
+  'G',
+  'H',
+  'I',
+  'J',
+  'K',
+  'L',
+  'M',
+  'N',
+  'O',
+  'P',
+  'Q',
+  'R',
+  'S',
+  'T',
+  'U',
+  'V',
+  'W',
+  'X',
+  'Y',
+  'Z',
+];
 
-class SignupScreen extends StatelessWidget {
+class SignupScreen extends StatefulWidget {
   final dynamic data;
   const SignupScreen({super.key, this.data});
 
   @override
-  Widget build(BuildContext context) {
-    bool old = data['old'] ?? false;
-    bool addMember = data['addMember'] ?? false;
-    bool edit = data['edit'] ?? false;
-    LoginModel? member;
-    TextEditingController firstNameController = TextEditingController();
-    TextEditingController middleNameController = TextEditingController();
-    TextEditingController lastNameController = TextEditingController();
-    TextEditingController mobileController = TextEditingController();
-    TextEditingController emailController = TextEditingController();
-    TextEditingController addressController = TextEditingController();
-    TextEditingController oldMemberNameController = TextEditingController();
-    TextEditingController occupationController = TextEditingController();
-    // TextEditingController villageController = TextEditingController();
+  State<SignupScreen> createState() => _SignupScreenState();
+}
 
-    StepperCubit stepperCubit = BlocProvider.of<StepperCubit>(context);
-    RadioCubit radioCubit = BlocProvider.of<RadioCubit>(context);
-    FrontImageCubit frontImageCubit = BlocProvider.of<FrontImageCubit>(context);
-    BackImageCubit backImageCubit = BlocProvider.of<BackImageCubit>(context);
-    VillageCubit villageCubit = BlocProvider.of<VillageCubit>(context);
-    ProfileImageCubit profileImageCubit = BlocProvider.of<ProfileImageCubit>(
-      context,
-    );
-    ImageUploadCubit imageUploadCubit = BlocProvider.of<ImageUploadCubit>(
-      context,
-    );
-    AuthCubit authCubit = BlocProvider.of<AuthCubit>(context);
-    ProfileCubit profileCubit = BlocProvider.of<ProfileCubit>(context);
+class _SignupScreenState extends State<SignupScreen> {
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController middleNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
+  TextEditingController mobileController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController idNoController = TextEditingController();
 
-    SelectRelationCubit selectRelationCubit =
-        BlocProvider.of<SelectRelationCubit>(context);
-    SelectStandardCubit selectStandardCubit =
-        BlocProvider.of<SelectStandardCubit>(context);
-    List<VillageModel> villageList = [];
+  TextEditingController occupationController = TextEditingController();
+  String serialNoValue = '';
+  String villageName = '';
+  String villageCode = '';
 
-    String villageName = '';
-    String villageCode = '';
+  String initialRelation = '';
+  String initialStandard = '';
+  LoginModel? member;
+  @override
+  void initState() {
+    bool addMember = widget.data['addMember'] ?? false;
+    bool edit = widget.data['edit'] ?? false;
+    super.initState();
 
-    String initialRelation = '';
-    String initialStandard = '';
-    stepperCubit.init();
-    radioCubit.init();
-    selectRelationCubit.init();
-    selectStandardCubit.init();
-    imageUploadCubit.removeImage();
-    profileImageCubit.removeImage();
-    frontImageCubit.removeImage();
-    backImageCubit.removeImage();
+    BlocProvider.of<StepperCubit>(context).init();
+    BlocProvider.of<RadioCubit>(context).init();
+    BlocProvider.of<SelectRelationCubit>(context).init();
+    BlocProvider.of<SelectStandardCubit>(context).init();
+    BlocProvider.of<ImageUploadCubit>(context).removeImage();
+    BlocProvider.of<ProfileImageCubit>(context).removeImage();
+    BlocProvider.of<FrontImageCubit>(context).removeImage();
+    BlocProvider.of<BackImageCubit>(context).removeImage();
     if (!addMember && !edit) {
-      villageCubit.fetchVillage(context);
+      BlocProvider.of<VillageCubit>(context).fetchVillage(context);
     }
     if (edit) {
-      member = data['member'];
+      member = widget.data['member'];
 
       firstNameController.text = member?.firstName ?? '';
       middleNameController.text = member?.middleName ?? '';
@@ -130,13 +145,48 @@ class SignupScreen extends StatelessWidget {
           orElse: () => standardList.first,
         );
       }
-      radioCubit.selectUserType(
-        userTypeFromString(member?.gender) ?? UserType.male,
-      );
+      BlocProvider.of<RadioCubit>(
+        context,
+      ).selectUserType(userTypeFromString(member?.gender) ?? UserType.male);
 
-      selectRelationCubit.updateValue(relationValue: member?.relation ?? '');
-      selectStandardCubit.updateValue(standardValue: member?.standard ?? '');
+      BlocProvider.of<SelectRelationCubit>(
+        context,
+      ).updateValue(relationValue: member?.relation ?? '');
+      BlocProvider.of<SelectStandardCubit>(
+        context,
+      ).updateValue(standardValue: member?.standard ?? '');
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    bool old = widget.data['old'] ?? false;
+    bool addMember = widget.data['addMember'] ?? false;
+    bool edit = widget.data['edit'] ?? false;
+
+    String language = widget.data['language'] ?? 'English';
+
+    // TextEditingController villageController = TextEditingController();
+
+    RadioCubit radioCubit = BlocProvider.of<RadioCubit>(context);
+    FrontImageCubit frontImageCubit = BlocProvider.of<FrontImageCubit>(context);
+    BackImageCubit backImageCubit = BlocProvider.of<BackImageCubit>(context);
+    VillageCubit villageCubit = BlocProvider.of<VillageCubit>(context);
+    ProfileImageCubit profileImageCubit = BlocProvider.of<ProfileImageCubit>(
+      context,
+    );
+    ImageUploadCubit imageUploadCubit = BlocProvider.of<ImageUploadCubit>(
+      context,
+    );
+    AuthCubit authCubit = BlocProvider.of<AuthCubit>(context);
+    ProfileCubit profileCubit = BlocProvider.of<ProfileCubit>(context);
+
+    SelectRelationCubit selectRelationCubit =
+        BlocProvider.of<SelectRelationCubit>(context);
+    SelectStandardCubit selectStandardCubit =
+        BlocProvider.of<SelectStandardCubit>(context);
+    List<VillageModel> villageList = [];
+
     return Scaffold(
       appBar:
           addMember
@@ -431,9 +481,9 @@ class SignupScreen extends StatelessWidget {
                             items: villageList,
 
                             onChanged: (value) {
-                              log('value?.key ??  ::${value?.key ?? ''}');
+                              log('value?.key ??  ::${value?.name ?? ''}');
                               villageCubit.setVillageName(
-                                name: value?.key ?? '',
+                                name: value?.name ?? '',
                                 nameCode: value?.code ?? '',
                               );
                             },
@@ -443,11 +493,41 @@ class SignupScreen extends StatelessWidget {
                     ],
                     if (old == true) ...[
                       Gap(20),
-                      CustomTextField(
-                        hintText: 'Old Member Number',
-                        labelText: 'Enter Old Member Number',
-                        controller: oldMemberNameController,
-                        textCapitalization: TextCapitalization.characters,
+                      Row(
+                        children: [
+                          Expanded(
+                            child: CustomDropWonFiled<String>(
+                              text: '',
+
+                              title: 'Serial No.',
+                              hintText: 'Select Serial No.',
+                              selectColor: AppColor.themePrimaryColor,
+                              items: serialNoList,
+
+                              onChanged: (value) {
+                                setState(() {
+                                  serialNoValue = value ?? '';
+                                });
+                              },
+                            ),
+                          ),
+                          Gap(10),
+
+                          Expanded(
+                            child: CustomTextField(
+                              hintText: 'Enter Id No.',
+                              labelText: 'Id No.',
+                              controller: idNoController,
+                              keyboardType: TextInputType.number,
+
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
+
+                              maxLength: 4,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                     Gap(20),
@@ -854,7 +934,8 @@ class SignupScreen extends StatelessWidget {
                                       email: emailController.text,
                                       address: addressController.text,
 
-                                      oldMemberId: oldMemberNameController.text,
+                                      oldMemberId:
+                                          '${idNoController.text.length == 3 ? '0' : ''}${idNoController.text.trim()}$serialNoValue',
                                       gender:
                                           radioCubit.state == UserType.male
                                               ? 'Male'
@@ -904,7 +985,8 @@ class SignupScreen extends StatelessWidget {
                                       address: addressController.text,
                                       villageName: villageName,
                                       villageCode: villageCode,
-                                      oldMemberId: oldMemberNameController.text,
+                                      oldMemberId:
+                                          '${idNoController.text.length == 3 ? '0' : ''}${idNoController.text.trim()}$serialNoValue',
                                       gender:
                                           radioCubit.state == UserType.male
                                               ? 'Male'
@@ -918,6 +1000,7 @@ class SignupScreen extends StatelessWidget {
                                           backImageCubit.state?.path ?? '',
                                       idProofFront:
                                           frontImageCubit.state?.path ?? '',
+                                      language: language,
                                     );
                                   },
                         );

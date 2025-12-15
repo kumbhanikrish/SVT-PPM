@@ -16,12 +16,14 @@ class CustomMainCard extends StatelessWidget {
   final String des;
   final String joinText;
   final bool showButton;
+  final bool applied;
   final void Function() onTap;
   final void Function() cardOnTap;
   const CustomMainCard({
     super.key,
     required this.image,
     required this.date,
+    required this.applied,
     required this.title,
     required this.des,
     required this.joinText,
@@ -84,11 +86,13 @@ class CustomMainCard extends StatelessWidget {
                     ],
                   ),
                 ),
-
                 if (showButton) ...[
                   Container(
                     decoration: BoxDecoration(
-                      color: AppColor.themePrimaryColor,
+                      color:
+                          applied == false
+                              ? AppColor.themePrimaryColor
+                              : AppColor.greenColor,
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(15),
                         bottomRight: Radius.circular(15),
@@ -128,7 +132,10 @@ class CustomCard extends StatelessWidget {
   final String des;
   final String time;
   final String joinText;
+  final String status;
   final bool showButton;
+  final bool applied;
+  final bool showTag;
   final BorderRadiusGeometry? borderRadius;
   final BorderRadiusGeometry? imageBorderRadius;
   final void Function()? onTap;
@@ -145,6 +152,9 @@ class CustomCard extends StatelessWidget {
     required this.joinText,
     this.width,
     this.height,
+    this.status = '',
+    this.applied = false,
+    this.showTag = false,
     this.borderRadius,
     this.imageBorderRadius,
     this.onTap,
@@ -165,16 +175,44 @@ class CustomCard extends StatelessWidget {
         onTap: cardOnTap,
         child: Column(
           children: <Widget>[
-            CustomCachedImage(
-              imageUrl: image,
-              height: 88,
-              width: 100.w,
-              borderRadius:
-                  imageBorderRadius ??
-                  BorderRadius.only(
-                    topLeft: Radius.circular(5),
-                    topRight: Radius.circular(5),
+            Stack(
+              children: [
+                CustomCachedImage(
+                  imageUrl: image,
+                  height: 88,
+                  width: 100.w,
+                  borderRadius:
+                      imageBorderRadius ??
+                      BorderRadius.only(
+                        topLeft: Radius.circular(5),
+                        topRight: Radius.circular(5),
+                      ),
+                ),
+                if (showTag) ...[
+                  Positioned(
+                    right: 0,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color:
+                            status == 'Passed'
+                                ? AppColor.greenColor
+                                : AppColor.redColor,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(5),
+                          topRight: Radius.circular(5),
+                        ),
+                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      child: CustomText(
+                        text: status,
+                        color: AppColor.whiteColor,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
+                ],
+              ],
             ),
 
             Column(
@@ -234,10 +272,13 @@ class CustomCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                if (showButton == true) ...[
+                if (showButton) ...[
                   Container(
                     decoration: BoxDecoration(
-                      color: AppColor.themePrimaryColor,
+                      color:
+                          applied
+                              ? AppColor.greenColor
+                              : AppColor.themePrimaryColor,
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(5),
                         bottomRight: Radius.circular(5),
@@ -306,13 +347,13 @@ class CustomPresidentCard extends StatelessWidget {
   final String image;
   final String name;
   final String position;
-  final String des;
+  final String number;
   const CustomPresidentCard({
     super.key,
     required this.image,
     required this.name,
     required this.position,
-    required this.des,
+    this.number = '',
   });
   @override
   Widget build(BuildContext context) {
@@ -324,6 +365,8 @@ class CustomPresidentCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+
           children: <Widget>[
             CustomCachedImage(
               height: 112,
@@ -335,6 +378,7 @@ class CustomPresidentCard extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+
                 children: <Widget>[
                   CustomText(text: name, fontWeight: FontWeight.w600),
                   Gap(10),
@@ -343,14 +387,16 @@ class CustomPresidentCard extends StatelessWidget {
                     fontWeight: FontWeight.w400,
                     color: AppColor.hintColor,
                   ),
-                  Gap(10),
+                  if (number.isNotEmpty) ...[
+                    Gap(10),
 
-                  CustomText(
-                    text: des,
-                    fontWeight: FontWeight.w400,
-                    color: AppColor.hintColor,
-                    fontSize: 14,
-                  ),
+                    CustomText(
+                      text: number,
+                      fontWeight: FontWeight.w400,
+                      color: AppColor.hintColor,
+                      fontSize: 14,
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -409,24 +455,27 @@ class CustomTeamCard extends StatelessWidget {
                   color: AppColor.hintColor,
                   fontSize: 10,
                 ),
-                Gap(7),
-                InkWell(
-                  onTap: () async {
-                    final uri = Uri(scheme: 'tel', path: number);
-                    if (await canLaunchUrl(uri)) {
-                      await launchUrl(uri);
-                    } else {
-                      // Optionally show error
-                      print("Could not launch dialer");
-                    }
-                  },
-                  child: CustomText(
-                    text: number,
-                    fontWeight: FontWeight.w400,
-                    color: AppColor.hintColor,
-                    fontSize: 12,
+
+                if (number.isNotEmpty) ...[
+                  Gap(7),
+                  InkWell(
+                    onTap: () async {
+                      final uri = Uri(scheme: 'tel', path: number);
+                      if (await canLaunchUrl(uri)) {
+                        await launchUrl(uri);
+                      } else {
+                        // Optionally show error
+                        print("Could not launch dialer");
+                      }
+                    },
+                    child: CustomText(
+                      text: number,
+                      fontWeight: FontWeight.w400,
+                      color: AppColor.hintColor,
+                      fontSize: 12,
+                    ),
                   ),
-                ),
+                ],
               ],
             ),
           ],
@@ -492,37 +541,62 @@ class KitCard extends StatelessWidget {
                     status.isNotEmpty
                         ? Padding(
                           padding: const EdgeInsets.only(top: 10),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color:
-                                  status == 'Pending'
-                                      ? AppColor.amberColor.withOpacity(0.1)
-                                      : status == 'Rejected'
-                                      ? AppColor.redColor.withOpacity(0.1)
-                                      : status == 'Delivered'
-                                      ? AppColor.themePrimaryColor.withOpacity(
-                                        0.1,
-                                      )
-                                      : AppColor.greenColor.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(3),
-                            ),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 5,
-                            ),
-                            child: CustomText(
-                              text: status,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color:
-                                  status == 'Pending'
-                                      ? AppColor.amberColor
-                                      : status == 'Rejected'
-                                      ? AppColor.redColor
-                                      : status == 'Delivered'
-                                      ? AppColor.themePrimaryColor
-                                      : AppColor.greenColor,
-                            ),
+                          child: Row(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color:
+                                      status == 'Pending'
+                                          ? AppColor.amberColor.withOpacity(0.1)
+                                          : status == 'Rejected'
+                                          ? AppColor.redColor.withOpacity(0.1)
+                                          : status == 'Delivered'
+                                          ? AppColor.themePrimaryColor
+                                              .withOpacity(0.1)
+                                          : AppColor.greenColor.withOpacity(
+                                            0.1,
+                                          ),
+                                  borderRadius: BorderRadius.circular(3),
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 5,
+                                ),
+                                child: CustomText(
+                                  text: status,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color:
+                                      status == 'Pending'
+                                          ? AppColor.amberColor
+                                          : status == 'Rejected'
+                                          ? AppColor.redColor
+                                          : status == 'Delivered'
+                                          ? AppColor.themePrimaryColor
+                                          : AppColor.greenColor,
+                                ),
+                              ),
+
+                              if (status == 'Rejected') ...[
+                                Gap(10),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: AppColor.themePrimaryColor,
+                                    borderRadius: BorderRadius.circular(3),
+                                  ),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 5,
+                                  ),
+                                  child: CustomText(
+                                    text: 'Re-Apply',
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColor.whiteColor,
+                                  ),
+                                ),
+                              ],
+                            ],
                           ),
                         )
                         : showButton == true

@@ -39,6 +39,8 @@ class ExamSeeAllScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final member = examData[index];
                     return CustomCard(
+                      showTag: true,
+                      status: member['status'] ?? '',
                       image: member['photo'],
                       date: member['exam_date'] ?? getCurrentDateFormat(),
                       title: member['name'],

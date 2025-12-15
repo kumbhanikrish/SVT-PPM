@@ -125,6 +125,8 @@ class _ExamScreenState extends State<ExamScreen> {
                                               final member = members[index];
                                               return CustomCard(
                                                 image: member['photo'],
+                                                status: member['status'] ?? '',
+                                                showTag: true,
                                                 date:
                                                     member['exam_date'] ??
                                                     getCurrentDateFormat(),
@@ -170,62 +172,6 @@ class _ExamScreenState extends State<ExamScreen> {
                                             },
                                           ),
                                 ),
-
-                                // Row(
-                                //   children:
-
-                                //   List.generate(members.length, (
-                                //     index,
-                                //   ) {
-                                //     final member = members[index];
-                                //     return
-
-                                //     CustomCard(
-                                //       width: 236,
-
-                                //       image: member['photo'],
-                                //       date:
-                                //           member['exam_date'] ??
-                                //           getCurrentDateFormat(),
-                                //       title: member['name'],
-                                //       des: member['place'] ?? 'No Place',
-                                //       joinText:
-                                //           member['result'] != null
-                                //               ? 'Result'
-                                //               : member['hall_ticket'] !=
-                                //                   null
-                                //               ? 'Hall Ticket'
-                                //               : member['is_registered'] ==
-                                //                   true
-                                //               ? 'Edit'
-                                //               : 'Apply',
-                                //       time: formatTo12Hour(
-                                //         time24h: member['exam_time'],
-                                //       ),
-                                //       onTap: () {
-                                //         if (member['hall_ticket'] !=
-                                //             null) {
-                                //           customResultAndHallTicketBottomSheet(
-                                //             context,
-                                //             result: member['hall_ticket'],
-                                //           );
-                                //         } else if (member['result'] !=
-                                //             null) {
-                                //           customResultAndHallTicketBottomSheet(
-                                //             context,
-                                //             hallTicket: member['result'],
-                                //           );
-                                //         } else {
-                                //           languageBottomSheet(
-                                //             context,
-                                //             memberId: member['id'],
-                                //           );
-                                //         }
-                                //       },
-                                //     );
-
-                                //   }),
-                                // ),
                               ),
                             ),
                             Gap(15),

@@ -1,6 +1,7 @@
 class AppPage {
   static String splashScreen = '/';
   static String authScreen = '/authScreen';
+  static String selectLanguageScreen = '/selectLanguageScreen';
 
   static String signupScreen = '/signupScreen';
   static String selectionScreen = '/selectionScreen';

@@ -105,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   accountEmail: CustomText(
                     text: loginModelNotifier.value?.email ?? "",
                     color: AppColor.whiteColor,
-                    fontSize: 14     ,
+                    fontSize: 14,
                   ),
                   currentAccountPicture: CircleAvatar(
                     backgroundImage: NetworkImage(
@@ -115,45 +115,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 );
               },
-            ),
-
-            ListTile(
-              leading: SvgPicture.asset(
-                AppImage.kitDistribution,
-                height: 35,
-                width: 35,
-              ),
-              title: CustomText(
-                text: 'Kit Distribution',
-                color: AppColor.blackColor,
-              ),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: SvgPicture.asset(
-                AppImage.examChecking,
-                height: 25,
-                width: 25,
-              ),
-              title: CustomText(
-                text: 'Exam Checking',
-
-                color: AppColor.blackColor,
-              ),
-              onTap: () {
-                Navigator.pushNamed(context, AppPage.profileScreen);
-              },
-            ),
-            ListTile(
-              leading: SvgPicture.asset(
-                AppImage.getEntry,
-                height: 25,
-                width: 25,
-              ),
-              title: CustomText(text: 'Get Entry', color: AppColor.blackColor),
-              onTap: () {},
             ),
           ],
         ),
@@ -218,10 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               },
                                             );
                                           },
-                                          showButton:
-                                              event.applied == false
-                                                  ? true
-                                                  : false,
+                                          showButton: true,
                                           onTap: () {
                                             customNoOfMemberBottomSheet(
                                               context,
@@ -235,7 +193,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                           title: event.title,
                                           des: event.place,
 
-                                          joinText: 'Join Event',
+                                          joinText:
+                                              event.applied == false
+                                                  ? 'Join Event'
+                                                  : 'Joined',
+                                          applied: event.applied,
                                         );
                                       },
                                     ),
@@ -293,6 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               },
                                             );
                                           },
+                                          applied: broadcast.applied,
                                         );
                                       },
                                     ),

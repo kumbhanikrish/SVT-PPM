@@ -163,7 +163,7 @@ class CustomDropWonFiled<T> extends StatelessWidget {
       fontSize: 12,
       padding: EdgeInsets.zero,
       children: [
-        CustomDropdown<T>(
+        CustomDropdown<T>.search(
           hintText: hintText,
 
           closedHeaderPadding: EdgeInsets.symmetric(

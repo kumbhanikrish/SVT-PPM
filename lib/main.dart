@@ -1,5 +1,6 @@
 // import 'package:country_code_picker/country_code_picker.dart';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,9 +44,17 @@ void main() async {
   await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPreferences.getInstance();
+  await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
 
-  runApp(const MyApp());
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [Locale('en'), Locale('gu'), Locale('hi')],
+      path: 'assets/translations',
+      fallbackLocale: const Locale('en'),
+      child: const MyApp(),
+    ),
+  );
   configLoading();
 }
 
@@ -58,8 +67,10 @@ class MyApp extends StatelessWidget {
         return MultiBlocProvider(
           providers: providers,
           child: MaterialApp(
+            locale: context.locale,
+            supportedLocales: context.supportedLocales,
             navigatorKey: navigatorKey,
-
+            localizationsDelegates: context.localizationDelegates,
             debugShowCheckedModeBanner: false,
             title: 'Flutter Demo',
             theme: ThemeData(

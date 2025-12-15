@@ -117,6 +117,7 @@ class AuthCubit extends Cubit<AuthState> {
     required String villageName,
     required String address,
     required String gender,
+    required String language,
     required String email,
     required String villageCode,
     String? oldMemberId,
@@ -208,6 +209,12 @@ class AuthCubit extends Cubit<AuthState> {
       "village_name": villageName,
       "village_code": villageCode,
       "gender": gender,
+      "language":
+          language == 'Gujarati'
+              ? 'gu'
+              : language == 'Hindi'
+              ? 'hi'
+              : 'en',
       "email": email,
       "address": address,
       "is_new_member": old ? 0 : 1,

@@ -82,10 +82,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       return customErrorToast(context, text: "Please select occupation");
     }
 
-    if (villageName == null || villageName.isEmpty) {
-      return customErrorToast(context, text: "Please enter village name");
-    }
-
     // Old Member Validation
     if (old == true) {
       if (oldMemberId == null || oldMemberId.isEmpty) {
@@ -99,6 +95,9 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     // New Member Validation
     if (old == false || old == null) {
+      // if (villageName == null || villageName.isEmpty) {
+      //   return customErrorToast(context, text: "Please enter village name");
+      // }
       if (idProofFront == null || idProofFront.isEmpty) {
         return customErrorToast(context, text: "Please upload ID Proof Front");
       }

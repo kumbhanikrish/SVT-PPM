@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:sizer/sizer.dart';
 import 'package:svt_ppm/module/home/cubit/home_cubit.dart';
+import 'package:svt_ppm/module/home/view/widget/custom_home_widget.dart';
 import 'package:svt_ppm/utils/constant/app_image.dart';
 import 'package:svt_ppm/utils/constant/app_page.dart';
 import 'package:svt_ppm/utils/formatter/format.dart';
@@ -26,6 +27,7 @@ class _EventScreenState extends State<EventScreen> {
   void initState() {
     HomeCubit homeCubit = BlocProvider.of<HomeCubit>(context);
 
+    homeCubit.init();
     homeCubit.getHomeSeeAll(context, type: widget.argument['title']);
     super.initState();
   }
@@ -60,119 +62,140 @@ class _EventScreenState extends State<EventScreen> {
                   if (state is GetHomeState) {
                     homeSeeAllData = state.homeSeeAllModel;
                   }
-                  return Column(
-                    children:
-                        homeSeeAllData.entries.map((entry) {
-                          final String key = entry.key;
-                          final dynamic value = entry.value;
-                          String formattedTitle = formatTitle(key);
+                  return homeSeeAllData.isEmpty
+                      ? SizedBox(height: 50.h, child: CustomEmpty())
+                      : Column(
+                        children:
+                            homeSeeAllData.entries.map((entry) {
+                              final String key = entry.key;
+                              final dynamic value = entry.value;
+                              String formattedTitle = formatTitle(key);
 
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Gap(10),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                ),
-                                child: CustomTitleSeeAllWidget(
-                                  title: formattedTitle,
-                                  image: AppImage.dateTime,
-                                  seeAllOnTap: () {
-                                    if (value is List) {
-                                      Navigator.pushNamed(
-                                        context,
-                                        AppPage.eventViewAllScreen,
-                                        arguments: {
-                                          'title': formattedTitle,
-                                          'homeSeeAllData': value,
-                                        },
-                                      );
-                                    }
-                                  },
-                                  child:
-                                      value is List
-                                          ? Padding(
-                                            padding: const EdgeInsets.only(
-                                              left: 20,
-                                              top: 10,
-                                              bottom: 10,
-                                            ),
-                                            child: SvgPicture.asset(
-                                              AppImage.rightArrow,
-                                            ),
-                                          )
-                                          : SizedBox(),
-                                ),
-                              ),
-                              Gap(10),
-                              value is List
-                                  ? value.isEmpty
-                                      ? CustomEmpty()
-                                      : Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 16,
-                                        ),
-                                        child: SizedBox(
-                                          width: 100.w,
-                                          height: 23.h,
-                                          child: GridView.builder(
-                                            shrinkWrap: true,
-                                            scrollDirection: Axis.horizontal,
-                                            physics:
-                                                const BouncingScrollPhysics(),
-                                            gridDelegate:
-                                                SliverGridDelegateWithFixedCrossAxisCount(
-                                                  crossAxisCount: 1,
-                                                  crossAxisSpacing: 7,
-                                                  mainAxisSpacing: 13,
-
-                                                  mainAxisExtent: 22.h,
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Gap(10),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                    ),
+                                    child: CustomTitleSeeAllWidget(
+                                      title: formattedTitle,
+                                      image: AppImage.dateTime,
+                                      seeAllOnTap: () {
+                                        if (value is List) {
+                                          Navigator.pushNamed(
+                                            context,
+                                            AppPage.eventViewAllScreen,
+                                            arguments: {
+                                              'title': formattedTitle,
+                                              'homeSeeAllData': value,
+                                            },
+                                          );
+                                        }
+                                      },
+                                      child:
+                                          value is List
+                                              ? Padding(
+                                                padding: const EdgeInsets.only(
+                                                  left: 20,
+                                                  top: 10,
+                                                  bottom: 10,
                                                 ),
-                                            itemCount: value.length,
-                                            itemBuilder: (context, index) {
-                                              final homeSeeAllData =
-                                                  value[index];
-                                              return CustomCard(
-                                                cardOnTap: () {
-                                                  Navigator.pushNamed(
-                                                    context,
-                                                    AppPage
-                                                        .eventBroadcastDetailScreen,
-                                                    arguments: {
-                                                      'homeData':
-                                                          homeSeeAllData,
-                                                      'title':
-                                                          widget.argument['title'] ==
-                                                                  'events'
-                                                              ? 'Event Detail'
-                                                              : 'BoardCast Detail',
+                                                child: SvgPicture.asset(
+                                                  AppImage.rightArrow,
+                                                ),
+                                              )
+                                              : SizedBox(),
+                                    ),
+                                  ),
+                                  Gap(10),
+                                  value is List
+                                      ? value.isEmpty
+                                          ? CustomEmpty()
+                                          : Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 16,
+                                            ),
+                                            child: SizedBox(
+                                              width: 100.w,
+                                              height: 23.h,
+                                              child: GridView.builder(
+                                                shrinkWrap: true,
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                physics:
+                                                    const BouncingScrollPhysics(),
+                                                gridDelegate:
+                                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                                      crossAxisCount: 1,
+                                                      crossAxisSpacing: 7,
+                                                      mainAxisSpacing: 13,
+
+                                                      mainAxisExtent: 22.h,
+                                                    ),
+                                                itemCount: value.length,
+                                                itemBuilder: (context, index) {
+                                                  final homeSeeAllData =
+                                                      value[index];
+                                                  return CustomCard(
+                                                    onTap:
+                                                        homeSeeAllData['applied']
+                                                            ? null
+                                                            : () {
+                                                              customNoOfMemberBottomSheet(
+                                                                context,
+                                                                eventId:
+                                                                    homeSeeAllData['id'],
+                                                                extra: true,
+                                                                seeAll: true
+                                                              );
+                                                            },
+                                                    cardOnTap: () {
+                                                      Navigator.pushNamed(
+                                                        context,
+                                                        AppPage
+                                                            .eventBroadcastDetailScreen,
+                                                        arguments: {
+                                                          'homeData':
+                                                              homeSeeAllData,
+                                                          'title':
+                                                              widget.argument['title'] ==
+                                                                      'events'
+                                                                  ? 'Event Detail'
+                                                                  : 'BoardCast Detail',
+                                                        },
+                                                      );
                                                     },
+                                                    image:
+                                                        homeSeeAllData['image'],
+                                                    date:
+                                                        homeSeeAllData['date'],
+                                                    title:
+                                                        homeSeeAllData['title'],
+                                                    des:
+                                                        homeSeeAllData['place'],
+                                                    showButton:
+                                                        widget.argument['title'] ==
+                                                                'events'
+                                                            ? true
+                                                            : false,
+                                                    joinText: 'Join Event',
+                                                    time: '',
+                                                    applied:
+                                                        homeSeeAllData['applied'],
                                                   );
                                                 },
-                                                image: homeSeeAllData['image'],
-                                                date: homeSeeAllData['date'],
-                                                title: homeSeeAllData['title'],
-                                                des: homeSeeAllData['place'],
-                                                showButton:
-                                                    homeSeeAllData['applied'] ==
-                                                            false
-                                                        ? true
-                                                        : false,
-                                                joinText: 'Join Event',
-                                                time: '',
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                      )
-                                  : SizedBox(),
+                                              ),
+                                            ),
+                                          )
+                                      : SizedBox(),
 
-                              CustomDivider(),
-                            ],
-                          );
-                        }).toList(),
-                  );
+                                  CustomDivider(),
+                                ],
+                              );
+                            }).toList(),
+                      );
                 },
               ),
 
