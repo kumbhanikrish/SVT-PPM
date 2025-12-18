@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:sizer/sizer.dart';
 import 'package:svt_ppm/utils/widgets/custom_app_bar.dart';
 import 'package:svt_ppm/utils/widgets/custom_card.dart';
 

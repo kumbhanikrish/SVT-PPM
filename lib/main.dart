@@ -1,6 +1,5 @@
 // import 'package:country_code_picker/country_code_picker.dart';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,12 +12,15 @@ import 'package:svt_ppm/local_data/local_data_sever.dart';
 import 'package:svt_ppm/module/app_features/cubit/community/community_cubit.dart';
 import 'package:svt_ppm/module/app_features/cubit/exam/exam_cubit.dart';
 import 'package:svt_ppm/module/app_features/cubit/kits/kits_cubit.dart';
+import 'package:svt_ppm/module/app_features/cubit/role_schemas_registration/role_schemas_registration_cubit.dart';
 import 'package:svt_ppm/module/app_features/cubit/schemas/schemas_cubit.dart';
 import 'package:svt_ppm/module/auth/cubit/auth_cubit.dart';
 import 'package:svt_ppm/module/data_entry/cubit/data_entry_cubit.dart';
 import 'package:svt_ppm/module/home/cubit/home_cubit.dart';
 import 'package:svt_ppm/module/profile/cubit/profile_cubit.dart';
 import 'package:svt_ppm/services/api_services.dart';
+
+import 'package:svt_ppm/utils/formatter/format.dart';
 import 'package:svt_ppm/utils/routes/app_routes.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
 
@@ -43,18 +45,11 @@ LocalDataSaver localDataSaver = LocalDataSaver();
 void main() async {
   await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
+  await UserSession.load();
   await SharedPreferences.getInstance();
-  await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
 
-  runApp(
-    EasyLocalization(
-      supportedLocales: const [Locale('en'), Locale('gu'), Locale('hi')],
-      path: 'assets/translations',
-      fallbackLocale: const Locale('en'),
-      child: const MyApp(),
-    ),
-  );
+  runApp(const MyApp());
   configLoading();
 }
 
@@ -67,10 +62,8 @@ class MyApp extends StatelessWidget {
         return MultiBlocProvider(
           providers: providers,
           child: MaterialApp(
-            locale: context.locale,
-            supportedLocales: context.supportedLocales,
             navigatorKey: navigatorKey,
-            localizationsDelegates: context.localizationDelegates,
+
             debugShowCheckedModeBanner: false,
             title: 'Flutter Demo',
             theme: ThemeData(
@@ -124,4 +117,6 @@ dynamic providers = [
   BlocProvider(create: (context) => LanguageCubit()),
   BlocProvider(create: (context) => ChangeBorder2Cubit()),
   BlocProvider(create: (context) => DataEntryCubit()),
+  BlocProvider(create: (context) => RoleSchemasRegistrationCubit()),
+  BlocProvider(create: (context) => StatusRadioCubit()),
 ];

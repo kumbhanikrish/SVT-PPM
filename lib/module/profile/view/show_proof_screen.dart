@@ -13,7 +13,7 @@ class ShowProofScreen extends StatefulWidget {
 }
 
 class _ShowProofScreenState extends State<ShowProofScreen> {
-  WebViewController controller = WebViewController( );
+  WebViewController controller = WebViewController();
 
   @override
   void initState() {

@@ -1,4 +1,8 @@
+import 'dart:developer';
+
 import 'package:intl/intl.dart';
+import 'package:svt_ppm/main.dart';
+import 'package:svt_ppm/module/auth/model/login_model.dart';
 import 'package:svt_ppm/utils/enum/enums.dart';
 
 String capitalize(String? value) {
@@ -47,4 +51,22 @@ String formatTo12Hour({String? time24h}) {
       time24h != null ? inputFormat.parse(time24h) : DateTime.now();
 
   return outputFormat.format(dateTime).toUpperCase();
+}
+
+class UserSession {
+  static LoginModel? loginModel;
+
+  static Future<void> load() async {
+    loginModel = await localDataSaver.getLoginModel();
+
+    log('loginModel ::${loginModel?.roles.map((e) => e.name).toList()}');
+  }
+
+  static bool hasRole(int roleId) {
+    return loginModel?.roles.any((r) => r.id == roleId) ?? false;
+  }
+
+  static bool hasAnyRole(List<int> roleIds) {
+    return loginModel?.roles.any((r) => roleIds.contains(r.id)) ?? false;
+  }
 }

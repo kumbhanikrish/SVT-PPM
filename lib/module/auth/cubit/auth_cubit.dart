@@ -393,6 +393,19 @@ class RadioCubit extends Cubit<UserType> {
   }
 }
 
+class StatusRadioCubit extends Cubit<StatusType> {
+  StatusRadioCubit() : super(StatusType.pending);
+
+  void selectStatusType(StatusType type) {
+    log('statustype ::$type');
+    emit(type);
+  }
+
+  init() {
+    emit(StatusType.pending);
+  }
+}
+
 class VillageCubit extends Cubit<VillageState> {
   VillageCubit() : super(VillageInitial());
   AuthRepo authRepo = AuthRepo();

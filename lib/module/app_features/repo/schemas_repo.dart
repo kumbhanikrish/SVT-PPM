@@ -35,4 +35,27 @@ class SchemasRepo {
 
     return response;
   }
+
+  Future<Response> roleSchemasRegistration(BuildContext context) async {
+    Response response = await apiServices.getDynamicData(
+      context,
+      AppApi.schemasRegistration,
+    );
+
+    return response;
+  }
+
+  Future<Response> schemasRegistrationChangeStatus(
+    BuildContext context, {
+
+    required Map<String, dynamic> params,
+  }) async {
+    Response response = await apiServices.postDynamicData(
+      context,
+      AppApi.schemasRegistrationChangeStatus,
+      params,
+    );
+
+    return response;
+  }
 }

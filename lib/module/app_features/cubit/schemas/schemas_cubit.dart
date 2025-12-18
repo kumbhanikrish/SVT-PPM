@@ -11,11 +11,13 @@ part 'schemas_state.dart';
 
 class SchemasCubit extends Cubit<SchemasState> {
   SchemasCubit() : super(SchemasInitial());
-
   SchemasRepo schemasRepo = SchemasRepo();
+
+
 
   List<SchemasModel> schemasModel = [];
   List<VillagePresidentModel> villagePresidentList = [];
+
 
   getSchemasData(BuildContext context) async {
     Response response = await schemasRepo.getSchemasData(context);
@@ -106,6 +108,8 @@ class SchemasCubit extends Cubit<SchemasState> {
       );
     }
   }
+
+  
 }
 
 class SelectMemberCubit extends Cubit<MemberSelectState> {

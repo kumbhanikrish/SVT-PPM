@@ -3,7 +3,9 @@ import 'package:svt_ppm/module/app_features/view/app_feature_screen.dart';
 import 'package:svt_ppm/module/app_features/view/comity/comity_see_all_screen.dart';
 import 'package:svt_ppm/module/app_features/view/exam/exam_see_all_screen.dart';
 import 'package:svt_ppm/module/app_features/view/kit/kit_detail_screen.dart';
+import 'package:svt_ppm/module/app_features/view/schema/role_schema_registration_user_screen.dart';
 import 'package:svt_ppm/module/app_features/view/schema/schema_content_screen.dart';
+import 'package:svt_ppm/module/app_features/view/schema/role_schema_registration_screen.dart';
 import 'package:svt_ppm/module/auth/view/auth_screen.dart';
 import 'package:svt_ppm/module/auth/view/language_select_screen.dart';
 import 'package:svt_ppm/module/auth/view/selection_Screen.dart';
@@ -72,6 +74,12 @@ final Map<String, WidgetBuilder> appRoutes = {
       ),
   AppPage.qrScannerScreen: (context) => QrScannerScreen(),
   AppPage.selectLanguageScreen: (context) => LanguageSelectScreen(),
+  AppPage.roleSchemaRegistrationScreen:
+      (context) => RoleSchemaRegistrationScreen(),
+  AppPage.roleSchemaRegistrationUserScreen:
+      (context) => RoleSchemaRegistrationUserScreen(
+        argument: ModalRoute.of(context)?.settings.arguments,
+      ),
 
   // AppRoutes.referAndEarnScreen:
   //     (context) =>

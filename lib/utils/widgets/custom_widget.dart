@@ -65,3 +65,18 @@ class CustomDivider extends StatelessWidget {
     );
   }
 }
+
+class CustomVerticalDivider extends StatelessWidget {
+  final double? width;
+  final double? height;
+  const CustomVerticalDivider({super.key, this.width, this.height});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: width ?? 50,
+      width: height ?? 0.5,
+      color: AppColor.unselectedColor,
+    );
+  }
+}

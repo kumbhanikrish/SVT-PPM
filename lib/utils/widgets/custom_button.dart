@@ -158,3 +158,31 @@ class CustomIconButton extends StatelessWidget {
     );
   }
 }
+
+class CustomStatusButton extends StatelessWidget {
+  final Color color;
+  final Color textColor;
+  final String status;
+  const CustomStatusButton({
+    super.key,
+    required this.color,
+    required this.status,
+    required this.textColor,
+  });
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(3),
+      ),
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+      child: CustomText(
+        text: status,
+        fontSize: 12,
+        fontWeight: FontWeight.w600,
+        color: textColor,
+      ),
+    );
+  }
+}

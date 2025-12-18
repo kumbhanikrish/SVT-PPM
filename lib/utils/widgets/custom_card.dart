@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:sizer/sizer.dart';
 import 'package:svt_ppm/utils/constant/app_image.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
+import 'package:svt_ppm/utils/widgets/custom_button.dart';
 import 'package:svt_ppm/utils/widgets/custom_image.dart';
 import 'package:svt_ppm/utils/widgets/custom_text.dart';
 import 'package:svt_ppm/utils/widgets/custom_widget.dart';
@@ -465,7 +468,7 @@ class CustomTeamCard extends StatelessWidget {
                         await launchUrl(uri);
                       } else {
                         // Optionally show error
-                        print("Could not launch dialer");
+                        log("Could not launch dialer");
                       }
                     },
                     child: CustomText(
@@ -494,9 +497,9 @@ class KitCard extends StatelessWidget {
   final bool showButton;
   final BorderRadiusGeometry? borderRadius;
   final void Function()? onTap;
-  void Function()? cardOnTap;
+  final void Function()? cardOnTap;
 
-  KitCard({
+  const KitCard({
     super.key,
     required this.image,
     required this.title,
@@ -543,38 +546,25 @@ class KitCard extends StatelessWidget {
                           padding: const EdgeInsets.only(top: 10),
                           child: Row(
                             children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  color:
-                                      status == 'Pending'
-                                          ? AppColor.amberColor.withOpacity(0.1)
-                                          : status == 'Rejected'
-                                          ? AppColor.redColor.withOpacity(0.1)
-                                          : status == 'Delivered'
-                                          ? AppColor.themePrimaryColor
-                                              .withOpacity(0.1)
-                                          : AppColor.greenColor.withOpacity(
-                                            0.1,
-                                          ),
-                                  borderRadius: BorderRadius.circular(3),
-                                ),
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 5,
-                                ),
-                                child: CustomText(
-                                  text: status,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color:
-                                      status == 'Pending'
-                                          ? AppColor.amberColor
-                                          : status == 'Rejected'
-                                          ? AppColor.redColor
-                                          : status == 'Delivered'
-                                          ? AppColor.themePrimaryColor
-                                          : AppColor.greenColor,
-                                ),
+                              CustomStatusButton(
+                                color:
+                                    status == 'Pending'
+                                        ? AppColor.amberColor.withOpacity(0.1)
+                                        : status == 'Rejected'
+                                        ? AppColor.redColor.withOpacity(0.1)
+                                        : status == 'Delivered'
+                                        ? AppColor.themePrimaryColor
+                                            .withOpacity(0.1)
+                                        : AppColor.greenColor.withOpacity(0.1),
+                                status: status,
+                                textColor:
+                                    status == 'Pending'
+                                        ? AppColor.amberColor
+                                        : status == 'Rejected'
+                                        ? AppColor.redColor
+                                        : status == 'Delivered'
+                                        ? AppColor.themePrimaryColor
+                                        : AppColor.greenColor,
                               ),
 
                               if (status == 'Rejected') ...[

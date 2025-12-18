@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:sizer/sizer.dart';
 import 'package:svt_ppm/main.dart';
@@ -8,6 +7,7 @@ import 'package:svt_ppm/module/auth/model/login_model.dart';
 import 'package:svt_ppm/module/home/cubit/home_cubit.dart';
 import 'package:svt_ppm/module/home/model/home_model.dart';
 import 'package:svt_ppm/module/home/model/static_model.dart';
+import 'package:svt_ppm/module/home/view/app_drawer.dart';
 import 'package:svt_ppm/module/home/view/widget/custom_home_widget.dart';
 import 'package:svt_ppm/utils/constant/app_image.dart';
 import 'package:svt_ppm/utils/constant/app_page.dart';
@@ -86,39 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
         //   child: Image.asset(AppLogo.smallLogo),
         // ),
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            ValueListenableBuilder<LoginModel?>(
-              valueListenable: loginModelNotifier,
-              builder: (context, value, child) {
-                return UserAccountsDrawerHeader(
-                  decoration: BoxDecoration(color: AppColor.themePrimaryColor),
-                  accountName: CustomText(
-                    text: loginModelNotifier.value?.name ?? "",
-                    color: AppColor.whiteColor,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-
-                  accountEmail: CustomText(
-                    text: loginModelNotifier.value?.email ?? "",
-                    color: AppColor.whiteColor,
-                    fontSize: 14,
-                  ),
-                  currentAccountPicture: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                      loginModelNotifier.value?.photo ?? "",
-                    ),
-                    backgroundColor: AppColor.whiteColor,
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: AppDrawer(loginModelNotifier: loginModelNotifier),
 
       body: RefreshIndicator(
         backgroundColor: AppColor.whiteColor,

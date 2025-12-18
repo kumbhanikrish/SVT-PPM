@@ -19,4 +19,7 @@ class AppPage {
   static String showProofScreen = '/showProofScreen';
   static String examSeeAllScreen = '/examSeeAllScreen';
   static String qrScannerScreen = '/qrScannerScreen';
+  static String roleSchemaRegistrationScreen = '/roleSchemaRegistrationScreen';
+  static String roleSchemaRegistrationUserScreen =
+      '/roleSchemaRegistrationUserScreen';
 }

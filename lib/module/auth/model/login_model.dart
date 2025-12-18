@@ -29,6 +29,7 @@ class LoginModel {
   final String memberFamilyCard;
   final String standard;
   final int familyHeadId;
+  final List<Role> roles;
 
   LoginModel({
     required this.id,
@@ -61,6 +62,7 @@ class LoginModel {
     required this.deletedAt,
     required this.token,
     required this.name,
+    required this.roles,
   });
 
   factory LoginModel.fromJson(Map<String, dynamic> json) => LoginModel(
@@ -94,6 +96,10 @@ class LoginModel {
     deletedAt: json["deleted_at"],
     token: json["token"] ?? '',
     name: json["name"],
+    roles:
+        json["roles"] == null
+            ? []
+            : List<Role>.from(json["roles"].map((x) => Role.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -125,5 +131,70 @@ class LoginModel {
     "deleted_at": deletedAt,
     "token": token,
     "name": name,
+    "roles": List<dynamic>.from(roles.map((x) => x.toJson())),
+  };
+
+  bool hasRole(int roleId) {
+    return roles.any((role) => role.id == roleId);
+  }
+
+  bool hasAnyRole(List<int> roleIds) {
+    return roles.any((role) => roleIds.contains(role.id));
+  }
+}
+
+class Role {
+  final int id;
+  final String name;
+  final String guardName;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final Pivot pivot;
+
+  Role({
+    required this.id,
+    required this.name,
+    required this.guardName,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.pivot,
+  });
+
+  factory Role.fromJson(Map<String, dynamic> json) => Role(
+    id: json["id"],
+    name: json["name"],
+    guardName: json["guard_name"],
+    createdAt: DateTime.parse(json["created_at"]),
+    updatedAt: DateTime.parse(json["updated_at"]),
+    pivot: Pivot.fromJson(json["pivot"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "name": name,
+    "guard_name": guardName,
+    "created_at": createdAt.toIso8601String(),
+    "updated_at": updatedAt.toIso8601String(),
+    "pivot": pivot.toJson(),
+  };
+}
+
+class Pivot {
+  final int modelId;
+  final int roleId;
+  final String modelType;
+
+  Pivot({required this.modelId, required this.roleId, required this.modelType});
+
+  factory Pivot.fromJson(Map<String, dynamic> json) => Pivot(
+    modelId: json["model_id"],
+    roleId: json["role_id"],
+    modelType: json["model_type"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "model_id": modelId,
+    "role_id": roleId,
+    "model_type": modelType,
   };
 }
