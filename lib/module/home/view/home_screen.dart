@@ -9,6 +9,7 @@ import 'package:svt_ppm/module/home/model/home_model.dart';
 import 'package:svt_ppm/module/home/model/static_model.dart';
 import 'package:svt_ppm/module/home/view/app_drawer.dart';
 import 'package:svt_ppm/module/home/view/widget/custom_home_widget.dart';
+import 'package:svt_ppm/module/profile/view/qr_profile_screen.dart';
 import 'package:svt_ppm/utils/constant/app_image.dart';
 import 'package:svt_ppm/utils/constant/app_page.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
@@ -29,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final ValueNotifier<LoginModel?> loginModelNotifier = ValueNotifier(null);
   HomeModel homeModel = HomeModel(broadcasts: [], events: []);
   Set<int> selectedMemberIds = {};
+
   Future<void> loadLoginData() async {
     final model = await localDataSaver.getLoginModel();
     loginModelNotifier.value = model;
@@ -63,7 +65,12 @@ class _HomeScreenState extends State<HomeScreen> {
               String imageUrl = model?.photo ?? '';
               return InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, AppPage.profileScreen);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const QrProfileScreen(),
+                    ),
+                  );
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(left: 16, bottom: 10),
@@ -80,11 +87,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Gap(12),
         ],
-
-        // leading: Padding(
-        //   padding: const EdgeInsets.only(left: 16, bottom: 10),
-        //   child: Image.asset(AppLogo.smallLogo),
-        // ),
       ),
       drawer: AppDrawer(loginModelNotifier: loginModelNotifier),
 
@@ -127,49 +129,49 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Padding(
                           padding: const EdgeInsets.only(right: 6, left: 16),
                           child:
-                              homeModel.events.isEmpty
-                                  ? CustomEmpty()
-                                  : Row(
-                                    children: List.generate(
-                                      homeModel.events.length,
-                                      (index) {
-                                        Broadcast event =
-                                            homeModel.events[index];
-                                        return CustomMainCard(
-                                          cardOnTap: () {
-                                            Navigator.pushNamed(
-                                              context,
-                                              AppPage.homeEventDetailScreen,
-                                              arguments: {
-                                                'homeData': event,
+                          homeModel.events.isEmpty
+                              ? CustomEmpty()
+                              : Row(
+                            children: List.generate(
+                              homeModel.events.length,
+                                  (index) {
+                                Broadcast event =
+                                homeModel.events[index];
+                                return CustomMainCard(
+                                  cardOnTap: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      AppPage.homeEventDetailScreen,
+                                      arguments: {
+                                        'homeData': event,
 
-                                                'title': 'Event Detail',
-                                              },
-                                            );
-                                          },
-                                          showButton: true,
-                                          onTap: () {
-                                            customNoOfMemberBottomSheet(
-                                              context,
-                                              eventId: event.id,
-                                              extra: true,
-                                            );
-                                          },
-
-                                          image: event.image,
-                                          date: event.date,
-                                          title: event.title,
-                                          des: event.place,
-
-                                          joinText:
-                                              event.applied == false
-                                                  ? 'Join Event'
-                                                  : 'Joined',
-                                          applied: event.applied,
-                                        );
+                                        'title': 'Event Detail',
                                       },
-                                    ),
-                                  ),
+                                    );
+                                  },
+                                  showButton: true,
+                                  onTap: () {
+                                    customNoOfMemberBottomSheet(
+                                      context,
+                                      eventId: event.id,
+                                      extra: true,
+                                    );
+                                  },
+
+                                  image: event.image,
+                                  date: event.date,
+                                  title: event.title,
+                                  des: event.place,
+
+                                  joinText:
+                                  event.applied == false
+                                      ? 'Join Event'
+                                      : 'Joined',
+                                  applied: event.applied,
+                                );
+                              },
+                            ),
+                          ),
                         ),
                       ),
 
@@ -197,37 +199,37 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Padding(
                           padding: const EdgeInsets.only(right: 6, left: 16),
                           child:
-                              homeModel.broadcasts.isEmpty
-                                  ? CustomEmpty()
-                                  : Row(
-                                    children: List.generate(
-                                      homeModel.broadcasts.length,
-                                      (index) {
-                                        Broadcast broadcast =
-                                            homeModel.broadcasts[index];
-                                        return CustomMainCard(
-                                          showButton: broadcast.applied,
-                                          image: broadcast.image,
-                                          date: broadcast.date,
-                                          title: broadcast.title,
-                                          des: broadcast.place,
-                                          onTap: () {},
-                                          joinText: 'Join Event',
-                                          cardOnTap: () {
-                                            Navigator.pushNamed(
-                                              context,
-                                              AppPage.homeEventDetailScreen,
-                                              arguments: {
-                                                'homeData': broadcast,
-                                                'title': 'Broadcast Detail',
-                                              },
-                                            );
-                                          },
-                                          applied: broadcast.applied,
-                                        );
+                          homeModel.broadcasts.isEmpty
+                              ? CustomEmpty()
+                              : Row(
+                            children: List.generate(
+                              homeModel.broadcasts.length,
+                                  (index) {
+                                Broadcast broadcast =
+                                homeModel.broadcasts[index];
+                                return CustomMainCard(
+                                  showButton: broadcast.applied,
+                                  image: broadcast.image,
+                                  date: broadcast.date,
+                                  title: broadcast.title,
+                                  des: broadcast.place,
+                                  onTap: () {},
+                                  joinText: 'Join Event',
+                                  cardOnTap: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      AppPage.homeEventDetailScreen,
+                                      arguments: {
+                                        'homeData': broadcast,
+                                        'title': 'Broadcast Detail',
                                       },
-                                    ),
-                                  ),
+                                    );
+                                  },
+                                  applied: broadcast.applied,
+                                );
+                              },
+                            ),
+                          ),
                         ),
                       ),
                       Gap(24),

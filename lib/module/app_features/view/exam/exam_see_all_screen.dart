@@ -33,7 +33,7 @@ class ExamSeeAllScreen extends StatelessWidget {
                     crossAxisCount: 2,
                     crossAxisSpacing: 7,
                     mainAxisSpacing: 13,
-                    mainAxisExtent: 23.h,
+                    mainAxisExtent: 23.2.h,
                   ),
                   itemCount: examData.length,
                   itemBuilder: (context, index) {
@@ -53,6 +53,7 @@ class ExamSeeAllScreen extends StatelessWidget {
                               : member['is_registered'] == true
                               ? 'Edit'
                               : 'Apply',
+                      applied: member['is_registered'],
                       time: formatTo12Hour(time24h: member['exam_time']),
                       onTap: () {
                         if (member['hall_ticket'] != null) {

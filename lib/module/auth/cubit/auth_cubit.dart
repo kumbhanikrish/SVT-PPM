@@ -12,6 +12,7 @@ import 'package:svt_ppm/module/auth/repo/auth_repo.dart';
 import 'package:svt_ppm/services/api_services.dart';
 import 'package:svt_ppm/utils/constant/app_page.dart';
 import 'package:svt_ppm/utils/enum/enums.dart';
+import 'package:svt_ppm/utils/formatter/format.dart';
 import 'package:svt_ppm/utils/widgets/custom_error_toast.dart';
 
 part 'auth_state.dart';
@@ -96,6 +97,7 @@ class AuthCubit extends Cubit<AuthState> {
     if (response.data['success'] == true) {
       LoginModel loginModel = LoginModel.fromJson(response.data['data']);
       await localDataSaver.setLoginData(loginModel);
+      await UserSession.load();
       await localDataSaver.setAuthToken(loginModel.token);
 
       Navigator.pushNamedAndRemoveUntil(
@@ -289,6 +291,7 @@ class AuthCubit extends Cubit<AuthState> {
         (route) => false,
       );
       await localDataSaver.setAuthToken('');
+      UserSession.clear();
     }
 
     return response;

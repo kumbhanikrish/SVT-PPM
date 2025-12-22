@@ -44,14 +44,14 @@ class _EventViewAllScreenState extends State<EventViewAllScreen> {
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   mainAxisSpacing: 13,
-                  mainAxisExtent: 23.h,
+                  mainAxisExtent: 23.2.h,
                 ),
                 itemCount: homeSeeAllData.length,
                 itemBuilder: (BuildContext context, int index) {
                   final homeData = homeSeeAllData[index];
                   return CustomCard(
                     onTap:
-                        homeData['applied']
+                        (homeData['applied'] ?? false)
                             ? null
                             : () {
                               customNoOfMemberBottomSheet(
@@ -75,11 +75,11 @@ class _EventViewAllScreenState extends State<EventViewAllScreen> {
                     date: homeData['date'],
                     title: homeData['title'],
                     des: homeData['place'],
-                    showButton: true,
+                    showButton: homeData['title'] == 'events' ? true : false,
                     joinText:
                         homeData['applied'] == false ? 'Join Event' : 'Joined',
                     time: '',
-                    applied: homeData['applied'],
+                    applied: homeData['applied'] ?? false,
                   );
                 },
               ),

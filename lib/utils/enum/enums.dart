@@ -14,4 +14,7 @@ class UserRoles {
   static const int yuvaKarobari = 9;
   static const int yuvaWorking = 10;
   static const int yuvaYoddha = 11;
+  static const int getEntry = 12;
+  static const int kitPayment = 13;
+  static const int kitDistributor = 14;
 }

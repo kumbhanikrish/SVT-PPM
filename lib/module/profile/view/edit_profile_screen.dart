@@ -94,7 +94,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     // }
 
     log('userData.villageName ::${userData.relation}');
-    villageCubit.setVillageName(name: userData.villageName, nameCode: userData.villageCode);
+    villageCubit.setVillageName(
+      name: userData.villageName,
+      nameCode: userData.villageCode,
+    );
     selectRelationCubit.updateValue(
       relationValue:
           userData.relation.isEmpty ? initialRelation : userData.relation,
@@ -441,6 +444,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             return CustomButton(
               text: 'Update',
               onTap: () async {
+              
                 if (userData.mobileNo == mobileController.text) {
                   profileCubit.addMemberFamily(
                     context,

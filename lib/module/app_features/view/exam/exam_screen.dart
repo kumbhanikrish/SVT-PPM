@@ -104,7 +104,7 @@ class _ExamScreenState extends State<ExamScreen> {
                                 ),
                                 child: SizedBox(
                                   width: 100.w,
-                                  height: 23.h,
+                                  height: 23.2.h,
                                   child:
                                       members.isEmpty
                                           ? CustomEmpty()
@@ -130,10 +130,11 @@ class _ExamScreenState extends State<ExamScreen> {
                                                 date:
                                                     member['exam_date'] ??
                                                     getCurrentDateFormat(),
+                                                applied:
+                                                    member['is_registered'],
+
                                                 title: member['name'],
-                                                des:
-                                                    member['place'] ??
-                                                    'No Place',
+                                                des: member['place'] ?? '',
                                                 joinText:
                                                     member['result'] != null
                                                         ? 'Result'

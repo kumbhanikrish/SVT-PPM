@@ -28,6 +28,7 @@ customDialog(
                 child: CustomAppBar(
                   title: title,
                   fontSize: 12,
+                  actions: [],
                   bottom: PreferredSize(
                     preferredSize: const Size.fromHeight(1),
                     child: Container(

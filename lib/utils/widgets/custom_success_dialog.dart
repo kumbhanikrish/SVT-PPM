@@ -13,6 +13,7 @@ void showCustomDialog(
 }) {
   showDialog(
     context: context,
+    barrierDismissible: false,
     builder: (BuildContext context) {
       return Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -46,9 +47,11 @@ void showCustomDialog(
                       textColor: AppColor.dividerColor,
                       padding: EdgeInsets.symmetric(vertical: 8),
                       fontSize: 14,
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
+                      onTap:
+                          onTap ??
+                          () {
+                            Navigator.pop(context);
+                          },
                     ),
                   ),
                   Gap(10),

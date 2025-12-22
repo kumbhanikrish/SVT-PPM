@@ -28,4 +28,9 @@ class AppApi {
   /// Exam Flow
   static String exam = 'user-exams';
   static String examsRegistration = 'exams-registration';
+
+  /// Data Entry Flow
+  static String totalGateEntry = 'total-gate-entry';
+  static String gateEntry = 'gate-entry';
+  static String gateEntryExtra = 'gate-entry-extra';
 }

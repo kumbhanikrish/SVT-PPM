@@ -2,21 +2,22 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:svt_ppm/main.dart';
 import 'package:svt_ppm/services/api_services.dart';
+import 'package:svt_ppm/utils/constant/app_api.dart';
 
 class DataEntryRepository {
   Future<Response> totalGetEntry(BuildContext context) async {
-    Response response = await api.getDynamicData(
+    Response response = await apiServices.getDynamicData(
       context,
-      '$baseUrl/total-gate-entry',
+      AppApi.totalGateEntry,
     );
 
     return response;
   }
 
   Future<Response> getExtraEntry(BuildContext context) async {
-    Response response = await api.postDynamicData(
+    Response response = await apiServices.postDynamicData(
       context,
-      '$baseUrl/gate-entry-extra',
+      AppApi.gateEntryExtra,
       {},
     );
 
@@ -25,12 +26,13 @@ class DataEntryRepository {
 
   Future<Response> getEntry(
     BuildContext context, {
-    required String sNumber,
+    required Map<String, dynamic> body,
   }) async {
-    Response response = await api.postDynamicData(
+    Response response = await apiServices.postDynamicData(
       context,
-      '$baseUrl/gate-entry',
-      {"s_number": sNumber},
+      AppApi.gateEntry,
+
+      body,
     );
 
     return response;

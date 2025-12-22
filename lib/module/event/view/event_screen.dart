@@ -119,7 +119,7 @@ class _EventScreenState extends State<EventScreen> {
                                             ),
                                             child: SizedBox(
                                               width: 100.w,
-                                              height: 23.h,
+                                              height: 23.2.h,
                                               child: GridView.builder(
                                                 shrinkWrap: true,
                                                 scrollDirection:
@@ -140,7 +140,8 @@ class _EventScreenState extends State<EventScreen> {
                                                       value[index];
                                                   return CustomCard(
                                                     onTap:
-                                                        homeSeeAllData['applied']
+                                                        (homeSeeAllData['applied'] ??
+                                                                false)
                                                             ? null
                                                             : () {
                                                               customNoOfMemberBottomSheet(
@@ -148,7 +149,7 @@ class _EventScreenState extends State<EventScreen> {
                                                                 eventId:
                                                                     homeSeeAllData['id'],
                                                                 extra: true,
-                                                                seeAll: true
+                                                                seeAll: true,
                                                               );
                                                             },
                                                     cardOnTap: () {
@@ -183,7 +184,8 @@ class _EventScreenState extends State<EventScreen> {
                                                     joinText: 'Join Event',
                                                     time: '',
                                                     applied:
-                                                        homeSeeAllData['applied'],
+                                                        homeSeeAllData['applied'] ??
+                                                        false,
                                                   );
                                                 },
                                               ),

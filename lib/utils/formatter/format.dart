@@ -69,4 +69,9 @@ class UserSession {
   static bool hasAnyRole(List<int> roleIds) {
     return loginModel?.roles.any((r) => roleIds.contains(r.id)) ?? false;
   }
+
+  static void clear() {
+    loginModel = null;
+    log('UserSession cleared');
+  }
 }

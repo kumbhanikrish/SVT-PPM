@@ -1,5 +1,3 @@
-// import 'package:country_code_picker/country_code_picker.dart';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,6 +17,7 @@ import 'package:svt_ppm/module/data_entry/cubit/data_entry_cubit.dart';
 import 'package:svt_ppm/module/home/cubit/home_cubit.dart';
 import 'package:svt_ppm/module/profile/cubit/profile_cubit.dart';
 import 'package:svt_ppm/services/api_services.dart';
+import 'package:svt_ppm/utils/constant/app_page.dart';
 
 import 'package:svt_ppm/utils/formatter/format.dart';
 import 'package:svt_ppm/utils/routes/app_routes.dart';
@@ -38,64 +37,68 @@ void configLoading() {
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-ApiServices api = ApiServices();
-
 LocalDataSaver localDataSaver = LocalDataSaver();
 
 void main() async {
   await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
-  await UserSession.load();
-  await SharedPreferences.getInstance();
   await Firebase.initializeApp();
+  await SharedPreferences.getInstance();
+
+  await UserSession.load();
+
+  configLoading();
 
   runApp(const MyApp());
-  configLoading();
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Sizer(
-      builder: (context, orientation, deviceType) {
-        return MultiBlocProvider(
-          providers: providers,
-          child: MaterialApp(
-            navigatorKey: navigatorKey,
-
-            debugShowCheckedModeBanner: false,
-            title: 'Flutter Demo',
-            theme: ThemeData(
-              dialogTheme: DialogThemeData(
-                backgroundColor: AppColor.whiteColor,
-                surfaceTintColor: AppColor.whiteColor,
+    return SafeArea(
+      top: false,
+      child: Sizer(
+        builder: (context, orientation, deviceType) {
+          return MultiBlocProvider(
+            providers: providers,
+            child: MaterialApp(
+              navigatorKey: navigatorKey,
+              debugShowCheckedModeBanner: false,
+              title: 'Flutter Demo',
+              theme: ThemeData(
+                dialogTheme: DialogThemeData(
+                  backgroundColor: AppColor.whiteColor,
+                  surfaceTintColor: AppColor.whiteColor,
+                ),
+                appBarTheme: AppBarTheme(
+                  backgroundColor: AppColor.whiteColor,
+                  surfaceTintColor: AppColor.whiteColor,
+                  iconTheme: IconThemeData(color: AppColor.hintColor),
+                ),
+                bottomSheetTheme: BottomSheetThemeData(
+                  backgroundColor: AppColor.whiteColor,
+                  surfaceTintColor: AppColor.whiteColor,
+                ),
+                scaffoldBackgroundColor: AppColor.whiteColor,
+                bottomAppBarTheme: BottomAppBarThemeData(
+                  color: AppColor.whiteColor,
+                  surfaceTintColor: AppColor.whiteColor,
+                ),
               ),
-
-              appBarTheme: AppBarTheme(
-                backgroundColor: AppColor.whiteColor,
-                surfaceTintColor: AppColor.whiteColor,
-                iconTheme: IconThemeData(color: AppColor.hintColor),
-              ),
-              bottomSheetTheme: BottomSheetThemeData(
-                backgroundColor: AppColor.whiteColor,
-                surfaceTintColor: AppColor.whiteColor,
-              ),
-              scaffoldBackgroundColor: AppColor.whiteColor,
-              bottomAppBarTheme: BottomAppBarThemeData(
-                color: AppColor.whiteColor,
-                surfaceTintColor: AppColor.whiteColor,
-              ),
+              initialRoute: AppPage.splashScreen,
+              routes: appRoutes,
+              builder: EasyLoading.init(),
             ),
-            routes: appRoutes,
-            builder: EasyLoading.init(),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
 
+// ----- Bloc Providers -----
 dynamic providers = [
   BlocProvider(create: (context) => AuthCubit()),
   BlocProvider(create: (context) => HomeCubit()),

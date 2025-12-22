@@ -78,7 +78,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     if (standard == null || standard.isEmpty) {
       return customErrorToast(context, text: "Please select standard");
     }
-    if ((occupation ?? '').isEmpty) {
+    if ((occupation ?? '').isEmpty && editProfile == false) {
       return customErrorToast(context, text: "Please select occupation");
     }
 
@@ -98,12 +98,18 @@ class ProfileCubit extends Cubit<ProfileState> {
       // if (villageName == null || villageName.isEmpty) {
       //   return customErrorToast(context, text: "Please enter village name");
       // }
-      if (idProofFront == null || idProofFront.isEmpty) {
-        return customErrorToast(context, text: "Please upload ID Proof Front");
-      }
 
-      if (idProofBack == null || idProofBack.isEmpty) {
-        return customErrorToast(context, text: "Please upload ID Proof Back");
+      if (editProfile == false) {
+        if (idProofFront == null || idProofFront.isEmpty) {
+          return customErrorToast(
+            context,
+            text: "Please upload ID Proof Front",
+          );
+        }
+
+        if (idProofBack == null || idProofBack.isEmpty) {
+          return customErrorToast(context, text: "Please upload ID Proof Back");
+        }
       }
     }
 

@@ -49,14 +49,19 @@ class LocalDataSaver {
     log("LoginModel saved.");
   }
 
-  // ✅ Get LoginModel from storage
-  Future<LoginModel> getLoginModel() async {
+  Future<LoginModel?> getLoginModel() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     final jsonString = sharedPreferences.getString('login_data');
     if (jsonString != null) {
-      final jsonMap = jsonDecode(jsonString);
-      return LoginModel.fromJson(jsonMap);
+      try {
+        final jsonMap = jsonDecode(jsonString);
+        return LoginModel.fromJson(jsonMap);
+      } catch (e) {
+        log("Error decoding LoginModel: $e");
+        return null;
+      }
     }
-    throw Exception("LoginModel not found");
+    log("LoginModel not found in SharedPreferences");
+    return null;
   }
 }

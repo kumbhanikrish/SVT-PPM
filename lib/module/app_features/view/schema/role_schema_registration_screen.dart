@@ -54,65 +54,83 @@ class _RoleSchemaRegistrationScreenState
 
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 16),
-                        child: ListView.separated(
-                          padding: EdgeInsets.zero,
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: schemasRegistrationModel.schemas.length,
-                          separatorBuilder: (BuildContext context, int index) {
-                            return Gap(16);
-                          },
-                          itemBuilder: (BuildContext context, int index) {
-                            final schemaItem =
-                                schemasRegistrationModel.schemas[index];
-                            return CustomListTile(
-                              onTap: () {
-                                Navigator.pushNamed(
-                                  context,
+                        child:
+                            schemasRegistrationModel.schemas.isEmpty
+                                ? CustomEmpty()
+                                : ListView.separated(
+                                  padding: EdgeInsets.zero,
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount:
+                                      schemasRegistrationModel.schemas.length,
+                                  separatorBuilder: (
+                                    BuildContext context,
+                                    int index,
+                                  ) {
+                                    return Gap(16);
+                                  },
+                                  itemBuilder: (
+                                    BuildContext context,
+                                    int index,
+                                  ) {
+                                    final schemaItem =
+                                        schemasRegistrationModel.schemas[index];
+                                    return CustomListTile(
+                                      onTap: () {
+                                        Navigator.pushNamed(
+                                          context,
 
-                                  AppPage.roleSchemaRegistrationUserScreen,
-                                  arguments: {'schemaUser': schemaItem.items},
-                                );
-                              },
-                              borderRadius: BorderRadius.circular(15),
-                              tileColor: AppColor.fillColor,
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 10,
-                              ),
-                              text: schemaItem.schemaName,
-                              leadingImage: '',
-                              leading: Container(
-                                width: 60,
-                                height: 60,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  image: DecorationImage(
-                                    image: NetworkImage(
-                                      'https://media.istockphoto.com/id/814423752/photo/eye-of-model-with-colorful-art-make-up-close-up.jpg?s=612x612&w=0&k=20&c=l15OdMWjgCKycMMShP8UK94ELVlEGvt7GmB_esHWPYE=',
-                                    ),
-                                    fit: BoxFit.cover,
-                                  ),
+                                          AppPage
+                                              .roleSchemaRegistrationUserScreen,
+                                          arguments: {
+                                            'schemaUser': schemaItem.items,
+                                          },
+                                        );
+                                      },
+                                      borderRadius: BorderRadius.circular(15),
+                                      tileColor: AppColor.fillColor,
+                                      contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical: 10,
+                                      ),
+                                      text: schemaItem.schemaName,
+                                      leadingImage: '',
+                                      leading: Container(
+                                        width: 60,
+                                        height: 60,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                          image: DecorationImage(
+                                            image: NetworkImage(
+                                              'https://media.istockphoto.com/id/814423752/photo/eye-of-model-with-colorful-art-make-up-close-up.jpg?s=612x612&w=0&k=20&c=l15OdMWjgCKycMMShP8UK94ELVlEGvt7GmB_esHWPYE=',
+                                            ),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      trailing: CircleAvatar(
+                                        backgroundColor:
+                                            AppColor.themeSecondaryColor,
+                                        radius: 12,
+                                        child: CustomText(
+                                          text:
+                                              schemaItem.notApprovedCount
+                                                  .toString(),
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
-                              ),
-                              trailing: CircleAvatar(
-                                backgroundColor: AppColor.themeSecondaryColor,
-                                radius: 12,
-                                child: CustomText(
-                                  text: schemaItem.notApprovedCount.toString(),
-                                  fontSize: 12,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
                       ),
                     ],
                   );
                 },
               );
             } else {
-              return SizedBox.shrink();
+              return CustomEmpty();
             }
           },
         ),

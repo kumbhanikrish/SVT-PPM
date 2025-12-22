@@ -52,6 +52,8 @@ class EventBroadcastDetailScreen extends StatelessWidget {
                 fontSize: 12,
                 textAlign: TextAlign.start,
               ),
+              Gap(10),
+              CustomHTMLText(text: homeData['description'] ?? ''),
 
               Gap(10.h),
             ],

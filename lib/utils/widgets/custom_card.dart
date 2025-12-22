@@ -199,7 +199,9 @@ class CustomCard extends StatelessWidget {
                         color:
                             status == 'Passed'
                                 ? AppColor.greenColor
-                                : AppColor.redColor,
+                                : status == 'Failed'
+                                ? AppColor.redColor
+                                : null,
                         borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(5),
                           topRight: Radius.circular(5),
