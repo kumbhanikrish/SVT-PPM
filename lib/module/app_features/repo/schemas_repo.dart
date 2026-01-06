@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:svt_ppm/services/api_services.dart';
@@ -26,11 +28,13 @@ class SchemasRepo {
     BuildContext context, {
     required Map<String, dynamic> params,
   }) async {
+    log('paramsparamdfgds ::$params');
     Response response = await apiServices.postDynamicData(
       context,
       AppApi.schemasRegistration,
       params,
       showSuccessMessage: true,
+      isFormData: true,
     );
 
     return response;

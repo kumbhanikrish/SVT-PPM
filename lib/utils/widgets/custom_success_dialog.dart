@@ -47,11 +47,9 @@ void showCustomDialog(
                       textColor: AppColor.dividerColor,
                       padding: EdgeInsets.symmetric(vertical: 8),
                       fontSize: 14,
-                      onTap:
-                          onTap ??
-                          () {
-                            Navigator.pop(context);
-                          },
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
                     ),
                   ),
                   Gap(10),

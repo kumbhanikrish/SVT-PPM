@@ -1,4 +1,4 @@
-package com.example.svt_ppm
+package com.app.svt_ppm
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -23,4 +23,5 @@ class AppPage {
   static String roleSchemaRegistrationUserScreen =
       '/roleSchemaRegistrationUserScreen';
   static String dataEntryScreen = '/DataEntryScreen';
+  static String selectDocumentScreen = '/selectDocumentScreen';
 }

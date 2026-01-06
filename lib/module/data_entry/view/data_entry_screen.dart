@@ -1,20 +1,15 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 import 'package:sizer/sizer.dart';
 import 'package:svt_ppm/module/data_entry/cubit/data_entry_cubit.dart';
-import 'package:svt_ppm/utils/constant/app_page.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
 import 'package:svt_ppm/utils/widgets/custom_app_bar.dart';
-import 'package:svt_ppm/utils/widgets/custom_button.dart';
-import 'package:svt_ppm/utils/widgets/custom_error_toast.dart';
 import 'package:svt_ppm/utils/widgets/custom_text.dart';
-import 'package:svt_ppm/utils/widgets/custom_textfield.dart';
 
 class DataEntryScreen extends StatefulWidget {
   const DataEntryScreen({super.key});

@@ -3,7 +3,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:svt_ppm/module/data_entry/repository/data_entry_repository.dart';
-import 'package:svt_ppm/utils/widgets/custom_error_toast.dart';
 import 'package:svt_ppm/utils/widgets/custom_success_dialog.dart';
 
 part 'data_entry_state.dart';

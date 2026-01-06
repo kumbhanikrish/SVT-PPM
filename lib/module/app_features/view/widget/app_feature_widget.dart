@@ -3,18 +3,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:sizer/sizer.dart';
 import 'package:svt_ppm/module/app_features/cubit/schemas/schemas_cubit.dart';
+import 'package:svt_ppm/module/app_features/model/schemas_model.dart';
 import 'package:svt_ppm/module/app_features/model/village_president_model.dart';
+import 'package:svt_ppm/utils/constant/app_page.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
 import 'package:svt_ppm/utils/widgets/custom_bottomsheet.dart';
 import 'package:svt_ppm/utils/widgets/custom_error_toast.dart';
 import 'package:svt_ppm/utils/widgets/custom_image.dart';
 import 'package:svt_ppm/utils/widgets/custom_list_tile.dart';
 
-
 void customVillagePresidentBottomSheet(
   BuildContext context, {
   required Set<int> selectedMemberIds,
   required int schemaId,
+  required List<Document> documents,
 }) {
   SchemasCubit schemasCubit = BlocProvider.of<SchemasCubit>(context);
   List<VillagePresidentModel> villagePresidentList = [];
@@ -29,11 +31,15 @@ void customVillagePresidentBottomSheet(
       if (selectedVillagePresidentIds.length < 2) {
         customErrorToast(context, text: 'Please select at least 2 members');
       } else {
-        schemasCubit.schemasRegistration(
+        Navigator.pushNamed(
           context,
-          schemaId: schemaId,
-          memberId: selectedVillagePresidentIds.first,
-          selectedVillagePresidentIds: selectedVillagePresidentIds,
+          AppPage.selectDocumentScreen,
+          arguments: {
+            'schemaId': schemaId,
+            'selectedVillagePresidentIds': selectedVillagePresidentIds.toList(),
+            'memberId': selectedVillagePresidentIds.first,
+            'documents': documents,
+          },
         );
       }
     },

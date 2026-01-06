@@ -6,6 +6,7 @@ import 'package:svt_ppm/module/app_features/view/kit/kit_detail_screen.dart';
 import 'package:svt_ppm/module/app_features/view/schema/role_schema_registration_user_screen.dart';
 import 'package:svt_ppm/module/app_features/view/schema/schema_content_screen.dart';
 import 'package:svt_ppm/module/app_features/view/schema/role_schema_registration_screen.dart';
+import 'package:svt_ppm/module/app_features/view/schema/select_document_screen.dart';
 import 'package:svt_ppm/module/auth/view/auth_screen.dart';
 import 'package:svt_ppm/module/auth/view/language_select_screen.dart';
 import 'package:svt_ppm/module/auth/view/selection_Screen.dart';
@@ -34,6 +35,7 @@ final Map<String, WidgetBuilder> appRoutes = {
         arguments: ModalRoute.of(context)?.settings.arguments,
       ),
   AppPage.homeScreen: (context) => const HomeScreen(),
+  // AppPage.homeScreen: (context) => const CustomBottomBarScreen(),
   AppPage.eventScreen:
       (context) =>
           EventScreen(argument: ModalRoute.of(context)?.settings.arguments),
@@ -81,8 +83,8 @@ final Map<String, WidgetBuilder> appRoutes = {
         argument: ModalRoute.of(context)?.settings.arguments,
       ),
   AppPage.dataEntryScreen: (context) => DataEntryScreen(),
-
-  // AppRoutes.referAndEarnScreen:
-  //     (context) =>
-  //         ReferAndEarnScreen(data: ModalRoute.of(context)?.settings.arguments),
+  AppPage.selectDocumentScreen:
+      (context) => SelectDocumentScreen(
+        argument: ModalRoute.of(context)?.settings.arguments,
+      ),
 };

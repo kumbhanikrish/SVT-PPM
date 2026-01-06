@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:svt_ppm/module/app_features/cubit/schemas/schemas_cubit.dart';
+import 'package:svt_ppm/module/app_features/model/schemas_model.dart';
 import 'package:svt_ppm/module/app_features/view/widget/app_feature_widget.dart';
 import 'package:svt_ppm/module/home/view/widget/custom_home_widget.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
@@ -27,6 +28,7 @@ class _SchemaContentScreenState extends State<SchemaContentScreen> {
     String template = widget.argument['template'];
     int schemaId = widget.argument['schemaId'];
     bool isApplied = widget.argument['isApplied'];
+    List<Document> documents = widget.argument['documents'];
     SelectMemberCubit selectMemberCubit = BlocProvider.of<SelectMemberCubit>(
       context,
     );
@@ -71,6 +73,7 @@ class _SchemaContentScreenState extends State<SchemaContentScreen> {
                                 context,
                                 selectedMemberIds: selectedMemberIds,
                                 schemaId: schemaId,
+                                documents: documents,
                               );
                             }
                           },

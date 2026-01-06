@@ -1,4 +1,3 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -16,7 +15,6 @@ import 'package:svt_ppm/module/auth/cubit/auth_cubit.dart';
 import 'package:svt_ppm/module/data_entry/cubit/data_entry_cubit.dart';
 import 'package:svt_ppm/module/home/cubit/home_cubit.dart';
 import 'package:svt_ppm/module/profile/cubit/profile_cubit.dart';
-import 'package:svt_ppm/services/api_services.dart';
 import 'package:svt_ppm/utils/constant/app_page.dart';
 
 import 'package:svt_ppm/utils/formatter/format.dart';
@@ -42,13 +40,9 @@ LocalDataSaver localDataSaver = LocalDataSaver();
 void main() async {
   await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
   await SharedPreferences.getInstance();
-
   await UserSession.load();
-
   configLoading();
-
   runApp(const MyApp());
 }
 

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:sizer/sizer.dart';
 import 'package:svt_ppm/utils/constant/app_image.dart';
@@ -22,6 +23,9 @@ class CustomMainCard extends StatelessWidget {
   final bool applied;
   final void Function() onTap;
   final void Function() cardOnTap;
+  final void Function()? onNotJoinTap;
+  final void Function()? onCancelTap;
+
   const CustomMainCard({
     super.key,
     required this.image,
@@ -33,94 +37,165 @@ class CustomMainCard extends StatelessWidget {
     required this.onTap,
     required this.showButton,
     required this.cardOnTap,
+    this.onNotJoinTap,
+    this.onCancelTap,
     this.width,
   });
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: width ?? 236,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(width: 0.5, color: AppColor.themePrimaryColor),
-      ),
-      margin: EdgeInsets.only(right: 10),
-      child: InkWell(
-        onTap: cardOnTap,
-        child: Column(
-          children: <Widget>[
-            CustomCachedImage(
-              imageUrl: image,
-              height: 107,
-              width: 100.w,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(14),
-                topRight: Radius.circular(14),
-              ),
-            ),
+    final Color primaryBlue = AppColor.themePrimaryColor;
+    final Color lightYellow = const Color(0xFFFFF9C4);
 
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Gap(5),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: CustomTitleName(
-                    title: 'Date',
-                    text: date,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
+    return InkWell(
+      onTap: cardOnTap,
+      child: Container(
+        width: width ?? 398,
+        margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF5F6F8),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 5,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                flex: 5,
+                child: SizedBox(
+                  width: double.infinity,
+                  child: CustomCachedImage(
+                    imageUrl: image,
+                    width: 1000,
+                    height: 200,
                   ),
                 ),
-                CustomDivider(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
+              ),
+
+              Container(
+                color: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.calendar_month, size: 16, color: primaryBlue),
+                    const Gap(6),
+                    Text(
+                      date,
+                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    ),
+                    const Spacer(),
+                    Text(
+                      "12:00 PM",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: primaryBlue,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              Expanded(
+                flex: 3,
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-
-                    children: <Widget>[
-                      CustomText(text: title, fontSize: 14),
-                      Gap(10),
-                      CustomText(
-                        text: des,
-                        color: AppColor.hintColor,
-                        fontSize: 12,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: primaryBlue,
+                        ),
                       ),
-                      Gap(7),
+                      const Gap(4),
+                      Text(
+                        des.isNotEmpty ? des : "No location added",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+                      ),
                     ],
                   ),
                 ),
-                if (showButton) ...[
-                  Container(
-                    decoration: BoxDecoration(
-                      color:
-                          applied == false
-                              ? AppColor.themePrimaryColor
-                              : AppColor.greenColor,
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(15),
-                        bottomRight: Radius.circular(15),
-                      ),
-                    ),
+              ),
 
-                    child: InkWell(
-                      onTap: onTap,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Center(
-                          child: CustomText(
-                            text: joinText,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w600,
-                            color: AppColor.whiteColor,
+              if (showButton)
+                SizedBox(
+                  height: 45,
+                  child:
+                      applied
+                          ? Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  color: primaryBlue,
+                                  child: Text(
+                                    "Joined",
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: InkWell(
+                                  onTap: onCancelTap ?? () {},
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    color: lightYellow,
+                                    child: Text(
+                                      "Cancel",
+                                      style: TextStyle(
+                                        color: primaryBlue,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                          : InkWell(
+                            onTap: onTap,
+                            child: Container(
+                              width: double.infinity,
+                              alignment: Alignment.center,
+                              color: primaryBlue,
+                              child: Text(
+                                joinText,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ],
-            ),
-          ],
+                ),
+            ],
+          ),
         ),
       ),
     );
@@ -281,7 +356,7 @@ class CustomCard extends StatelessWidget {
                   Container(
                     decoration: BoxDecoration(
                       color:
-                          applied
+                          applied && status.isEmpty
                               ? AppColor.greenColor
                               : AppColor.themePrimaryColor,
                       borderRadius: BorderRadius.only(
@@ -513,8 +588,26 @@ class KitCard extends StatelessWidget {
     this.cardOnTap,
     this.showButton = true,
   });
+
   @override
   Widget build(BuildContext context) {
+    Color statusBgColor;
+    Color statusTextColor;
+
+    if (status == 'Pending') {
+      statusBgColor = AppColor.amberColor.withOpacity(0.1);
+      statusTextColor = AppColor.amberColor;
+    } else if (status == 'Rejected') {
+      statusBgColor = AppColor.redColor.withOpacity(0.1);
+      statusTextColor = AppColor.redColor;
+    } else if (status == 'Delivered') {
+      statusBgColor = AppColor.themePrimaryColor.withOpacity(0.1);
+      statusTextColor = AppColor.themePrimaryColor;
+    } else {
+      statusBgColor = AppColor.greenColor.withOpacity(0.1);
+      statusTextColor = AppColor.greenColor;
+    }
+
     return InkWell(
       onTap: cardOnTap,
       borderRadius: BorderRadius.circular(12),
@@ -526,111 +619,103 @@ class KitCard extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomCachedImage(
                 imageUrl: image,
                 height: 80,
+                width: 80,
                 borderRadius: BorderRadius.circular(12),
               ),
-              Gap(10),
+              const Gap(12),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomText(
-                      text: title,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
+                child: Container(
+                  constraints: const BoxConstraints(minHeight: 80),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        title.toUpperCase(),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: AppColor.themePrimaryColor,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
 
-                    status.isNotEmpty
-                        ? Padding(
-                          padding: const EdgeInsets.only(top: 10),
-                          child: Row(
-                            children: [
-                              CustomStatusButton(
-                                color:
-                                    status == 'Pending'
-                                        ? AppColor.amberColor.withOpacity(0.1)
-                                        : status == 'Rejected'
-                                        ? AppColor.redColor.withOpacity(0.1)
-                                        : status == 'Delivered'
-                                        ? AppColor.themePrimaryColor
-                                            .withOpacity(0.1)
-                                        : AppColor.greenColor.withOpacity(0.1),
-                                status: status,
-                                textColor:
-                                    status == 'Pending'
-                                        ? AppColor.amberColor
-                                        : status == 'Rejected'
-                                        ? AppColor.redColor
-                                        : status == 'Delivered'
-                                        ? AppColor.themePrimaryColor
-                                        : AppColor.greenColor,
-                              ),
-
-                              if (status == 'Rejected') ...[
-                                Gap(10),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: AppColor.themePrimaryColor,
-                                    borderRadius: BorderRadius.circular(3),
-                                  ),
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                    vertical: 5,
-                                  ),
-                                  child: CustomText(
-                                    text: 'Re-Apply',
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                    color: AppColor.whiteColor,
-                                  ),
+                      const Gap(6),
+                      if (status.isNotEmpty)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                CustomStatusButton(
+                                  color: statusBgColor,
+                                  status: status,
+                                  textColor: statusTextColor,
                                 ),
+                                if (status == 'Rejected') ...[
+                                  const Gap(10),
+                                  InkWell(
+                                    onTap: onTap,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: AppColor.themePrimaryColor,
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical: 5,
+                                      ),
+                                      child: CustomText(
+                                        text: 'Re-Apply',
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColor.whiteColor,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ],
-                            ],
-                          ),
+                            ),
+                            if (status == 'Rejected' && rejectReason.isNotEmpty)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5),
+                                child: CustomTitleName(
+                                  text: rejectReason,
+                                  title: 'Reason',
+                                  color: AppColor.redColor,
+                                  fontWeight: FontWeight.w600,
+                                  textColor: AppColor.redColor.withOpacity(0.5),
+                                ),
+                              ),
+                          ],
                         )
-                        : showButton == true
-                        ? Padding(
-                          padding: const EdgeInsets.only(top: 10),
+                      else if (showButton)
+                        InkWell(
+                          onTap: onTap,
                           child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(vertical: 7),
                             decoration: BoxDecoration(
                               color: AppColor.themePrimaryColor,
-                              borderRadius: BorderRadius.circular(5),
+                              borderRadius: BorderRadius.circular(6),
                             ),
-
-                            child: InkWell(
-                              onTap: onTap,
-                              child: Padding(
-                                padding: const EdgeInsets.all(7),
-                                child: Center(
-                                  child: CustomText(
-                                    text: joinText,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w600,
-                                    color: AppColor.whiteColor,
-                                  ),
-                                ),
-                              ),
+                            alignment: Alignment.center,
+                            child: CustomText(
+                              text: joinText,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: AppColor.whiteColor,
                             ),
                           ),
-                        )
-                        : Container(),
-
-                    status == 'Rejected'
-                        ? Padding(
-                          padding: const EdgeInsets.only(top: 5),
-                          child: CustomTitleName(
-                            text: rejectReason,
-                            title: 'Reason',
-                            color: AppColor.redColor,
-                            fontWeight: FontWeight.w600,
-                            textColor: AppColor.redColor.withOpacity(0.5),
-                          ),
-                        )
-                        : SizedBox.shrink(),
-                  ],
+                        ),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -638,35 +723,195 @@ class KitCard extends StatelessWidget {
         ),
       ),
     );
+  }
+}
 
-    // Container(
-    // decoration: BoxDecoration(
-    //   borderRadius: borderRadius ?? BorderRadius.circular(5),
-    //   color: AppColor.fillColor,
-    // ),
-    //   margin: EdgeInsets.only(right: 6),
-    //   child: InkWell(
-    //     onTap: cardOnTap,
-    //     child: Column(
-    //       children: <Widget>[
+class SchemaItemCard extends StatelessWidget {
+  final String title;
+  final String? image;
+  final String status;
+  final bool isApplied;
+  final String rejectReason;
+  final VoidCallback cardOnTap;
+  final VoidCallback onTap;
 
-    //         Column(
-    //           crossAxisAlignment: CrossAxisAlignment.start,
-    //           children: <Widget>[
-    //             Gap(5),
+  const SchemaItemCard({
+    super.key,
+    required this.title,
+    required this.image,
+    required this.status,
+    required this.isApplied,
+    required this.rejectReason,
+    required this.onTap,
+    required this.cardOnTap,
+  });
 
-    //
-    //
-    //             Gap(7),
-    //             if (showButton == true) ...[
-    //               Gap(22),
+  @override
+  Widget build(BuildContext context) {
+    Color statusBgColor;
+    Color statusTextColor;
+    String currentStatus = status.isEmpty ? "Pending" : status;
+    String statusKey = currentStatus.toLowerCase();
 
-    //             ],
-    //           ],
-    //         ),
-    //       ],
-    //     ),
-    //   ),
-    // );
+    if (statusKey == 'rejected') {
+      statusBgColor = AppColor.redColor.withOpacity(0.1);
+      statusTextColor = AppColor.redColor;
+    } else if (statusKey == 'approved' || statusKey == 'delivered') {
+      statusBgColor = AppColor.greenColor.withOpacity(0.1);
+      statusTextColor = AppColor.greenColor;
+    } else {
+      statusBgColor = AppColor.amberColor.withOpacity(0.1);
+      statusTextColor = AppColor.amberColor;
+    }
+
+    return InkWell(
+      onTap: cardOnTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: AppColor.fillColor,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: SizedBox(
+                height: 80,
+                width: 80,
+                child:
+                    (image != null && image!.isNotEmpty)
+                        ? Image.network(
+                          image!,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return SvgPicture.asset(
+                              AppImage.schemaDetails,
+                              fit: BoxFit.cover,
+                            );
+                          },
+                        )
+                        : SvgPicture.asset(
+                          AppImage.schemaDetails,
+                          fit: BoxFit.cover,
+                        ),
+              ),
+            ),
+            const Gap(12),
+            Expanded(
+              child: Container(
+                constraints: const BoxConstraints(minHeight: 80),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      title.toUpperCase(),
+                      style: TextStyle(
+                        color: AppColor.themePrimaryColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+
+                    const Gap(6),
+                    if (!isApplied)
+                      InkWell(
+                        onTap: onTap,
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          decoration: BoxDecoration(
+                            color: AppColor.themePrimaryColor,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Apply",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      )
+                    else
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Status Row
+                          Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 6,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: statusBgColor,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text(
+                                  currentStatus,
+                                  style: TextStyle(
+                                    color: statusTextColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                              if (statusKey == 'rejected') ...[
+                                const Gap(10),
+                                InkWell(
+                                  onTap: onTap,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: AppColor.themePrimaryColor,
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 6,
+                                    ),
+                                    child: Text(
+                                      'Re-Apply',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColor.whiteColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
+                          if (statusKey == 'rejected' &&
+                              rejectReason.isNotEmpty)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5),
+                              child: CustomTitleName(
+                                text: rejectReason,
+                                title: 'Reason',
+                                color: AppColor.redColor,
+                                fontWeight: FontWeight.w600,
+                                textColor: AppColor.redColor.withOpacity(0.5),
+                              ),
+                            ),
+                        ],
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

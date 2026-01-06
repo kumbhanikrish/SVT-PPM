@@ -4,50 +4,6 @@ import 'package:svt_ppm/utils/constant/app_image.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
 import 'package:svt_ppm/utils/widgets/custom_text.dart';
 
-// class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-//   final String title;
-//   final Widget? leading;
-//   final List<Widget>? actions;
-//   final PreferredSizeWidget? bottom;
-//   final double? fontSize;
-//   final bool? centerTitle;
-//   const CustomAppBar({
-//     super.key,
-//     required this.title,
-//     this.leading,
-//     this.actions,
-//     this.bottom,
-//     this.fontSize,
-//     this.centerTitle,
-//   });
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       decoration: BoxDecoration(
-//         border: Border(
-//           bottom: BorderSide(width: 0.1, color: AppColor.whiteColor),
-//         ),
-//       ),
-//       child: AppBar(
-//         title: CustomText(
-//           text: title,
-//           color: AppColor.themePrimaryColor,
-//           fontWeight: FontWeight.w600,
-//           fontSize: fontSize ?? 18,
-//         ),
-//         bottom: bottom,
-//         leading: leading,
-//         actions: actions,
-//         automaticallyImplyLeading: true,
-//         centerTitle: centerTitle ?? true,
-//         iconTheme: IconThemeData(color: AppColor.themePrimaryColor),
-//       ),
-//     );
-//   }
-
-//   @override
-//   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-// }
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final Widget? leading;
@@ -59,6 +15,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Radius? bottomRadius;
   final Color? shadowColor;
   final double? blurRadius;
+
   const CustomAppBar({
     super.key,
     required this.title,
@@ -72,34 +29,35 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.bottomRadius,
     this.shadowColor,
   });
+
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: shadowColor ?? AppColor.themePrimaryColor.withOpacity(0.5),
+            color: shadowColor ?? Colors.black.withOpacity(0.2),
             blurRadius: 3,
             spreadRadius: 2,
-            offset: Offset(0, 4),
+            offset: const Offset(0, 4),
           ),
         ],
         borderRadius: BorderRadius.only(
-          bottomLeft: bottomRadius ?? Radius.circular(15),
-          bottomRight: bottomRadius ?? Radius.circular(15),
+          bottomLeft: bottomRadius ?? const Radius.circular(15),
+          bottomRight: bottomRadius ?? const Radius.circular(15),
         ),
-        color: AppColor.themeSecondaryColor,
+        color: AppColor.themePrimaryColor,
       ),
       child: AppBar(
         backgroundColor: AppColor.transparentColor,
+        elevation: 0,
         title: CustomText(
           text: title,
-          color: AppColor.themePrimaryColor,
+          color: AppColor.whiteColor,
           fontWeight: FontWeight.w600,
           fontSize: fontSize ?? 18,
         ),
         bottom: bottom,
-        leading: leading,
 
         actions:
             actions ??
@@ -108,13 +66,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 onTap: notificationOnTap,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: SvgPicture.asset(AppImage.notification),
+                  child: SvgPicture.asset(
+                    AppImage.notification,
+                    colorFilter: const ColorFilter.mode(
+                      AppColor.whiteColor,
+                      BlendMode.srcIn,
+                    ),
+                  ),
                 ),
               ),
             ],
         automaticallyImplyLeading: true,
         centerTitle: centerTitle ?? true,
-        iconTheme: IconThemeData(color: AppColor.themePrimaryColor),
+        iconTheme: const IconThemeData(color: AppColor.whiteColor),
       ),
     );
   }

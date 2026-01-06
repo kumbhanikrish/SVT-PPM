@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -13,11 +15,8 @@ class SchemasCubit extends Cubit<SchemasState> {
   SchemasCubit() : super(SchemasInitial());
   SchemasRepo schemasRepo = SchemasRepo();
 
-
-
   List<SchemasModel> schemasModel = [];
   List<VillagePresidentModel> villagePresidentList = [];
-
 
   getSchemasData(BuildContext context) async {
     Response response = await schemasRepo.getSchemasData(context);
@@ -60,15 +59,9 @@ class SchemasCubit extends Cubit<SchemasState> {
 
   schemasRegistration(
     BuildContext context, {
-    required int schemaId,
-    required int memberId,
-    required Set<int> selectedVillagePresidentIds,
+    required Map<String, dynamic> params,
   }) async {
-    Map<String, dynamic> params = {
-      "schema_id": schemaId,
-      "member_id": memberId,
-      "village_president_ids": selectedVillagePresidentIds.toList(),
-    };
+    log('paramsparams ::$params');
     Response response = await schemasRepo.schemasRegistration(
       context,
       params: params,
@@ -81,7 +74,7 @@ class SchemasCubit extends Cubit<SchemasState> {
       }
 
       for (var i = 0; i < schemasModel.length; i++) {
-        if (schemasModel[i].id == schemaId) {
+        if (schemasModel[i].id == params['schema_id']) {
           schemasModel[i].isApplied = true;
         }
       }
@@ -108,8 +101,6 @@ class SchemasCubit extends Cubit<SchemasState> {
       );
     }
   }
-
-  
 }
 
 class SelectMemberCubit extends Cubit<MemberSelectState> {
