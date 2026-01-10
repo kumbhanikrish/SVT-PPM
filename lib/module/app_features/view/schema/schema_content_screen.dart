@@ -26,6 +26,7 @@ class _SchemaContentScreenState extends State<SchemaContentScreen> {
   Widget build(BuildContext context) {
     String title = widget.argument['title'];
     String template = widget.argument['template'];
+    String pdfTemplate = widget.argument['pdfTemplate'];
     int schemaId = widget.argument['schemaId'];
     bool isApplied = widget.argument['isApplied'];
     List<Document> documents = widget.argument['documents'];
@@ -57,7 +58,10 @@ class _SchemaContentScreenState extends State<SchemaContentScreen> {
               onTap:
                   isApplied
                       ? () {
-                        generateAndDownloadPdf(title: title, content: template);
+                        generateAndDownloadPdf(
+                          title: title,
+                          content: pdfTemplate,
+                        );
                       }
                       : () {
                         customNoOfMemberBottomSheet(

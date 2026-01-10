@@ -24,4 +24,19 @@ class KitsRepo {
 
     return response;
   }
+
+  Future<Response> kitsRegistrationStatus(
+    BuildContext context, {
+    required Map<String, dynamic> params,
+  }) async {
+    Response response = await apiServices.postDynamicData(
+      context,
+      AppApi.kitsRegistrationStatus,
+      params,
+
+      showSuccessMessage: false,
+    );
+
+    return response;
+  }
 }

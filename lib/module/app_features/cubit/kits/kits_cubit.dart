@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:svt_ppm/module/app_features/repo/kits_repo.dart';
 import 'package:svt_ppm/utils/widgets/custom_success_dialog.dart';
 
@@ -48,6 +49,39 @@ class KitsCubit extends Cubit<KitsState> {
         title: 'Success',
         subTitle: 'Kits Registered Successfully',
         buttonText: 'OK',
+      );
+    }
+    return response;
+  }
+
+  Future<Response> kitsRegistrationStatus(
+    BuildContext context, {
+    required String sNumber,
+    required String type,
+    required MobileScannerController scannerController,
+    String? photo,
+  }) async {
+    Map<String, dynamic> params = {'s_number': sNumber, 'type': type};
+    await scannerController.start();
+    Response response = await kitsRepo.kitsRegistrationStatus(
+      context,
+      params: params,
+    );
+
+    if (response.data['success'] == true) {
+      showCustomDialog(
+        context,
+        title: 'Success',
+        subTitle: response.data['message'] ?? 'Data added successfully',
+        buttonText: 'OK',
+        cancelOnTap: () async {
+          await scannerController.start();
+          Navigator.of(context).pop();
+        },
+        onTap: () async {
+          await scannerController.start();
+          Navigator.of(context).pop();
+        },
       );
     }
     return response;

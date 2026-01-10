@@ -20,7 +20,7 @@ class CurrentEventSection extends StatelessWidget {
                 'https://www.singaporeflyer.com/storage/meeting-events/June2021/yttsLF5xhRz8fvrnwpLa.png',
             date: '15/05/2025',
             title: 'Albert Flores',
-            des: 'Yuva - Team of Comity',
+            des: 'Yuva - Team of Committee',
             joinText: 'Join Event',
             time: '12:00pm',
           );

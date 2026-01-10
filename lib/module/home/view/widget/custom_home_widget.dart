@@ -32,7 +32,6 @@ void customNoOfMemberBottomSheet(
 
   bool showExtraMemberInput = false;
   TextEditingController extraMemberController = TextEditingController();
-
   homeCubit.memberFamily(context, pageName: '');
 
   customBottomSheet(

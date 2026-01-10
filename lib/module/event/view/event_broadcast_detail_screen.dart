@@ -23,104 +23,106 @@ class EventBroadcastDetailScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: CustomAppBar(title: title, actions: []),
 
-      bottomNavigationBar: isEvent
-          ? Container(
-        padding: const EdgeInsets.all(16.0),
-        decoration: BoxDecoration(
-          color: Colors.transparent,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 10,
-              offset: const Offset(0, -5),
-            ),
-          ],
-        ),
-        child: isJoined
-            ? Row(
-          children: [
-            Expanded(
-              child: InkWell(
-                onTap: null,
-                child: Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: AppColor.themePrimaryColor,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      bottomLeft: Radius.circular(10),
+      bottomNavigationBar:
+          isEvent
+              ? Container(
+                padding: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, -5),
                     ),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      'Joined Event',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
+                  ],
                 ),
-              ),
-            ),
-            Expanded(
-              child: InkWell(
-                onTap: null,
-                child: Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFFF9C4),
-                    borderRadius: const BorderRadius.only(
-                      topRight: Radius.circular(10),
-                      bottomRight: Radius.circular(10),
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Cancel',
-                      style: TextStyle(
-                        color: AppColor.themePrimaryColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        )
-            : InkWell(
-          onTap: () {
-            customNoOfMemberBottomSheet(
-              context,
-              eventId: homeData['id'],
-              extra: true,
-              seeAll: true,
-            );
-          },
-          child: Container(
-            height: 50,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: AppColor.themePrimaryColor,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: const Center(
-              child: Text(
-                'Join Event',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ),
-        ),
-      )
-          : const SizedBox.shrink(),
+                child:
+                    isJoined
+                        ? Row(
+                          children: [
+                            Expanded(
+                              child: InkWell(
+                                onTap: null,
+                                child: Container(
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    color: AppColor.lightYellow,
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      bottomLeft: Radius.circular(10),
+                                    ),
+                                  ),
+                                  child: const Center(
+                                    child: Text(
+                                      'Joined Event',
+                                      style: TextStyle(
+                                        color: AppColor.themePrimaryColor,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            // Expanded(
+                            //   child: InkWell(
+                            //     onTap: null,
+                            //     child: Container(
+                            //       height: 50,
+                            //       decoration: BoxDecoration(
+                            //         color: const Color(0xFFFFF9C4),
+                            //         borderRadius: const BorderRadius.only(
+                            //           topRight: Radius.circular(10),
+                            //           bottomRight: Radius.circular(10),
+                            //         ),
+                            //       ),
+                            //       child: Center(
+                            //         child: Text(
+                            //           'Cancel',
+                            //           style: TextStyle(
+                            //             color: AppColor.themePrimaryColor,
+                            //             fontSize: 16,
+                            //             fontWeight: FontWeight.w600,
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                          ],
+                        )
+                        : InkWell(
+                          onTap: () {
+                            customNoOfMemberBottomSheet(
+                              context,
+                              eventId: homeData['id'],
+                              extra: true,
+                              seeAll: true,
+                            );
+                          },
+                          child: Container(
+                            height: 50,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: AppColor.themePrimaryColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Center(
+                              child: Text(
+                                'Join Event',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+              )
+              : const SizedBox.shrink(),
 
       body: SingleChildScrollView(
         child: Padding(

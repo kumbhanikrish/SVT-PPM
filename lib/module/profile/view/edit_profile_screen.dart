@@ -287,9 +287,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         items: villageList,
 
                         onChanged: (value) {
-                          log('value?.key ??  ::${value?.key ?? ''}');
+                          log('value?.key ??  ::${value?.name ?? ''}');
                           villageCubit.setVillageName(
-                            name: value?.key ?? '',
+                            name: value?.name ?? '',
                             nameCode: value?.code ?? '',
                           );
                         },
@@ -444,7 +444,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             return CustomButton(
               text: 'Update',
               onTap: () async {
-              
                 if (userData.mobileNo == mobileController.text) {
                   profileCubit.addMemberFamily(
                     context,

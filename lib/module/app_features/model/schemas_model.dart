@@ -4,6 +4,7 @@ class SchemasModel {
   final int id;
   final String title;
   final String template;
+  final String pdfTemplate;
   final String photo;
   bool isApplied;
   final String status;
@@ -23,6 +24,7 @@ class SchemasModel {
     required this.year,
     required this.canReapply,
     required this.documents,
+    required this.pdfTemplate,
   });
 
   factory SchemasModel.fromRawJson(String str) =>
@@ -40,6 +42,7 @@ class SchemasModel {
     remarks: json["remarks"] ?? '',
     year: json["year"] ?? '',
     canReapply: json["can_reapply"],
+    pdfTemplate: json["pdf_template"] ?? '',
     documents: List<Document>.from(
       json["documents"].map((x) => Document.fromJson(x)),
     ),
@@ -55,6 +58,7 @@ class SchemasModel {
     "remarks": remarks,
     "year": year,
     "can_reapply": canReapply,
+    "pdf_template": pdfTemplate,
     "documents": List<dynamic>.from(documents.map((x) => x.toJson())),
   };
 }

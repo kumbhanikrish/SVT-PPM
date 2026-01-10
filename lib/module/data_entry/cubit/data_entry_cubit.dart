@@ -50,17 +50,22 @@ class DataEntryCubit extends Cubit<DataEntryState> {
     required MobileScannerController scannerController,
   }) async {
     Map<String, dynamic> body = {"s_number": sNumber};
+    await scannerController.start();
     Response response = await dataEntryRepository.getEntry(context, body: body);
-
     if (response.data['success'] == true) {
       extraEntry = response.data['data'] == [] ? 0 : response.data['data'];
 
       emit(DataEntryLoaded(totalMember: extraEntry));
+
       showCustomDialog(
         context,
         title: 'Success',
         subTitle: response.data['message'] ?? 'Data added successfully',
         buttonText: 'OK',
+        cancelOnTap: () async {
+          await scannerController.start();
+          Navigator.of(context).pop();
+        },
         onTap: () async {
           await scannerController.start();
           Navigator.of(context).pop();

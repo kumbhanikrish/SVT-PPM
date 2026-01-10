@@ -46,33 +46,29 @@ class AppDrawer extends StatelessWidget {
                       currentAccountPicture: CircleAvatar(
                         backgroundColor: AppColor.whiteColor,
                         backgroundImage:
-                            model?.photo != null && model!.photo.isNotEmpty
-                                ? NetworkImage(model.photo)
-                                : null,
-                        child:
-                            model?.photo == null || model!.photo.isEmpty
-                                ? const Icon(Icons.person, size: 40)
-                                : null,
+                        model?.photo != null && model!.photo.isNotEmpty
+                            ? NetworkImage(model.photo)
+                            : null,
+                        child: model?.photo == null || model!.photo.isEmpty
+                            ? const Icon(Icons.person, size: 40)
+                            : null,
                       ),
                     ),
 
                     _drawerItem(
                       context,
-                      icon: Icons.person,
                       title: "Profile",
                       route: AppPage.profileScreen,
                     ),
 
                     _drawerItem(
                       context,
-                      icon: Icons.family_restroom,
                       title: "Family Detail",
                       route: AppPage.profileScreen,
                     ),
 
                     _drawerItem(
                       context,
-                      icon: Icons.schema,
                       title: "Schema",
                       route: AppPage.appFeatureScreen,
                       arguments: {'title': 'Schema'},
@@ -84,7 +80,6 @@ class AppDrawer extends StatelessWidget {
                     ])) ...[
                       _drawerItem(
                         context,
-                        icon: Icons.app_registration,
                         title: "Schema Registration",
                         route: AppPage.roleSchemaRegistrationScreen,
                       ),
@@ -92,15 +87,29 @@ class AppDrawer extends StatelessWidget {
                     if (UserSession.hasRole(UserRoles.getEntry)) ...[
                       _drawerItem(
                         context,
-                        icon: Icons.app_registration,
                         title: "Get Entry",
                         route: AppPage.dataEntryScreen,
+                      ),
+                    ],
+                    if (UserSession.hasAnyRole([UserRoles.kitDistributor])) ...[
+                      _drawerItem(
+                        context,
+                        title: "Kit Distributor",
+                        route: AppPage.kitPaymentDistributorPaymentScreen,
+                        arguments: {'title': "Kit Distributor"},
+                      ),
+                    ],
+                    if (UserSession.hasAnyRole([UserRoles.kitPayment])) ...[
+                      _drawerItem(
+                        context,
+                        title: "Kit Payment",
+                        route: AppPage.kitPaymentDistributorPaymentScreen,
+                        arguments: {'title': "Kit Payment"},
                       ),
                     ],
 
                     _drawerItem(
                       context,
-                      icon: Icons.shopping_bag,
                       title: "Kit",
                       route: AppPage.appFeatureScreen,
                       arguments: {'title': 'Kit'},
@@ -108,7 +117,6 @@ class AppDrawer extends StatelessWidget {
 
                     _drawerItem(
                       context,
-                      icon: Icons.book,
                       title: "Exam (GK)",
                       route: AppPage.appFeatureScreen,
                       arguments: {'title': 'Exam (GK)'},
@@ -116,22 +124,26 @@ class AppDrawer extends StatelessWidget {
 
                     _drawerItem(
                       context,
-                      icon: Icons.groups,
                       title: "Committee",
                       route: AppPage.appFeatureScreen,
-                      arguments: {'title': 'Comity'},
+                      arguments: {'title': 'Committee'},
                     ),
                   ],
                 ),
               ),
 
               const Divider(thickness: 1),
+
               Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
                 child: CustomListTile(
                   text: "Logout",
+                  textColor: Colors.grey.shade700,
                   leadingImage: '',
-                  leading: const Icon(Icons.logout, color: Colors.red),
+                  leading: Icon(
+                    _getIconByName("Logout"),
+                    color: AppColor.themePrimaryColor,
+                  ),
                   trailing: const SizedBox.shrink(),
                   onTap: () {
                     showCustomDialog(
@@ -154,19 +166,58 @@ class AppDrawer extends StatelessWidget {
     );
   }
 
+  IconData _getIconByName(String title) {
+    switch (title) {
+      case "Profile":
+        return Icons.person;
+      case "Family Detail":
+        return Icons.family_restroom;
+      case "Schema":
+        return Icons.description;
+      case "Schema Registration":
+        return Icons.how_to_reg ;
+      case "Get Entry":
+        return Icons.post_add ;
+      case "Kit Distributor":
+        return Icons.local_shipping ;
+      case "Kit Payment":
+        return Icons.currency_rupee ;
+      case "Kit":
+        return Icons.shopping_bag;
+      case "Exam (GK)":
+        return Icons.book;
+      case "Committee":
+        return Icons.groups;
+      case "Logout":
+        return Icons.logout;
+      default:
+        return Icons.circle;
+    }
+  }
+
   Widget _drawerItem(
-    BuildContext context, {
-    required IconData icon,
-    required String title,
-    required String route,
-    Map<String, dynamic>? arguments,
-  }) {
+      BuildContext context, {
+        required String title,
+        required String route,
+        Map<String, dynamic>? arguments,
+      }) {
+
+    final IconData icon = _getIconByName(title);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: CustomListTile(
         text: title,
+        textColor: Colors.grey.shade700,
+
         leadingImage: '',
-        leading: Icon(icon, color: Colors.grey),
+
+        leading: Icon(
+          icon,
+          color: AppColor.themePrimaryColor,
+          size: 24,
+        ),
+
         onTap: () {
           Navigator.of(context).pop();
           Navigator.of(context).pushNamed(route, arguments: arguments);

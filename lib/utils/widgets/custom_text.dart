@@ -65,6 +65,7 @@ class CustomTitleName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         if (icon == true) ...[
           SvgPicture.asset(image ?? ''),
@@ -74,6 +75,7 @@ class CustomTitleName extends StatelessWidget {
             text: title,
             fontSize: fontSize ?? 10,
             fontWeight: fontWeight ?? FontWeight.w400,
+
             color: color,
           ),
           if (title.isNotEmpty) ...[
@@ -89,7 +91,7 @@ class CustomTitleName extends StatelessWidget {
               text: text,
               color: textColor ?? AppColor.hintColor,
               fontSize: fontSize ?? 10,
-              overflow: true,
+              overflow: false,
               fontWeight: fontWeight ?? FontWeight.w400,
             ),
           ),

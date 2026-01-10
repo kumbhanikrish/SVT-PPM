@@ -9,7 +9,8 @@ void showCustomDialog(
   required String title,
   required String subTitle,
   required String buttonText,
-  void Function()? onTap,
+  VoidCallback? onTap,
+  VoidCallback? cancelOnTap,
 }) {
   showDialog(
     context: context,
@@ -47,9 +48,11 @@ void showCustomDialog(
                       textColor: AppColor.dividerColor,
                       padding: EdgeInsets.symmetric(vertical: 8),
                       fontSize: 14,
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
+                      onTap:
+                          cancelOnTap ??
+                          () {
+                            Navigator.pop(context);
+                          },
                     ),
                   ),
                   Gap(10),

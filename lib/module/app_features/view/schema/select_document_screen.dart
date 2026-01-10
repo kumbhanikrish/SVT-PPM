@@ -145,16 +145,7 @@ class _SelectDocumentScreenState extends State<SelectDocumentScreen> {
         child: CustomButton(
           text: 'Submit',
           onTap: () async {
-            if (selectedImages.length < documents.length) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Please upload all required documents"),
-                ),
-              );
-              return;
-            }
-
-            Map<String, dynamic> params = {
+             Map<String, dynamic> params = {
               "schema_id": schemaId,
               "member_id": memberId,
               "village_president_ids[]": selectedVillagePresidentIds,

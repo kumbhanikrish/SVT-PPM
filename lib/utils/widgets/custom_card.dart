@@ -150,32 +150,32 @@ class CustomMainCard extends StatelessWidget {
                               Expanded(
                                 child: Container(
                                   alignment: Alignment.center,
-                                  color: primaryBlue,
+                                  color: lightYellow,
                                   child: Text(
                                     "Joined",
                                     style: const TextStyle(
-                                      color: Colors.white,
+                                      color: AppColor.themePrimaryColor,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                 ),
                               ),
-                              Expanded(
-                                child: InkWell(
-                                  onTap: onCancelTap ?? () {},
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    color: lightYellow,
-                                    child: Text(
-                                      "Cancel",
-                                      style: TextStyle(
-                                        color: primaryBlue,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              // Expanded(
+                              //   child: InkWell(
+                              //     onTap: onCancelTap ?? () {},
+                              //     child: Container(
+                              //       alignment: Alignment.center,
+                              //       color: lightYellow,
+                              //       child: Text(
+                              //         "Cancel",
+                              //         style: TextStyle(
+                              //           color: primaryBlue,
+                              //           fontWeight: FontWeight.w600,
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           )
                           : InkWell(
@@ -633,7 +633,7 @@ class KitCard extends StatelessWidget {
                   constraints: const BoxConstraints(minHeight: 80),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         title.toUpperCase(),
@@ -646,7 +646,6 @@ class KitCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
 
-                      const Gap(6),
                       if (status.isNotEmpty)
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -751,6 +750,7 @@ class SchemaItemCard extends StatelessWidget {
     Color statusBgColor;
     Color statusTextColor;
     String currentStatus = status.isEmpty ? "Pending" : status;
+
     String statusKey = currentStatus.toLowerCase();
 
     if (statusKey == 'rejected') {
@@ -805,7 +805,7 @@ class SchemaItemCard extends StatelessWidget {
                 constraints: const BoxConstraints(minHeight: 80),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       title.toUpperCase(),
@@ -818,7 +818,6 @@ class SchemaItemCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
 
-                    const Gap(6),
                     if (!isApplied)
                       InkWell(
                         onTap: onTap,
@@ -900,6 +899,7 @@ class SchemaItemCard extends StatelessWidget {
                                 title: 'Reason',
                                 color: AppColor.redColor,
                                 fontWeight: FontWeight.w600,
+
                                 textColor: AppColor.redColor.withOpacity(0.5),
                               ),
                             ),

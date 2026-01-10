@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:svt_ppm/module/app_features/model/schemas_model.dart';
 import 'package:svt_ppm/module/app_features/model/village_president_model.dart';
 import 'package:svt_ppm/module/app_features/repo/schemas_repo.dart';
+import 'package:svt_ppm/utils/constant/app_page.dart';
 import 'package:svt_ppm/utils/widgets/custom_downloader.dart';
 import 'package:svt_ppm/utils/widgets/custom_success_dialog.dart';
 
@@ -75,21 +76,26 @@ class SchemasCubit extends Cubit<SchemasState> {
 
       for (var i = 0; i < schemasModel.length; i++) {
         if (schemasModel[i].id == params['schema_id']) {
+          log(
+            'schemasCubit.getSchemasData(context); ::${schemasModel[i].isApplied}',
+          );
           schemasModel[i].isApplied = true;
         }
       }
-      Navigator.pop(context);
-      Navigator.pop(context);
-      Navigator.pop(context);
+      Navigator.popUntil(
+        context,
+        ModalRoute.withName(AppPage.appFeatureScreen),
+      );
       showCustomDialog(
         context,
         buttonText: 'Download PDF',
         title: 'Register',
         subTitle: 'Schemas Registration Successfully',
+
         onTap: () {
           generateAndDownloadPdf(
             title: response.data['data']['title'],
-            content: response.data['data']['template'],
+            content: response.data['data']['pdf_template'],
           );
         },
       );

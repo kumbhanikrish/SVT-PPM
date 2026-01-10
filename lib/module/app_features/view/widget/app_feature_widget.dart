@@ -37,7 +37,7 @@ void customVillagePresidentBottomSheet(
           arguments: {
             'schemaId': schemaId,
             'selectedVillagePresidentIds': selectedVillagePresidentIds.toList(),
-            'memberId': selectedVillagePresidentIds.first,
+            'memberId': selectedMemberIds.first,
             'documents': documents,
           },
         );

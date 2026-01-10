@@ -469,7 +469,7 @@ customKitsRegistered(
   frontImageCubit.removeImage();
   customBottomSheet(
     context,
-    title: 'Kits Registered',
+    title: 'Kits Registration',
     child: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       child:

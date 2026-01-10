@@ -348,7 +348,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:svt_ppm/main.dart';
-import 'package:svt_ppm/module/auth/cubit/auth_cubit.dart';
 import 'package:svt_ppm/module/auth/model/login_model.dart';
 import 'package:svt_ppm/module/home/cubit/home_cubit.dart';
 import 'package:svt_ppm/utils/constant/app_image.dart';
@@ -357,9 +356,7 @@ import 'package:svt_ppm/utils/theme/colors.dart';
 import 'package:svt_ppm/utils/widgets/custom_app_bar.dart';
 import 'package:svt_ppm/utils/widgets/custom_filed_box.dart';
 import 'package:svt_ppm/utils/widgets/custom_image.dart';
-import 'package:svt_ppm/utils/widgets/custom_success_dialog.dart';
 import 'package:svt_ppm/utils/widgets/custom_text.dart';
-import 'package:svt_ppm/utils/widgets/custom_widget.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -396,10 +393,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         title: 'Profile',
         notificationOnTap: () {},
 
-        // ✅ Arrow (Back Button) રીમુવ કરેલ છે
-        leading: const SizedBox(),
-
-        // ✅ Logout Button રીમુવ કરેલ છે (ખાલી લિસ્ટ)
         actions: const [],
       ),
       body: Padding(
@@ -410,10 +403,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ValueListenableBuilder<LoginModel?>(
                 valueListenable: loginModelNotifier,
                 builder: (
-                    BuildContext context,
-                    LoginModel? model,
-                    Widget? child,
-                    ) {
+                  BuildContext context,
+                  LoginModel? model,
+                  Widget? child,
+                ) {
                   log('model?.familyHeadId ::${model?.familyHeadId}');
                   String imageUrl = model?.photo ?? '';
                   return Column(
@@ -455,9 +448,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       mainAxisAlignment:
-                                      MainAxisAlignment.center,
+                                          MainAxisAlignment.center,
                                       children: [
                                         InkWell(
                                           onTap: () {
@@ -537,141 +530,141 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               return noOfMemberList.isEmpty
                                   ? CustomEmpty()
                                   : ListView.separated(
-                                shrinkWrap: true,
-                                physics:
-                                const NeverScrollableScrollPhysics(),
-                                itemCount: noOfMemberList.length,
-                                separatorBuilder: (
-                                    BuildContext context,
-                                    int index,
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    itemCount: noOfMemberList.length,
+                                    separatorBuilder: (
+                                      BuildContext context,
+                                      int index,
                                     ) {
-                                  return Gap(15);
-                                },
-                                itemBuilder: (
-                                    BuildContext context,
-                                    int index,
+                                      return Gap(15);
+                                    },
+                                    itemBuilder: (
+                                      BuildContext context,
+                                      int index,
                                     ) {
-                                  LoginModel member = noOfMemberList[index];
+                                      LoginModel member = noOfMemberList[index];
 
-                                  return Stack(
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          Navigator.pushNamed(
-                                            context,
-                                            AppPage.signupScreen,
-                                            arguments: {
-                                              'addMember': true,
-                                              'edit': true,
-                                              'member': member,
+                                      return Stack(
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              Navigator.pushNamed(
+                                                context,
+                                                AppPage.signupScreen,
+                                                arguments: {
+                                                  'addMember': true,
+                                                  'edit': true,
+                                                  'member': member,
+                                                },
+                                              );
                                             },
-                                          );
-                                        },
-                                        child: Container(
-                                          padding:
-                                          const EdgeInsets.symmetric(
-                                            horizontal: 10,
-                                            vertical: 5,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: AppColor.fillColor,
-                                            borderRadius:
-                                            BorderRadius.circular(8),
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              // Image
-                                              ClipOval(
-                                                child: CustomCachedImage(
-                                                  imageUrl: member.photo,
-                                                  width: 60,
-                                                  height: 60,
-                                                ),
-                                              ),
-                                              const Gap(15),
-                                              Expanded(
-                                                child: Text(
-                                                  member.name,
-                                                  maxLines: 1,
-                                                  overflow:
-                                                  TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                    FontWeight.w600,
-                                                    color:
-                                                    AppColor
-                                                        .themePrimaryColor,
-                                                    fontFamily: 'Poppins',
-                                                  ),
-                                                ),
-                                              ),
-
-                                              if (member.active == 0)
-                                                Container(
-                                                  margin:
-                                                  const EdgeInsets.only(
-                                                    right: 35,
-                                                  ),
-                                                  padding:
+                                            child: Container(
+                                              padding:
                                                   const EdgeInsets.symmetric(
-                                                    horizontal: 8,
-                                                    vertical: 4,
+                                                    horizontal: 10,
+                                                    vertical: 5,
                                                   ),
-                                                  decoration: BoxDecoration(
-                                                    color: AppColor
-                                                        .themePrimaryColor
-                                                        .withOpacity(0.2),
-                                                    borderRadius:
-                                                    BorderRadius.circular(
-                                                      8,
+                                              decoration: BoxDecoration(
+                                                color: AppColor.fillColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  // Image
+                                                  ClipOval(
+                                                    child: CustomCachedImage(
+                                                      imageUrl: member.photo,
+                                                      width: 60,
+                                                      height: 60,
                                                     ),
                                                   ),
-                                                  child: CustomText(
-                                                    text: 'Pending',
-                                                    fontSize: 10,
-                                                    fontWeight:
-                                                    FontWeight.w500,
+                                                  const Gap(15),
+                                                  Expanded(
+                                                    child: Text(
+                                                      member.name,
+                                                      maxLines: 1,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color:
+                                                            AppColor
+                                                                .themePrimaryColor,
+                                                        fontFamily: 'Poppins',
+                                                      ),
+                                                    ),
                                                   ),
-                                                ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
 
-                                      // Blue Edit Icon
-                                      Positioned(
-                                        right: 0,
-                                        bottom: 0,
-                                        child: InkWell(
-                                          onTap: () {
-                                            Navigator.pushNamed(
-                                              context,
-                                              AppPage.signupScreen,
-                                              arguments: {
-                                                'addMember': true,
-                                                'edit': true,
-                                                'member': member,
-                                              },
-                                            );
-                                          },
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.only(
-                                              bottomRight: Radius.circular(
-                                                8,
+                                                  if (member.active == 0)
+                                                    Container(
+                                                      margin:
+                                                          const EdgeInsets.only(
+                                                            right: 35,
+                                                          ),
+                                                      padding:
+                                                          const EdgeInsets.symmetric(
+                                                            horizontal: 8,
+                                                            vertical: 4,
+                                                          ),
+                                                      decoration: BoxDecoration(
+                                                        color: AppColor
+                                                            .themePrimaryColor
+                                                            .withOpacity(0.2),
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              8,
+                                                            ),
+                                                      ),
+                                                      child: CustomText(
+                                                        text: 'Pending',
+                                                        fontSize: 10,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                ],
                                               ),
                                             ),
-                                            child: SvgPicture.asset(
-                                              AppImage.editProfile,
-                                              height: 24,
+                                          ),
+
+                                          // Blue Edit Icon
+                                          Positioned(
+                                            right: 0,
+                                            bottom: 0,
+                                            child: InkWell(
+                                              onTap: () {
+                                                Navigator.pushNamed(
+                                                  context,
+                                                  AppPage.signupScreen,
+                                                  arguments: {
+                                                    'addMember': true,
+                                                    'edit': true,
+                                                    'member': member,
+                                                  },
+                                                );
+                                              },
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.only(
+                                                  bottomRight: Radius.circular(
+                                                    8,
+                                                  ),
+                                                ),
+                                                child: SvgPicture.asset(
+                                                  AppImage.editProfile,
+                                                  height: 24,
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                    ],
+                                        ],
+                                      );
+                                    },
                                   );
-                                },
-                              );
                             },
                           ),
                         ],

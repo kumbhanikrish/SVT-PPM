@@ -76,19 +76,24 @@ class RoleSchemaRegistrationUserScreen extends StatelessWidget {
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                    CustomIconButton(
-                                      icon: Icons.more_vert_rounded,
-                                      onPressed: () {
-                                        changeStatusBottomSheet(
-                                          context,
-                                          registrationId: schemaUserItem.id,
-                                          status:
-                                              schemaUserItem
-                                                  .villagePresidentStatus,
-                                        );
-                                      },
-                                      color: AppColor.themePrimaryColor,
-                                    ),
+
+                                    UserSession.hasRole(
+                                          UserRoles.villagePresident,
+                                        )
+                                        ? CustomIconButton(
+                                          icon: Icons.more_vert_rounded,
+                                          onPressed: () {
+                                            changeStatusBottomSheet(
+                                              context,
+                                              registrationId: schemaUserItem.id,
+                                              status:
+                                                  schemaUserItem
+                                                      .villagePresidentStatus,
+                                            );
+                                          },
+                                          color: AppColor.themePrimaryColor,
+                                        )
+                                        : SizedBox.shrink(),
                                   ],
                                 ),
 

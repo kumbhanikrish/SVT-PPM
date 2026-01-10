@@ -5,7 +5,6 @@ import 'package:svt_ppm/main.dart';
 import 'package:svt_ppm/module/auth/model/login_model.dart';
 import 'package:svt_ppm/module/home/cubit/home_cubit.dart';
 import 'package:svt_ppm/module/profile/repo/profile_repo.dart';
-import 'package:svt_ppm/utils/constant/app_page.dart';
 import 'package:svt_ppm/utils/widgets/custom_error_toast.dart';
 import 'package:svt_ppm/utils/widgets/custom_success_dialog.dart';
 
@@ -75,9 +74,9 @@ class ProfileCubit extends Cubit<ProfileState> {
     if (relation == null || relation.isEmpty) {
       return customErrorToast(context, text: "Please select relation");
     }
-    if (standard == null || standard.isEmpty) {
-      return customErrorToast(context, text: "Please select standard");
-    }
+    // if (standard == null || standard.isEmpty) {
+    //   return customErrorToast(context, text: "Please select standard");
+    // }
     if ((occupation ?? '').isEmpty && editProfile == false) {
       return customErrorToast(context, text: "Please select occupation");
     }
@@ -197,11 +196,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         LoginModel loginModel = LoginModel.fromJson(response.data['data']);
         await localDataSaver.setLoginData(loginModel);
 
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          AppPage.profileScreen,
-          (route) => false,
-        );
+        Navigator.pop(context);
 
         showCustomDialog(
           context,

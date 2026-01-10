@@ -3,6 +3,7 @@ import 'package:svt_ppm/module/app_features/view/app_feature_screen.dart';
 import 'package:svt_ppm/module/app_features/view/comity/comity_see_all_screen.dart';
 import 'package:svt_ppm/module/app_features/view/exam/exam_see_all_screen.dart';
 import 'package:svt_ppm/module/app_features/view/kit/kit_detail_screen.dart';
+import 'package:svt_ppm/module/app_features/view/kit/kit_payment_distributor_payment_screen.dart';
 import 'package:svt_ppm/module/app_features/view/schema/role_schema_registration_user_screen.dart';
 import 'package:svt_ppm/module/app_features/view/schema/schema_content_screen.dart';
 import 'package:svt_ppm/module/app_features/view/schema/role_schema_registration_screen.dart';
@@ -85,6 +86,10 @@ final Map<String, WidgetBuilder> appRoutes = {
   AppPage.dataEntryScreen: (context) => DataEntryScreen(),
   AppPage.selectDocumentScreen:
       (context) => SelectDocumentScreen(
+        argument: ModalRoute.of(context)?.settings.arguments,
+      ),
+  AppPage.kitPaymentDistributorPaymentScreen:
+      (context) => KitPaymentDistributorPaymentScreen(
         argument: ModalRoute.of(context)?.settings.arguments,
       ),
 };

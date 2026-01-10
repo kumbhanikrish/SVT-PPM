@@ -37,7 +37,6 @@ class _EventScreenState extends State<EventScreen> {
     HomeCubit homeCubit = BlocProvider.of<HomeCubit>(context);
 
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: CustomAppBar(
         title: widget.argument['title'] == 'events' ? 'Events' : 'Broadcast',
         notificationOnTap: () {},
@@ -66,52 +65,58 @@ class _EventScreenState extends State<EventScreen> {
                   return homeSeeAllData.isEmpty
                       ? SizedBox(height: 50.h, child: CustomEmpty())
                       : Column(
-                    children: homeSeeAllData.entries.map((entry) {
-                      final String key = entry.key;
-                      final dynamic value = entry.value;
-                      String displayTitle = formatTitle(key);
+                        children:
+                            homeSeeAllData.entries.map((entry) {
+                              final String key = entry.key;
+                              final dynamic value = entry.value;
+                              String displayTitle = formatTitle(key);
 
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildSectionHeader(
-                            title: displayTitle,
-                            icon: widget.argument['title'] == 'events'
-                                ? Icons.event_note
-                                : Icons.campaign_rounded,
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _buildSectionHeader(
+                                    title: displayTitle,
+                                    icon:
+                                        widget.argument['title'] == 'events'
+                                            ? Icons.event_note
+                                            : Icons.campaign_rounded,
 
-                            onTap: () {
-                              if (value is List) {
-                                Navigator.pushNamed(
-                                  context,
-                                  AppPage.eventViewAllScreen,
-                                  arguments: {
-                                    'title': displayTitle,
-                                    'homeSeeAllData': value,
-                                    'isEvent': widget.argument['title'] == 'events',
-                                  },
-                                );
-                              }
-                            },
-                          ),
-                          Gap(10),
+                                    onTap: () {
+                                      if (value is List) {
+                                        Navigator.pushNamed(
+                                          context,
+                                          AppPage.eventViewAllScreen,
+                                          arguments: {
+                                            'title': displayTitle,
+                                            'homeSeeAllData': value,
+                                            'isEvent':
+                                                widget.argument['title'] ==
+                                                'events',
+                                          },
+                                        );
+                                      }
+                                    },
+                                  ),
+                                  Gap(10),
 
-                          value is List
-                              ? value.isEmpty
-                              ? CustomEmpty()
-                              : HomeStyleSection(
-                            dataList: value,
-                            isEvent: widget.argument['title'] == 'events',
-                          )
-                              : SizedBox(),
+                                  value is List
+                                      ? value.isEmpty
+                                          ? CustomEmpty()
+                                          : HomeStyleSection(
+                                            dataList: value,
+                                            isEvent:
+                                                widget.argument['title'] ==
+                                                'events',
+                                          )
+                                      : SizedBox(),
 
-                          Gap(20),
-                          CustomDivider(),
-                          Gap(20),
-                        ],
+                                  Gap(20),
+                                  CustomDivider(),
+                                  Gap(20),
+                                ],
+                              );
+                            }).toList(),
                       );
-                    }).toList(),
-                  );
                 },
               ),
               Gap(50),
@@ -162,6 +167,7 @@ class _EventScreenState extends State<EventScreen> {
     );
   }
 }
+
 class HomeStyleSection extends StatefulWidget {
   final List<dynamic> dataList;
   final bool isEvent;
@@ -241,21 +247,23 @@ class _HomeStyleSectionState extends State<HomeStyleSection> {
                 title: eventItem['title'] ?? '',
                 des: eventItem['place'] ?? '',
 
-                joinText: (eventItem['applied'] ?? false) ? 'Joined' : 'Join Event',
+                joinText:
+                    (eventItem['applied'] ?? false) ? 'Joined' : 'Join Event',
                 applied: eventItem['applied'] ?? false,
                 showButton: widget.isEvent,
                 width: null,
 
-                onTap: (eventItem['applied'] ?? false)
-                    ? () {}
-                    : () {
-                  customNoOfMemberBottomSheet(
-                    context,
-                    eventId: eventItem['id'],
-                    extra: true,
-                    seeAll: true,
-                  );
-                },
+                onTap:
+                    (eventItem['applied'] ?? false)
+                        ? () {}
+                        : () {
+                          customNoOfMemberBottomSheet(
+                            context,
+                            eventId: eventItem['id'],
+                            extra: true,
+                            seeAll: true,
+                          );
+                        },
                 onNotJoinTap: () {},
                 cardOnTap: () {
                   Navigator.pushNamed(
@@ -263,7 +271,8 @@ class _HomeStyleSectionState extends State<HomeStyleSection> {
                     AppPage.eventBroadcastDetailScreen,
                     arguments: {
                       'homeData': eventItem,
-                      'title': widget.isEvent ? 'Event Detail' : 'Broadcast Detail',
+                      'title':
+                          widget.isEvent ? 'Event Detail' : 'Broadcast Detail',
                     },
                   );
                 },
@@ -287,9 +296,10 @@ class _HomeStyleSectionState extends State<HomeStyleSection> {
                     width: 6,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: currentIndex == index
-                          ? AppColor.themePrimaryColor
-                          : Colors.grey.withOpacity(0.3),
+                      color:
+                          currentIndex == index
+                              ? AppColor.themePrimaryColor
+                              : Colors.grey.withOpacity(0.3),
                     ),
                   );
                 }),

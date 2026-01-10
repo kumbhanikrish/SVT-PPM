@@ -48,7 +48,8 @@ class AppFeatureScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // ✅ સુધારો: ડેટા પહેલા Constructor (BottomBar) માં ચેક કરો, નહિતર Route (Navigation) માં ચેક કરો
-    final dynamic finalData = data ?? ModalRoute.of(context)?.settings.arguments;
+    final dynamic finalData =
+        data ?? ModalRoute.of(context)?.settings.arguments;
 
     String title = '';
     if (finalData != null && finalData is Map) {
@@ -64,7 +65,7 @@ class AppFeatureScreen extends StatelessWidget {
           return KitScreen();
         case 'Exam (GK)':
           return ExamScreen();
-        case 'Comity':
+        case 'Committee':
           return ComitySection();
         default:
           return const Center(child: Text("No Data Found"));

@@ -212,12 +212,11 @@ class ExamScreen extends StatefulWidget {
 
 class _ExamScreenState extends State<ExamScreen> {
   Map<String, dynamic> examData = {};
-  bool isLoading = true; // ✅ લોડિંગ ફ્લેગ ઉમેર્યું
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    // ✅ ડેટા કોલ અહીં કર્યો
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ExamCubit examCubit = BlocProvider.of<ExamCubit>(context);
       examCubit.init();
@@ -235,19 +234,17 @@ class _ExamScreenState extends State<ExamScreen> {
       elevation: 0,
       onRefresh: () {
         setState(() {
-          isLoading = true; // રિફ્રેશ વખતે લોડિંગ ટ્રુ
+          isLoading = true;
         });
         return examCubit.getExamData(context);
       },
       child: BlocBuilder<ExamCubit, ExamState>(
         builder: (context, state) {
-          // 1. ડેટા આવે ત્યારે
           if (state is GetExamState) {
             examData = state.examData;
-            isLoading = false; // લોડિંગ બંધ
+            isLoading = false;
           }
 
-          // 2. લોડિંગ હોય અને ડેટા ખાલી હોય તો ફરતું ચક્કર
           if (isLoading && examData.isEmpty) {
             return SizedBox(
               height: 50.h,
@@ -259,17 +256,14 @@ class _ExamScreenState extends State<ExamScreen> {
             );
           }
 
-          // 3. ડેટા આવ્યા પછી પણ ખાલી હોય તો Empty
           if (examData.isEmpty ||
               examData.values.every((members) => (members as List).isEmpty)) {
-            // સ્ક્રોલિંગ ચાલુ રાખ્યું જેથી રિફ્રેશ કરી શકાય
             return SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
               child: SizedBox(height: 50.h, child: const CustomEmpty()),
             );
           }
 
-          // 4. ડેટા બતાવો
           return SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             child: Column(
@@ -326,7 +320,7 @@ class _ExamScreenState extends State<ExamScreen> {
                                 ),
                                 child: SizedBox(
                                   width: 100.w,
-                                  height: 23.2.h,
+                                  height: 197,
                                   child:
                                       members.isEmpty
                                           ? const CustomEmpty()
@@ -401,7 +395,6 @@ class _ExamScreenState extends State<ExamScreen> {
                         );
                       }).toList(),
                 ),
-                // Bottom Padding જેથી છેલ્લું કાર્ડ કપાય નહિ
                 Gap(10.h),
               ],
             ),

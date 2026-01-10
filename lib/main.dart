@@ -1,10 +1,16 @@
+import 'dart:developer';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:firebase_core/firebase_core.dart';
 import 'package:sizer/sizer.dart';
+import 'package:svt_ppm/firebase_options.dart';
 import 'package:svt_ppm/local_data/local_data_sever.dart';
 import 'package:svt_ppm/module/app_features/cubit/community/community_cubit.dart';
 import 'package:svt_ppm/module/app_features/cubit/exam/exam_cubit.dart';
@@ -37,13 +43,72 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 LocalDataSaver localDataSaver = LocalDataSaver();
 
-void main() async {
-  await dotenv.load();
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  log("Handling background message: ${message.messageId}");
+  showNotification(message);
+}
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await SharedPreferences.getInstance();
   await UserSession.load();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  NotificationSettings settings =
+      await FirebaseMessaging.instance.requestPermission();
+  log('🔔 Notification permission status: ${settings.authorizationStatus}');
+
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+
+  const InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+  );
+
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp, // lock to portrait
+  ]);
   configLoading();
   runApp(const MyApp());
+}
+
+void showNotification(RemoteMessage message) async {
+  const AndroidNotificationChannel channel = AndroidNotificationChannel(
+    'high_importance_channel',
+    'High Importance Notifications',
+    description: 'This channel is used for important notifications.',
+    importance: Importance.max,
+  );
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin
+      >()
+      ?.createNotificationChannel(channel);
+
+  final androidDetails = AndroidNotificationDetails(
+    channel.id,
+    channel.name,
+    channelDescription: channel.description,
+    importance: Importance.max,
+    priority: Priority.high,
+    icon: '@mipmap/ic_launcher',
+  );
+
+  final platformDetails = NotificationDetails(android: androidDetails);
+
+  await flutterLocalNotificationsPlugin.show(
+    0,
+    message.notification?.title ?? message.data['title'] ?? 'No Title',
+    message.notification?.body ?? message.data['body'] ?? 'No Body',
+    platformDetails,
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -51,6 +116,26 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      log('📢 Notifications enabled, displaying notification');
+      showNotification(message);
+    });
+
+    void handleMessageNavigation(RemoteMessage message) {
+      final screen = message.data['screen'];
+      log('🔁 Navigating to screen from notification: $screen');
+
+      if (screen == 'offers') {
+        navigatorKey.currentState?.pushNamed('/offersScreen');
+      } else if (screen == 'profile') {
+        navigatorKey.currentState?.pushNamed('/profileScreen');
+      }
+    }
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      log('🟢 App opened from background notification');
+      handleMessageNavigation(message);
+    });
     return SafeArea(
       top: false,
       child: Sizer(

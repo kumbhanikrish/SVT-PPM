@@ -2,10 +2,12 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:svt_ppm/main.dart';
+
 import 'package:svt_ppm/module/auth/model/login_model.dart';
 import 'package:svt_ppm/module/auth/model/village_model.dart';
 import 'package:svt_ppm/module/auth/repo/auth_repo.dart';
@@ -21,6 +23,7 @@ class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
 
   AuthRepo authRepo = AuthRepo();
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   Future<Response> checkMember(
     BuildContext context, {
@@ -78,14 +81,17 @@ class AuthCubit extends Cubit<AuthState> {
     required String number,
     required String otp,
   }) async {
-    // await messaging.requestPermission();
+    await messaging.requestPermission();
+    String? token = await messaging.getToken();
 
+    print('FCM Token :: $token');
     String verificationId = await dataSaver.getVerificationId();
 
     Map<String, dynamic> loginParams = {
       "mobile_no": number,
       "otp": otp,
       "data_requested": true,
+      "fcm_token": token,
       'verificationId': verificationId,
     };
 

@@ -1,6 +1,7 @@
-import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:svt_ppm/module/app_features/cubit/schemas/schemas_cubit.dart';
 import 'package:svt_ppm/module/auth/model/login_model.dart';
 import 'package:svt_ppm/module/home/model/home_model.dart';
 import 'package:svt_ppm/module/home/repo/home_repo.dart';
@@ -113,7 +114,19 @@ class HomeCubit extends Cubit<HomeState> {
         title: 'Success',
         subTitle: 'Event Registered Successfully',
         buttonText: 'OK',
+        cancelOnTap: () {
+          BlocProvider.of<SelectMemberCubit>(context).init();
+
+          if (seeAll) {
+            getHomeSeeAll(context, type: 'events');
+          } else {
+            getHomeData(context);
+          }
+          Navigator.pop(context);
+        },
         onTap: () {
+          BlocProvider.of<SelectMemberCubit>(context).init();
+
           if (seeAll) {
             getHomeSeeAll(context, type: 'events');
           } else {

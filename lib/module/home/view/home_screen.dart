@@ -1218,8 +1218,12 @@ class _HomeScreenState extends State<HomeScreen> {
   final ValueNotifier<LoginModel?> loginModelNotifier = ValueNotifier(null);
   HomeModel homeModel = HomeModel(broadcasts: [], events: []);
 
-  final PageController _eventPageController = PageController(viewportFraction: 0.93);
-  final PageController _broadcastPageController = PageController(viewportFraction: 0.93);
+  final PageController _eventPageController = PageController(
+    viewportFraction: 0.93,
+  );
+  final PageController _broadcastPageController = PageController(
+    viewportFraction: 0.93,
+  );
 
   final ValueNotifier<int> _eventIndexNotifier = ValueNotifier(0);
   final ValueNotifier<int> _broadcastIndexNotifier = ValueNotifier(0);
@@ -1247,7 +1251,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _startAutoScroll() {
-
     _eventTimer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
       if (filteredEvents.length > 1 && _eventPageController.hasClients) {
         _eventPageController.nextPage(
@@ -1258,7 +1261,8 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     _broadcastTimer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
-      if (homeModel.broadcasts.length > 1 && _broadcastPageController.hasClients) {
+      if (homeModel.broadcasts.length > 1 &&
+          _broadcastPageController.hasClients) {
         _broadcastPageController.nextPage(
           duration: const Duration(milliseconds: 800),
           curve: Curves.fastOutSlowIn,
@@ -1333,6 +1337,7 @@ class _HomeScreenState extends State<HomeScreen> {
           return homeCubit.getHomeData(context);
         },
         child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
             children: [
               Gap(25),
@@ -1345,27 +1350,33 @@ class _HomeScreenState extends State<HomeScreen> {
                     DateTime now = DateTime.now();
                     DateTime today = DateTime(now.year, now.month, now.day);
 
-                    filteredEvents = homeModel.events.where((element) {
-                      try {
-                        String dateStr = element.date.trim().replaceAll('-', '/');
-                        List<String> parts = dateStr.split('/');
-                        if (parts.length == 3) {
-                          int day = int.parse(parts[0]);
-                          int month = int.parse(parts[1]);
-                          int year = int.parse(parts[2]);
-                          DateTime eventDate = DateTime(year, month, day);
-                          return eventDate.isAtSameMomentAs(today) || eventDate.isAfter(today);
-                        }
-                        return false;
-                      } catch (e) {
-                        return false;
-                      }
-                    }).toList();
+                    filteredEvents =
+                        homeModel.events.where((element) {
+                          try {
+                            String dateStr = element.date.trim().replaceAll(
+                              '-',
+                              '/',
+                            );
+                            List<String> parts = dateStr.split('/');
+                            if (parts.length == 3) {
+                              int day = int.parse(parts[0]);
+                              int month = int.parse(parts[1]);
+                              int year = int.parse(parts[2]);
+                              DateTime eventDate = DateTime(year, month, day);
+                              return eventDate.isAtSameMomentAs(today) ||
+                                  eventDate.isAfter(today);
+                            }
+                            return false;
+                          } catch (e) {
+                            return false;
+                          }
+                        }).toList();
 
                     if (!_isEventLoopSet && filteredEvents.isNotEmpty) {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         // Only Jump if more than 1 item (Infinite Loop)
-                        if (filteredEvents.length > 1 && _eventPageController.hasClients) {
+                        if (filteredEvents.length > 1 &&
+                            _eventPageController.hasClients) {
                           int middleZero = filteredEvents.length * 1000;
                           _eventPageController.jumpToPage(middleZero);
                         }
@@ -1373,9 +1384,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       _isEventLoopSet = true;
                     }
 
-                    if (!_isBroadcastLoopSet && homeModel.broadcasts.isNotEmpty) {
+                    if (!_isBroadcastLoopSet &&
+                        homeModel.broadcasts.isNotEmpty) {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
-                        if (homeModel.broadcasts.length > 1 && _broadcastPageController.hasClients) {
+                        if (homeModel.broadcasts.length > 1 &&
+                            _broadcastPageController.hasClients) {
                           int middleZero = homeModel.broadcasts.length * 1000;
                           _broadcastPageController.jumpToPage(middleZero);
                         }
@@ -1387,7 +1400,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-
                       _buildSectionHeader(
                         title: 'List of Event',
                         icon: Icons.event_note,
@@ -1404,57 +1416,66 @@ class _HomeScreenState extends State<HomeScreen> {
                       filteredEvents.isEmpty
                           ? Center(child: CustomEmpty())
                           : Column(
-                        children: [
-                          SizedBox(
-                            height: 340,
-                            child: PageView.builder(
-                              controller: _eventPageController,
-                              itemCount: filteredEvents.length > 1 ? null : 1,
+                            children: [
+                              SizedBox(
+                                height: 340,
+                                child: PageView.builder(
+                                  controller: _eventPageController,
+                                  itemCount:
+                                      filteredEvents.length > 1 ? null : 1,
 
-                              onPageChanged: (index) {
-                                _eventIndexNotifier.value = index % filteredEvents.length;
-                              },
-                              itemBuilder: (context, index) {
-                                final int trueIndex = index % filteredEvents.length;
-                                final event = filteredEvents[trueIndex];
-
-                                return CustomMainCard(
-                                  image: event.image,
-                                  date: event.date,
-                                  title: event.title,
-                                  des: event.place,
-                                  joinText: event.applied == false ? 'Join Event' : 'Joined',
-                                  applied: event.applied,
-                                  showButton: true,
-                                  onTap: () {
-                                    customNoOfMemberBottomSheet(
-                                      context,
-                                      eventId: event.id,
-                                      extra: true,
-                                    );
+                                  onPageChanged: (index) {
+                                    _eventIndexNotifier.value =
+                                        index % filteredEvents.length;
                                   },
-                                  onNotJoinTap: () {},
-                                  onCancelTap: () {},
-                                  cardOnTap: () {
-                                    Navigator.pushNamed(
-                                      context,
-                                      AppPage.homeEventDetailScreen,
-                                      arguments: {
-                                        'homeData': event,
-                                        'title': 'Event Detail',
+                                  itemBuilder: (context, index) {
+                                    final int trueIndex =
+                                        index % filteredEvents.length;
+                                    final event = filteredEvents[trueIndex];
+
+                                    return CustomMainCard(
+                                      image: event.image,
+                                      date: event.date,
+                                      title: event.title,
+                                      des: event.place,
+                                      joinText:
+                                          event.applied == false
+                                              ? 'Join Event'
+                                              : 'Joined',
+                                      applied: event.applied,
+                                      showButton: true,
+                                      onTap: () {
+                                        customNoOfMemberBottomSheet(
+                                          context,
+                                          eventId: event.id,
+                                          extra: true,
+                                        );
+                                      },
+                                      onNotJoinTap: () {},
+                                      onCancelTap: () {},
+                                      cardOnTap: () {
+                                        Navigator.pushNamed(
+                                          context,
+                                          AppPage.homeEventDetailScreen,
+                                          arguments: {
+                                            'homeData': event,
+                                            'title': 'Event Detail',
+                                          },
+                                        );
                                       },
                                     );
                                   },
-                                );
-                              },
-                            ),
+                                ),
+                              ),
+                              Gap(8),
+                              // Hide Dots if only 1 item
+                              if (filteredEvents.length > 1)
+                                _buildDots(
+                                  filteredEvents.length,
+                                  _eventIndexNotifier,
+                                ),
+                            ],
                           ),
-                          Gap(8),
-                          // Hide Dots if only 1 item
-                          if (filteredEvents.length > 1)
-                            _buildDots(filteredEvents.length, _eventIndexNotifier),
-                        ],
-                      ),
 
                       Gap(24),
                       CustomDivider(),
@@ -1475,51 +1496,60 @@ class _HomeScreenState extends State<HomeScreen> {
                       homeModel.broadcasts.isEmpty
                           ? Center(child: CustomEmpty())
                           : Column(
-                        children: [
-                          SizedBox(
-                            height: 340,
-                            child: PageView.builder(
-                              controller: _broadcastPageController,
+                            children: [
+                              SizedBox(
+                                height: 340,
+                                child: PageView.builder(
+                                  controller: _broadcastPageController,
 
-                              itemCount: homeModel.broadcasts.length > 1 ? null : 1,
+                                  itemCount:
+                                      homeModel.broadcasts.length > 1
+                                          ? null
+                                          : 1,
 
-                              onPageChanged: (index) {
-                                _broadcastIndexNotifier.value = index % homeModel.broadcasts.length;
-                              },
-                              itemBuilder: (context, index) {
-                                final int trueIndex = index % homeModel.broadcasts.length;
-                                final broadcast = homeModel.broadcasts[trueIndex];
+                                  onPageChanged: (index) {
+                                    _broadcastIndexNotifier.value =
+                                        index % homeModel.broadcasts.length;
+                                  },
+                                  itemBuilder: (context, index) {
+                                    final int trueIndex =
+                                        index % homeModel.broadcasts.length;
+                                    final broadcast =
+                                        homeModel.broadcasts[trueIndex];
 
-                                return CustomMainCard(
-                                  image: broadcast.image,
-                                  date: broadcast.date,
-                                  title: broadcast.title,
-                                  des: broadcast.place,
-                                  joinText: '',
-                                  applied: broadcast.applied,
-                                  showButton: false,
-                                  onTap: () {},
-                                  onNotJoinTap: () {},
-                                  onCancelTap: () {},
-                                  cardOnTap: () {
-                                    Navigator.pushNamed(
-                                      context,
-                                      AppPage.homeEventDetailScreen,
-                                      arguments: {
-                                        'homeData': broadcast,
-                                        'title': 'Broadcast Detail',
+                                    return CustomMainCard(
+                                      image: broadcast.image,
+                                      date: broadcast.date,
+                                      title: broadcast.title,
+                                      des: broadcast.place,
+                                      joinText: '',
+                                      applied: broadcast.applied,
+                                      showButton: false,
+                                      onTap: () {},
+                                      onNotJoinTap: () {},
+                                      onCancelTap: () {},
+                                      cardOnTap: () {
+                                        Navigator.pushNamed(
+                                          context,
+                                          AppPage.homeEventDetailScreen,
+                                          arguments: {
+                                            'homeData': broadcast,
+                                            'title': 'Broadcast Detail',
+                                          },
+                                        );
                                       },
                                     );
                                   },
-                                );
-                              },
-                            ),
+                                ),
+                              ),
+                              Gap(8),
+                              if (homeModel.broadcasts.length > 1)
+                                _buildDots(
+                                  homeModel.broadcasts.length,
+                                  _broadcastIndexNotifier,
+                                ),
+                            ],
                           ),
-                          Gap(8),
-                          if (homeModel.broadcasts.length > 1)
-                            _buildDots(homeModel.broadcasts.length, _broadcastIndexNotifier),
-                        ],
-                      ),
 
                       Gap(24),
                       CustomDivider(),
@@ -1553,11 +1583,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       onTap: () {
                         // Navigation Logic
                         String pageTitle = '';
-                        if (index == 0) pageTitle = 'Schema';
-                        else if (index == 1) pageTitle = 'Kit';
-                        else if (index == 2) pageTitle = 'Exam (GK)';
-                        else pageTitle = 'Comity';
-
+                        if (index == 0) {
+                          pageTitle = 'Schema';
+                        } else if (index == 1) {
+                          pageTitle = 'Kit';
+                        } else if (index == 2) {
+                          pageTitle = 'Exam (GK)';
+                        } else {
+                          pageTitle = 'Committee';
+                        }
                         Navigator.pushNamed(
                           context,
                           AppPage.appFeatureScreen,
@@ -1634,9 +1668,10 @@ class _HomeScreenState extends State<HomeScreen> {
               width: 6,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: currentIndex == index
-                    ? AppColor.themePrimaryColor
-                    : Colors.grey.withOpacity(0.3),
+                color:
+                    currentIndex == index
+                        ? AppColor.themePrimaryColor
+                        : Colors.grey.withOpacity(0.3),
               ),
             );
           }),

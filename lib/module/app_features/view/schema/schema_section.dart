@@ -132,7 +132,6 @@
 //     );
 //   }
 // }
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -229,6 +228,7 @@ class _SchemaSectionState extends State<SchemaSection> {
                                 AppPage.schemaContentScreen,
                                 arguments: {
                                   'template': schema.template,
+                                  'pdfTemplate': schema.pdfTemplate,
                                   'title': schema.title,
                                   'schemaId': schema.id,
                                   'isApplied': schema.isApplied,
