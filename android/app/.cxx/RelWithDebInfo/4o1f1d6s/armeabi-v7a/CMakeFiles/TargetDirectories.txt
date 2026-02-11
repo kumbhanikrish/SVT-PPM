@@ -1,0 +1,2 @@
+K:/Akshay/SVT-PPM/android/app/.cxx/RelWithDebInfo/4o1f1d6s/armeabi-v7a/CMakeFiles/edit_cache.dir
+K:/Akshay/SVT-PPM/android/app/.cxx/RelWithDebInfo/4o1f1d6s/armeabi-v7a/CMakeFiles/rebuild_cache.dir
