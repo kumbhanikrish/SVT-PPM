@@ -414,7 +414,8 @@ class CustomAppFeatureCard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.asset(image),
+            Image.asset(image, height: 80),
+            Gap(10),
             CustomText(text: title, fontSize: 14, fontWeight: FontWeight.w600),
           ],
         ),

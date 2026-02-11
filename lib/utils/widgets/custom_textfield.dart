@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
 import 'package:svt_ppm/utils/widgets/custom_filed_box.dart';
+import 'package:svt_ppm/utils/widgets/custom_text.dart';
 // import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -132,7 +133,7 @@ class CustomTextField extends StatelessWidget {
   }
 }
 
-class CustomDropWonFiled<T> extends StatelessWidget {
+class CustomDropWonFiled<T> extends StatefulWidget {
   final String text;
   final T? initialItem;
   final String? hintText;
@@ -157,48 +158,206 @@ class CustomDropWonFiled<T> extends StatelessWidget {
   });
 
   @override
+  State<CustomDropWonFiled<T>> createState() => _CustomDropWonFiledState<T>();
+}
+
+class _CustomDropWonFiledState<T> extends State<CustomDropWonFiled<T>> {
+  T? _selectedItem;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedItem = widget.initialItem;
+  }
+
+  void _showBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder:
+          (context) => _DropdownBottomSheet<T>(
+            items: widget.items,
+            selectedItem: _selectedItem,
+            hintText: widget.hintText ?? 'Search...',
+            onItemSelected: (item) {
+              setState(() {
+                _selectedItem = item;
+              });
+              widget.onChanged(item);
+              Navigator.pop(context);
+            },
+          ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return CustomFieldBox(
-      title: title,
+      title: widget.title,
       fontSize: 12,
       padding: EdgeInsets.zero,
       children: [
-        CustomDropdown<T>.search(
-          hintText: hintText,
-
-          closedHeaderPadding: EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 14,
+        InkWell(
+          onTap: _showBottomSheet,
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            // decoration: BoxDecoration(
+            //   color: AppColor.whiteColor,
+            //   borderRadius: BorderRadius.circular(12),
+            //   border: Border.all(color: AppColor.themePrimaryColor),
+            // ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: CustomText(
+                    text:
+                        _selectedItem?.toString() ??
+                        widget.hintText ??
+                        'Select',
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color:
+                        _selectedItem != null
+                            ? widget.selectColor ?? AppColor.themePrimaryColor
+                            : AppColor.hintColor,
+                  ),
+                ),
+                Icon(Icons.keyboard_arrow_down, color: AppColor.hintColor),
+              ],
+            ),
           ),
-          validator: validator,
-          decoration: CustomDropdownDecoration(
-            closedBorder: Border.all(color: AppColor.transparentColor),
-
-            hintStyle: TextStyle(
-              fontFamily: 'Caros Soft',
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              color: AppColor.hintColor,
-            ),
-            headerStyle: TextStyle(
-              fontFamily: 'Caros Soft',
-              fontSize: 12,
-              color: selectColor,
-              fontWeight: FontWeight.w500,
-            ),
-            listItemStyle: TextStyle(
-              fontFamily: 'Caros Soft',
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          listItemBuilder: listItemBuilder,
-          items: items,
-          initialItem: initialItem,
-
-          onChanged: onChanged,
         ),
       ],
+    );
+  }
+}
+
+class _DropdownBottomSheet<T> extends StatefulWidget {
+  final List<T> items;
+  final T? selectedItem;
+  final String hintText;
+  final Function(T) onItemSelected;
+
+  const _DropdownBottomSheet({
+    required this.items,
+    required this.selectedItem,
+    required this.hintText,
+    required this.onItemSelected,
+  });
+
+  @override
+  State<_DropdownBottomSheet<T>> createState() =>
+      _DropdownBottomSheetState<T>();
+}
+
+class _DropdownBottomSheetState<T> extends State<_DropdownBottomSheet<T>> {
+  late List<T> _filteredItems;
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _filteredItems = widget.items;
+  }
+
+  void _filterItems(String query) {
+    setState(() {
+      if (query.isEmpty) {
+        _filteredItems = widget.items;
+      } else {
+        _filteredItems =
+            widget.items
+                .where(
+                  (item) => item.toString().toLowerCase().contains(
+                    query.toLowerCase(),
+                  ),
+                )
+                .toList();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 0.6,
+      ),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            margin: const EdgeInsets.only(top: 12),
+            width: 40,
+            height: 4,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: TextField(
+              controller: _searchController,
+              onChanged: _filterItems,
+              decoration: InputDecoration(
+                hintText: widget.hintText,
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+              ),
+            ),
+          ),
+          Flexible(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: _filteredItems.length,
+              itemBuilder: (context, index) {
+                final item = _filteredItems[index];
+                final isSelected = item == widget.selectedItem;
+                return ListTile(
+                  title: Text(
+                    item.toString(),
+                    style: TextStyle(
+                      fontFamily: 'Caros Soft',
+                      fontSize: 14,
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.w400,
+                      color:
+                          isSelected
+                              ? AppColor.themePrimaryColor
+                              : Colors.black,
+                    ),
+                  ),
+                  trailing:
+                      isSelected
+                          ? Icon(Icons.check, color: AppColor.themePrimaryColor)
+                          : null,
+                  onTap: () => widget.onItemSelected(item),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

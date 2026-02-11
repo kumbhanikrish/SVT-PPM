@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -7,6 +6,7 @@ import 'package:svt_ppm/module/app_features/cubit/role_schemas_registration/role
 import 'package:svt_ppm/utils/constant/app_page.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
 import 'package:svt_ppm/utils/widgets/custom_app_bar.dart';
+import 'package:svt_ppm/utils/widgets/custom_image.dart';
 import 'package:svt_ppm/utils/widgets/custom_list_tile.dart';
 import 'package:svt_ppm/utils/widgets/custom_text.dart';
 
@@ -122,19 +122,11 @@ class _RoleSchemaRegistrationScreenState
                                                   ),
                                               text: schemaItem.schemaName,
                                               leadingImage: '',
-                                              leading: Container(
-                                                width: 60,
+                                              leading: CustomCachedImage(
+                                                imageUrl:
+                                                    schemaItem.schemaPhoto,
                                                 height: 60,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                  image: DecorationImage(
-                                                    image: NetworkImage(
-                                                      'https://media.istockphoto.com/id/814423752/photo/eye-of-model-with-colorful-art-make-up-close-up.jpg?s=612x612&w=0&k=20&c=l15OdMWjgCKycMMShP8UK94ELVlEGvt7GmB_esHWPYE=',
-                                                    ),
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ),
+                                                width: 60,
                                               ),
                                               trailing: CircleAvatar(
                                                 backgroundColor:

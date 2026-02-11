@@ -1283,8 +1283,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     List<StaticModel> appFeaturesList = [
-      StaticModel(image: AppImage.kit, title: 'Schema'),
-      StaticModel(image: AppImage.comity, title: 'Kit'),
+      StaticModel(image: AppImage.schema, title: 'Schema'),
+      StaticModel(image: AppImage.kit, title: 'Kit'),
       StaticModel(image: AppImage.exam, title: 'Exam (GK)'),
       StaticModel(image: AppImage.comity, title: 'Comity'),
     ];
