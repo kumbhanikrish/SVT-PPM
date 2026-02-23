@@ -16,6 +16,7 @@ import 'package:svt_ppm/utils/constant/app_page.dart';
 import 'package:svt_ppm/utils/enum/enums.dart';
 import 'package:svt_ppm/utils/formatter/format.dart';
 import 'package:svt_ppm/utils/widgets/custom_error_toast.dart';
+import 'package:svt_ppm/utils/widgets/custom_success_dialog.dart';
 
 part 'auth_state.dart';
 
@@ -80,6 +81,8 @@ class AuthCubit extends Cubit<AuthState> {
     BuildContext context, {
     required String number,
     required String otp,
+    bool switchUser = false,
+    String? memberId,
   }) async {
     await messaging.requestPermission();
     String? token = await messaging.getToken();
@@ -91,6 +94,8 @@ class AuthCubit extends Cubit<AuthState> {
       "mobile_no": number,
       "otp": otp,
       "data_requested": true,
+      "switch_user": switchUser,
+      "member_id": memberId,
       "fcm_token": token,
       'verificationId': verificationId,
     };
@@ -108,7 +113,7 @@ class AuthCubit extends Cubit<AuthState> {
 
       Navigator.pushNamedAndRemoveUntil(
         context,
-        AppPage.homeScreen,
+        AppPage.memberScreen,
         (route) => false,
       );
     }

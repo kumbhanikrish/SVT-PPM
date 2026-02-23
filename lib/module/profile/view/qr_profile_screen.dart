@@ -313,11 +313,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:svt_ppm/main.dart';
+import 'package:svt_ppm/module/auth/cubit/auth_cubit.dart';
 import 'package:svt_ppm/module/auth/model/login_model.dart';
 import 'package:svt_ppm/module/home/cubit/home_cubit.dart';
 import 'package:svt_ppm/utils/constant/app_page.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
 import 'package:svt_ppm/utils/widgets/custom_app_bar.dart';
+import 'package:svt_ppm/utils/widgets/custom_button.dart';
 import 'package:svt_ppm/utils/widgets/custom_image.dart';
 
 class QrProfileScreen extends StatefulWidget {
@@ -408,13 +410,17 @@ class _QrProfileScreenState extends State<QrProfileScreen> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: _buildThemeCard(
+                              userModel: userModel,
                               name: member.name,
                               photo: member.photo,
                               mobile: member.mobileNo ?? "",
                               memberId: member.memberId,
                               qrData: qrString,
                               memberFamilyCard: member.memberFamilyCard,
-                              relation: isHeadMember ? "Main Member" : member.relation,
+                              relation:
+                                  isHeadMember
+                                      ? "Main Member"
+                                      : member.relation,
                             ),
                           ),
                         );
@@ -444,6 +450,7 @@ class _QrProfileScreenState extends State<QrProfileScreen> {
     required String qrData,
     required String memberFamilyCard,
     required String? relation,
+     LoginModel? userModel,
   }) {
     return Container(
       width: double.infinity,
@@ -518,12 +525,12 @@ class _QrProfileScreenState extends State<QrProfileScreen> {
                 height: 50,
                 width: 50,
                 decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 4),
-                    boxShadow: const [
-                      BoxShadow(color: Colors.black12, blurRadius: 5),
-                    ]
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 4),
+                  boxShadow: const [
+                    BoxShadow(color: Colors.black12, blurRadius: 5),
+                  ],
                 ),
                 child: ClipOval(
                   child: CustomCachedImage(
@@ -581,10 +588,13 @@ class _QrProfileScreenState extends State<QrProfileScreen> {
 
           InkWell(
             onTap: () {
-              if(mobile.isNotEmpty){
+              if (mobile.isNotEmpty) {
                 Clipboard.setData(ClipboardData(text: mobile));
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Mobile number copied"), duration: Duration(seconds: 1)),
+                  const SnackBar(
+                    content: Text("Mobile number copied"),
+                    duration: Duration(seconds: 1),
+                  ),
                 );
               }
             },
@@ -599,30 +609,35 @@ class _QrProfileScreenState extends State<QrProfileScreen> {
                   ),
                 ),
                 const Gap(8),
-                if(mobile.isNotEmpty)
-                  Icon(Icons.copy_rounded, color: Colors.white.withOpacity(0.9), size: 14),
+                if (mobile.isNotEmpty)
+                  Icon(
+                    Icons.copy_rounded,
+                    color: Colors.white.withOpacity(0.9),
+                    size: 14,
+                  ),
               ],
             ),
           ),
 
           const Gap(20),
 
-          if(memberFamilyCard.isNotEmpty)
+          if (memberFamilyCard.isNotEmpty) ...[
             InkWell(
               onTap: () {
                 Navigator.pushNamed(
                   context,
                   AppPage.showProofScreen,
-                  arguments: {
-                    'memberFamilyCard': memberFamilyCard,
-                  },
+                  arguments: {'memberFamilyCard': memberFamilyCard},
                 );
               },
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8)
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   "View ID Card Proof",
@@ -634,6 +649,29 @@ class _QrProfileScreenState extends State<QrProfileScreen> {
                 ),
               ),
             ),
+          ],
+          
+          Gap(16),
+          CustomButton(
+            backgroundColor:userModel?.memberId == memberId? AppColor.redColor: AppColor.themePrimaryColor,
+            borderColor:userModel?.memberId == memberId? AppColor.redColor: AppColor.dividerColor,
+            text:userModel?.memberId == memberId? 'LogOut': 'Login',
+            textColor:userModel?.memberId == memberId? AppColor.whiteColor: AppColor.dividerColor,
+            padding: EdgeInsets.symmetric(vertical: 8),
+            fontSize: 14,
+            onTap: () {
+              if(userModel?.memberId == memberId) {
+                BlocProvider.of<AuthCubit>(context).logout(context);
+              } else {
+                BlocProvider.of<AuthCubit>(context).verifyOtp(
+                  context,
+                  number: mobile,
+                  otp: '1234',
+                  switchUser: true,
+                memberId: memberId,
+              );}
+            },
+          ),
         ],
       ),
     );

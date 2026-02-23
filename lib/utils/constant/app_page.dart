@@ -25,4 +25,5 @@ class AppPage {
   static String dataEntryScreen = '/DataEntryScreen';
   static String selectDocumentScreen = '/selectDocumentScreen';
   static String kitPaymentDistributorPaymentScreen = '/kitPaymentDistributorPaymentScreen';
+  static String memberScreen = '/memberScreen';
 }
