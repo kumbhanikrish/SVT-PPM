@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:svt_ppm/main.dart';
 import 'package:svt_ppm/module/auth/cubit/auth_cubit.dart';
 import 'package:svt_ppm/module/auth/model/login_model.dart';
 import 'package:svt_ppm/utils/constant/app_page.dart';
@@ -22,6 +25,7 @@ class AppDrawer extends StatelessWidget {
       child: ValueListenableBuilder<LoginModel?>(
         valueListenable: loginModelNotifier,
         builder: (BuildContext context, LoginModel? model, Widget? child) {
+          log('model in drawer: ${model?.familyHeadId}');
           return Column(
             children: [
               Expanded(
@@ -46,12 +50,13 @@ class AppDrawer extends StatelessWidget {
                       currentAccountPicture: CircleAvatar(
                         backgroundColor: AppColor.whiteColor,
                         backgroundImage:
-                        model?.photo != null && model!.photo.isNotEmpty
-                            ? NetworkImage(model.photo)
-                            : null,
-                        child: model?.photo == null || model!.photo.isEmpty
-                            ? const Icon(Icons.person, size: 40)
-                            : null,
+                            model?.photo != null && model!.photo.isNotEmpty
+                                ? NetworkImage(model.photo)
+                                : null,
+                        child:
+                            model?.photo == null || model!.photo.isEmpty
+                                ? const Icon(Icons.person, size: 40)
+                                : null,
                       ),
                     ),
 
@@ -59,12 +64,14 @@ class AppDrawer extends StatelessWidget {
                       context,
                       title: "Profile",
                       route: AppPage.profileScreen,
+                      
                     ),
 
                     _drawerItem(
                       context,
                       title: "Family Detail",
                       route: AppPage.profileScreen,
+                   
                     ),
 
                     _drawerItem(
@@ -72,6 +79,7 @@ class AppDrawer extends StatelessWidget {
                       title: "Schema",
                       route: AppPage.appFeatureScreen,
                       arguments: {'title': 'Schema'},
+            
                     ),
 
                     if (UserSession.hasAnyRole([
@@ -82,6 +90,7 @@ class AppDrawer extends StatelessWidget {
                         context,
                         title: "Schema Registration",
                         route: AppPage.roleSchemaRegistrationScreen,
+                        
                       ),
                     ],
                     if (UserSession.hasRole(UserRoles.getEntry)) ...[
@@ -89,6 +98,7 @@ class AppDrawer extends StatelessWidget {
                         context,
                         title: "Get Entry",
                         route: AppPage.dataEntryScreen,
+                 
                       ),
                     ],
                     if (UserSession.hasAnyRole([UserRoles.kitDistributor])) ...[
@@ -96,6 +106,7 @@ class AppDrawer extends StatelessWidget {
                         context,
                         title: "Kit Distributor",
                         route: AppPage.kitPaymentDistributorPaymentScreen,
+                   
                         arguments: {'title': "Kit Distributor"},
                       ),
                     ],
@@ -104,6 +115,7 @@ class AppDrawer extends StatelessWidget {
                         context,
                         title: "Kit Payment",
                         route: AppPage.kitPaymentDistributorPaymentScreen,
+              
                         arguments: {'title': "Kit Payment"},
                       ),
                     ],
@@ -113,6 +125,7 @@ class AppDrawer extends StatelessWidget {
                       title: "Kit",
                       route: AppPage.appFeatureScreen,
                       arguments: {'title': 'Kit'},
+                
                     ),
 
                     _drawerItem(
@@ -120,6 +133,7 @@ class AppDrawer extends StatelessWidget {
                       title: "Exam (GK)",
                       route: AppPage.appFeatureScreen,
                       arguments: {'title': 'Exam (GK)'},
+                
                     ),
 
                     _drawerItem(
@@ -127,6 +141,7 @@ class AppDrawer extends StatelessWidget {
                       title: "Committee",
                       route: AppPage.appFeatureScreen,
                       arguments: {'title': 'Committee'},
+                
                     ),
                   ],
                 ),
@@ -175,13 +190,13 @@ class AppDrawer extends StatelessWidget {
       case "Schema":
         return Icons.description;
       case "Schema Registration":
-        return Icons.how_to_reg ;
+        return Icons.how_to_reg;
       case "Get Entry":
-        return Icons.post_add ;
+        return Icons.post_add;
       case "Kit Distributor":
-        return Icons.local_shipping ;
+        return Icons.local_shipping;
       case "Kit Payment":
-        return Icons.currency_rupee ;
+        return Icons.currency_rupee;
       case "Kit":
         return Icons.shopping_bag;
       case "Exam (GK)":
@@ -196,12 +211,12 @@ class AppDrawer extends StatelessWidget {
   }
 
   Widget _drawerItem(
-      BuildContext context, {
-        required String title,
-        required String route,
-        Map<String, dynamic>? arguments,
-      }) {
+    BuildContext context, {
+    required String title,
+    required String route,
 
+    Map<String, dynamic>? arguments,
+  }) {
     final IconData icon = _getIconByName(title);
 
     return Padding(
@@ -212,15 +227,32 @@ class AppDrawer extends StatelessWidget {
 
         leadingImage: '',
 
-        leading: Icon(
-          icon,
-          color: AppColor.themePrimaryColor,
-          size: 24,
-        ),
+        leading: Icon(icon, color: AppColor.themePrimaryColor, size: 24),
 
-        onTap: () {
-          Navigator.of(context).pop();
-          Navigator.of(context).pushNamed(route, arguments: arguments);
+        onTap: () async {
+
+      int headId = await localDataSaver.getHeadId();
+
+      log('headIdheadId :${headId}');
+      
+            if ((title == 'Schema' ||
+                    title == 'Kit' ||
+                    title == 'Exam (GK)' ||
+                    title == 'Schema Registration') &&
+                headId != 0) {
+              showCustomDialog(
+                context,
+                title: 'Access Denied',
+                subTitle: 'You do not have access to this feature.',
+                buttonText: 'OK',
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              );
+            } else {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed(route, arguments: arguments);
+            }
         },
       ),
     );

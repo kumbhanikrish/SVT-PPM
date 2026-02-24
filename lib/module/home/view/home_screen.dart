@@ -1203,6 +1203,7 @@ import 'package:svt_ppm/utils/theme/colors.dart';
 import 'package:svt_ppm/utils/widgets/custom_app_bar.dart';
 import 'package:svt_ppm/utils/widgets/custom_card.dart';
 import 'package:svt_ppm/utils/widgets/custom_image.dart';
+import 'package:svt_ppm/utils/widgets/custom_success_dialog.dart';
 import 'package:svt_ppm/utils/widgets/custom_widget.dart';
 
 import '../../../utils/widgets/custom_text.dart';
@@ -1580,23 +1581,38 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemCount: appFeaturesList.length,
                   itemBuilder: (BuildContext context, int index) {
                     return CustomAppFeatureCard(
-                      onTap: () {
+                      onTap: () async {
                         // Navigation Logic
-                        String pageTitle = '';
-                        if (index == 0) {
-                          pageTitle = 'Schema';
-                        } else if (index == 1) {
-                          pageTitle = 'Kit';
-                        } else if (index == 2) {
-                          pageTitle = 'Exam (GK)';
+                        int headId = await localDataSaver.getHeadId();
+
+                        if ((index == 0 || index == 1 || index == 2) &&
+                            headId != 0) {
+                          showCustomDialog(
+                            context,
+                            title: 'Access Denied',
+                            subTitle: 'You do not have access to this feature.',
+                            buttonText: 'OK',
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                          );
                         } else {
-                          pageTitle = 'Committee';
+                          String pageTitle = '';
+                          if (index == 0) {
+                            pageTitle = 'Schema';
+                          } else if (index == 1) {
+                            pageTitle = 'Kit';
+                          } else if (index == 2) {
+                            pageTitle = 'Exam (GK)';
+                          } else {
+                            pageTitle = 'Committee';
+                          }
+                          Navigator.pushNamed(
+                            context,
+                            AppPage.appFeatureScreen,
+                            arguments: {'title': pageTitle},
+                          );
                         }
-                        Navigator.pushNamed(
-                          context,
-                          AppPage.appFeatureScreen,
-                          arguments: {'title': pageTitle},
-                        );
                       },
                       image: appFeaturesList[index].image,
                       title: appFeaturesList[index].title,

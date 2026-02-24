@@ -107,7 +107,10 @@ class AuthCubit extends Cubit<AuthState> {
 
     if (response.data['success'] == true) {
       LoginModel loginModel = LoginModel.fromJson(response.data['data']);
+
+      log('loginModelloginModelloginModel ::${loginModel.familyHeadId}');
       await localDataSaver.setLoginData(loginModel);
+      await localDataSaver.setHeadId(loginModel.familyHeadId);
       await UserSession.load();
       await localDataSaver.setAuthToken(loginModel.token);
 
