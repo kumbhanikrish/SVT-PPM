@@ -233,7 +233,7 @@ class AppDrawer extends StatelessWidget {
 
       int headId = await localDataSaver.getHeadId();
 
-      log('headIdheadId :${headId}');
+      log('headIdheadId :$headId');
       
             if ((title == 'Schema' ||
                     title == 'Kit' ||

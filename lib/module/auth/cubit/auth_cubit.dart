@@ -16,7 +16,6 @@ import 'package:svt_ppm/utils/constant/app_page.dart';
 import 'package:svt_ppm/utils/enum/enums.dart';
 import 'package:svt_ppm/utils/formatter/format.dart';
 import 'package:svt_ppm/utils/widgets/custom_error_toast.dart';
-import 'package:svt_ppm/utils/widgets/custom_success_dialog.dart';
 
 part 'auth_state.dart';
 

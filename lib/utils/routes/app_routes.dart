@@ -32,10 +32,10 @@ final Map<String, WidgetBuilder> appRoutes = {
   AppPage.signupScreen:
       (context) =>
           SignupScreen(data: ModalRoute.of(context)?.settings.arguments),
-  AppPage.selectionScreen:
-      (context) => SelectionScreen(
-        arguments: ModalRoute.of(context)?.settings.arguments,
-      ),
+  // AppPage.selectionScreen:
+  //     (context) => SelectionScreen(
+  //       arguments: ModalRoute.of(context)?.settings.arguments,
+  //     ),
   AppPage.homeScreen: (context) => const HomeScreen(),
   AppPage.memberScreen: (context) => const MemberScreen(),
   // AppPage.homeScreen: (context) => const CustomBottomBarScreen(),
@@ -78,7 +78,7 @@ final Map<String, WidgetBuilder> appRoutes = {
         argument: ModalRoute.of(context)?.settings.arguments,
       ),
 
-  AppPage.selectLanguageScreen: (context) => LanguageSelectScreen(),
+  // AppPage.selectLanguageScreen: (context) => LanguageSelectScreen(),
   AppPage.roleSchemaRegistrationScreen:
       (context) => RoleSchemaRegistrationScreen(),
   AppPage.roleSchemaRegistrationUserScreen:

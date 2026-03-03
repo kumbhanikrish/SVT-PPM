@@ -12,7 +12,7 @@ import 'package:svt_ppm/utils/widgets/custom_image.dart';
 import 'package:svt_ppm/utils/widgets/custom_text.dart';
 
 class MemberScreen extends StatefulWidget {
-  const MemberScreen({Key? key}) : super(key: key);
+  const MemberScreen({super.key});
 
   @override
   State<MemberScreen> createState() => _MemberScreenState();
