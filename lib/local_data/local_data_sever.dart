@@ -41,6 +41,16 @@ class LocalDataSaver {
     return sharedPreference.getString('verificationId') ?? '';
   }
 
+  Future setHeadId(int headId) async {
+    SharedPreferences sharedPreference = await SharedPreferences.getInstance();
+    sharedPreference.setInt('headId', headId);
+  }
+
+  Future<int> getHeadId() async {
+    SharedPreferences sharedPreference = await SharedPreferences.getInstance();
+    return sharedPreference.getInt('headId') ?? 0;
+  }
+
   // ✅ Save LoginModel as JSON string
   Future<void> setLoginData(LoginModel loginModel) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -55,6 +65,8 @@ class LocalDataSaver {
     if (jsonString != null) {
       try {
         final jsonMap = jsonDecode(jsonString);
+
+        log('jsonMapjsonMap ::${jsonMap['family_head_id']}');
         return LoginModel.fromJson(jsonMap);
       } catch (e) {
         log("Error decoding LoginModel: $e");

@@ -45,13 +45,14 @@ class CustomButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         onTap: onTap,
         child: Padding(
-          padding: padding ?? const EdgeInsets.symmetric(vertical: 12.5),
+          padding: padding ?? const EdgeInsets.symmetric(vertical: 12.5,),
           child: Center(
             child: CustomText(
               text: text,
               color: textColor ?? AppColor.whiteColor,
               fontWeight: fontWeight ?? FontWeight.w600,
               fontSize: fontSize ?? 16,
+              textAlign: TextAlign.center,
             ),
           ),
         ),

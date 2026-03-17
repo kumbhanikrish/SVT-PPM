@@ -9,8 +9,7 @@ import 'package:svt_ppm/module/app_features/view/schema/schema_content_screen.da
 import 'package:svt_ppm/module/app_features/view/schema/role_schema_registration_screen.dart';
 import 'package:svt_ppm/module/app_features/view/schema/select_document_screen.dart';
 import 'package:svt_ppm/module/auth/view/auth_screen.dart';
-import 'package:svt_ppm/module/auth/view/language_select_screen.dart';
-import 'package:svt_ppm/module/auth/view/selection_Screen.dart';
+import 'package:svt_ppm/module/auth/view/member_screen.dart';
 import 'package:svt_ppm/module/auth/view/signup_screen.dart';
 import 'package:svt_ppm/module/auth/view/splash_screen.dart';
 import 'package:svt_ppm/module/data_entry/view/data_entry_screen.dart';
@@ -31,11 +30,12 @@ final Map<String, WidgetBuilder> appRoutes = {
   AppPage.signupScreen:
       (context) =>
           SignupScreen(data: ModalRoute.of(context)?.settings.arguments),
-  AppPage.selectionScreen:
-      (context) => SelectionScreen(
-        arguments: ModalRoute.of(context)?.settings.arguments,
-      ),
+  // AppPage.selectionScreen:
+  //     (context) => SelectionScreen(
+  //       arguments: ModalRoute.of(context)?.settings.arguments,
+  //     ),
   AppPage.homeScreen: (context) => const HomeScreen(),
+  AppPage.memberScreen: (context) => const MemberScreen(),
   // AppPage.homeScreen: (context) => const CustomBottomBarScreen(),
   AppPage.eventScreen:
       (context) =>
@@ -76,7 +76,7 @@ final Map<String, WidgetBuilder> appRoutes = {
         argument: ModalRoute.of(context)?.settings.arguments,
       ),
 
-  AppPage.selectLanguageScreen: (context) => LanguageSelectScreen(),
+  // AppPage.selectLanguageScreen: (context) => LanguageSelectScreen(),
   AppPage.roleSchemaRegistrationScreen:
       (context) => RoleSchemaRegistrationScreen(),
   AppPage.roleSchemaRegistrationUserScreen:

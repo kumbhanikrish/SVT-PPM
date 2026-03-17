@@ -79,7 +79,7 @@ class LoginModel {
     memberFamilyCard: json["memberFamilyCard"] ?? '',
     mobileNo: json["mobile_no"],
     whatsappNo: json["whatsapp_no"] ?? '',
-    email: json["email"],
+    email: json["email"] ?? '',
     villageName: json["village_name"],
     villageCode: json["village_code"] ?? '',
     address: json["address"],

@@ -1,10 +1,10 @@
 class AppPage {
   static String splashScreen = '/';
   static String authScreen = '/authScreen';
-  static String selectLanguageScreen = '/selectLanguageScreen';
+  // static String selectLanguageScreen = '/selectLanguageScreen';
 
   static String signupScreen = '/signupScreen';
-  static String selectionScreen = '/selectionScreen';
+  // static String selectionScreen = '/selectionScreen';
   static String homeScreen = '/homeScreen';
   static String eventScreen = '/eventScreen';
   static String eventViewAllScreen = '/eventViewAllScreen';
@@ -25,4 +25,5 @@ class AppPage {
   static String dataEntryScreen = '/DataEntryScreen';
   static String selectDocumentScreen = '/selectDocumentScreen';
   static String kitPaymentDistributorPaymentScreen = '/kitPaymentDistributorPaymentScreen';
+  static String memberScreen = '/memberScreen';
 }

@@ -80,6 +80,8 @@ class AuthCubit extends Cubit<AuthState> {
     BuildContext context, {
     required String number,
     required String otp,
+    bool switchUser = false,
+    String? memberId,
   }) async {
     await messaging.requestPermission();
     String? token = await messaging.getToken();
@@ -91,6 +93,8 @@ class AuthCubit extends Cubit<AuthState> {
       "mobile_no": number,
       "otp": otp,
       "data_requested": true,
+      "switch_user": switchUser,
+      "member_id": memberId,
       "fcm_token": token,
       'verificationId': verificationId,
     };
@@ -102,13 +106,16 @@ class AuthCubit extends Cubit<AuthState> {
 
     if (response.data['success'] == true) {
       LoginModel loginModel = LoginModel.fromJson(response.data['data']);
+
+      log('loginModelloginModelloginModel ::${loginModel.familyHeadId}');
       await localDataSaver.setLoginData(loginModel);
+      await localDataSaver.setHeadId(loginModel.familyHeadId);
       await UserSession.load();
       await localDataSaver.setAuthToken(loginModel.token);
 
       Navigator.pushNamedAndRemoveUntil(
         context,
-        AppPage.homeScreen,
+        AppPage.memberScreen,
         (route) => false,
       );
     }

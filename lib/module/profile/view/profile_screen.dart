@@ -356,6 +356,7 @@ import 'package:svt_ppm/utils/theme/colors.dart';
 import 'package:svt_ppm/utils/widgets/custom_app_bar.dart';
 import 'package:svt_ppm/utils/widgets/custom_filed_box.dart';
 import 'package:svt_ppm/utils/widgets/custom_image.dart';
+import 'package:svt_ppm/utils/widgets/custom_success_dialog.dart';
 import 'package:svt_ppm/utils/widgets/custom_text.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -515,11 +516,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         title: 'Family Members',
                         addButton: true,
                         addOnTap: () {
-                          Navigator.pushNamed(
+                          showCustomDialog(
                             context,
-                            AppPage.selectionScreen,
-                            arguments: {'addMember': true},
+                            title: 'Select Member Type',
+                            subTitle: 'Please select the Member option.',
+                            buttonText:
+                                'જો તમારી પાસે તાલુકાનું આઈડી કાર્ડ ન હોય તો અહીં ક્લિક કરો. (New Member)',
+                            button2Text:
+                                'જો તમારી પાસે તાલુકાનું ID કાર્ડ હોય તો અહીં ક્લિક કરો. (Old Member)',
+                            columnButton: true,
+                            showCloseIcon: true,
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                AppPage.signupScreen,
+                                arguments: {'old': false, 'addMember': true},
+                              );
+                            },
+                            cancelOnTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                AppPage.signupScreen,
+                                arguments: {'old': true, 'addMember': true},
+                              );
+                            },
                           );
+
+                          // Navigator.pushNamed(
+                          //   context,
+                          //   AppPage.selectionScreen,
+                          //   arguments: {'addMember': true},
+                          // );
                         },
                         children: [
                           BlocBuilder<HomeCubit, HomeState>(
