@@ -219,7 +219,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   left: 0,
                   top: 30,
 
-                  child: Image.asset(AppLogo.splashLogo, height: 150),
+                  child: Image.asset(AppLogo.logoWithOutBG, height: 150),
                 ),
 
                 Padding(

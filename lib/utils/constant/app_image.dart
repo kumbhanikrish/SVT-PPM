@@ -35,5 +35,6 @@ class AppImage {
 
 class AppLogo {
   static String splashLogo = 'assets/logo/logo.png';
+  static String logoWithOutBG = 'assets/logo/LogoWithOutBG.png';
   static String smallLogo = 'assets/logo/small-logo.png';
 }

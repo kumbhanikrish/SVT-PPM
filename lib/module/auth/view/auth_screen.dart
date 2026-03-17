@@ -58,7 +58,7 @@ class AuthScreen extends StatelessWidget {
                   left: 0,
                   top: 30,
 
-                  child: Image.asset(AppLogo.splashLogo, height: 230),
+                  child: Image.asset(AppLogo.logoWithOutBG, height: 230),
                 ),
               ],
             ),
