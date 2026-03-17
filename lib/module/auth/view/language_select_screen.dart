@@ -11,7 +11,7 @@
 // import 'package:svt_ppm/utils/widgets/custom_text.dart';
 
 // // We must convert StatelessWidget to StatefulWidget to manage the selected language state
-// class LanguageSelectScreen extends StatefulWidget {
+// class LanguageSelectScreen extends StatefulWet {
 //   const LanguageSelectScreen({super.key});
 
 //   @override

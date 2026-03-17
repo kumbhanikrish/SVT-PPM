@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:svt_ppm/module/auth/view/widget/custom_login_widget.dart';
 import 'package:svt_ppm/utils/constant/app_page.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
 import 'package:svt_ppm/utils/widgets/custom_button.dart';
-import 'package:svt_ppm/utils/widgets/custom_dialog.dart';
 import 'package:svt_ppm/utils/widgets/custom_success_dialog.dart';
 import 'package:svt_ppm/utils/widgets/custom_text.dart';
 import 'package:svt_ppm/utils/widgets/custom_textfield.dart';

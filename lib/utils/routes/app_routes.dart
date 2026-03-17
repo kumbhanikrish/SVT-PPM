@@ -9,9 +9,7 @@ import 'package:svt_ppm/module/app_features/view/schema/schema_content_screen.da
 import 'package:svt_ppm/module/app_features/view/schema/role_schema_registration_screen.dart';
 import 'package:svt_ppm/module/app_features/view/schema/select_document_screen.dart';
 import 'package:svt_ppm/module/auth/view/auth_screen.dart';
-import 'package:svt_ppm/module/auth/view/language_select_screen.dart';
 import 'package:svt_ppm/module/auth/view/member_screen.dart';
-import 'package:svt_ppm/module/auth/view/selection_Screen.dart';
 import 'package:svt_ppm/module/auth/view/signup_screen.dart';
 import 'package:svt_ppm/module/auth/view/splash_screen.dart';
 import 'package:svt_ppm/module/data_entry/view/data_entry_screen.dart';
