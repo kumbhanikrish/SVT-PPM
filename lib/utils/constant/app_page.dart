@@ -27,4 +27,5 @@ class AppPage {
   static String kitPaymentDistributorPaymentScreen = '/kitPaymentDistributorPaymentScreen';
   static String memberScreen = '/memberScreen';
   static String addMemberScreen = '/addMemberScreen';
+  static String benefitScreen = '/benefitScreen';
 }

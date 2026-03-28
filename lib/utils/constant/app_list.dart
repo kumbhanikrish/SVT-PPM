@@ -51,3 +51,62 @@ List<String> serialNoList = [
   'Y',
   'Z',
 ];
+
+List<String> educationList = [
+  'Below 8',
+  '8 Pass',
+  '10 Pass',
+  '12 Pass',
+  'Graduate',
+  'Post Graduate',
+];
+
+List<String> bloodGroupList = [
+  'A+',
+  'A-',
+  'B+',
+  'B-',
+  'AB+',
+  'AB-',
+  'O+',
+  'O-',
+];
+
+List<String> undergraduateDegrees = [
+  'B.Com',
+  'B.Sc',
+  'B.A',
+  'B.E/B.Tech',
+  'BBA',
+  'BCA',
+  'B.Pharm',
+  'LLB',
+  'MBBS',
+  'BAMS',
+  'BHMS',
+  'B.Des',
+  'B.Arch',
+  'BHM',
+  'B.Ed',
+  'Diploma',
+  'Other (Type New)',
+];
+
+List<String> postgraduateDegrees = [
+  'M.Com',
+  'M.Sc',
+  'M.A',
+  'M.E/M.Tech',
+  'MBA',
+  'MCA',
+  'M.Pharm',
+  'LLM',
+  'MD',
+  'MS',
+  'M.Des',
+  'M.Arch',
+  'M.Ed',
+  'PhD',
+  'Diploma',
+  'Other (Type New)',
+];

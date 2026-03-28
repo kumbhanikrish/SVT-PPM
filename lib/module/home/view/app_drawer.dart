@@ -64,22 +64,19 @@ class AppDrawer extends StatelessWidget {
                       context,
                       title: "Profile",
                       route: AppPage.profileScreen,
-                      
                     ),
 
-                    _drawerItem(
-                      context,
-                      title: "Family Detail",
-                      route: AppPage.profileScreen,
-                   
-                    ),
+                    // _drawerItem(
+                    //   context,
+                    //   title: "Family Detail",
+                    //   route: AppPage.profileScreen,
 
+                    // ),
                     _drawerItem(
                       context,
                       title: "Scheme",
                       route: AppPage.appFeatureScreen,
                       arguments: {'title': 'Scheme'},
-            
                     ),
 
                     if (UserSession.hasAnyRole([
@@ -90,7 +87,6 @@ class AppDrawer extends StatelessWidget {
                         context,
                         title: "Scheme Registration",
                         route: AppPage.roleSchemeRegistrationScreen,
-                        
                       ),
                     ],
                     if (UserSession.hasRole(UserRoles.getEntry)) ...[
@@ -98,7 +94,6 @@ class AppDrawer extends StatelessWidget {
                         context,
                         title: "Gate Entry",
                         route: AppPage.dataEntryScreen,
-                 
                       ),
                     ],
                     if (UserSession.hasAnyRole([UserRoles.kitDistributor])) ...[
@@ -106,7 +101,7 @@ class AppDrawer extends StatelessWidget {
                         context,
                         title: "Kit Distributor",
                         route: AppPage.kitPaymentDistributorPaymentScreen,
-                   
+
                         arguments: {'title': "Kit Distributor"},
                       ),
                     ],
@@ -115,7 +110,7 @@ class AppDrawer extends StatelessWidget {
                         context,
                         title: "Kit Payment",
                         route: AppPage.kitPaymentDistributorPaymentScreen,
-              
+
                         arguments: {'title': "Kit Payment"},
                       ),
                     ],
@@ -125,7 +120,6 @@ class AppDrawer extends StatelessWidget {
                       title: "Kit",
                       route: AppPage.appFeatureScreen,
                       arguments: {'title': 'Kit'},
-                
                     ),
 
                     _drawerItem(
@@ -133,7 +127,6 @@ class AppDrawer extends StatelessWidget {
                       title: "Exam (GK)",
                       route: AppPage.appFeatureScreen,
                       arguments: {'title': 'Exam (GK)'},
-                
                     ),
 
                     _drawerItem(
@@ -141,7 +134,12 @@ class AppDrawer extends StatelessWidget {
                       title: "Committee",
                       route: AppPage.appFeatureScreen,
                       arguments: {'title': 'Committee'},
-                
+                    ),
+
+                    _drawerItem(
+                      context,
+                      title: "Benefit",
+                      route: AppPage.benefitScreen,
                     ),
                   ],
                 ),
@@ -203,6 +201,8 @@ class AppDrawer extends StatelessWidget {
         return Icons.book;
       case "Committee":
         return Icons.groups;
+      case "Benefit":
+        return Icons.card_giftcard;
       case "Logout":
         return Icons.logout;
       default:
@@ -230,29 +230,28 @@ class AppDrawer extends StatelessWidget {
         leading: Icon(icon, color: AppColor.themePrimaryColor, size: 24),
 
         onTap: () async {
+          int headId = await localDataSaver.getHeadId();
 
-      int headId = await localDataSaver.getHeadId();
+          log('headIdheadId :$headId');
 
-      log('headIdheadId :$headId');
-      
-            if ((title == 'Scheme' ||
-                    title == 'Kit' ||
-                    title == 'Exam (GK)' ||
-                    title == 'Scheme Registration') &&
-                headId != 0) {
-              showCustomDialog(
-                context,
-                title: 'Access Denied',
-                subTitle: 'You do not have access to this feature.',
-                buttonText: 'OK',
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              );
-            } else {
-              Navigator.of(context).pop();
-              Navigator.of(context).pushNamed(route, arguments: arguments);
-            }
+          if ((title == 'Scheme' ||
+                  title == 'Kit' ||
+                  title == 'Exam (GK)' ||
+                  title == 'Scheme Registration') &&
+              headId != 0) {
+            showCustomDialog(
+              context,
+              title: 'Access Denied',
+              subTitle: 'You do not have access to this feature.',
+              buttonText: 'OK',
+              onTap: () {
+                Navigator.pop(context);
+              },
+            );
+          } else {
+            Navigator.of(context).pop();
+            Navigator.of(context).pushNamed(route, arguments: arguments);
+          }
         },
       ),
     );

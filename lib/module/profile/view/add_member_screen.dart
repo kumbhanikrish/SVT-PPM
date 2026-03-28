@@ -1,11 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:svt_ppm/module/auth/cubit/auth_cubit.dart';
+import 'package:svt_ppm/module/auth/model/auth_arguments.dart';
 import 'package:svt_ppm/module/auth/model/login_model.dart';
 import 'package:svt_ppm/module/profile/cubit/profile_cubit.dart';
 import 'package:svt_ppm/utils/constant/app_list.dart';
@@ -15,11 +14,12 @@ import 'package:svt_ppm/utils/widgets/custom_app_bar.dart';
 import 'package:svt_ppm/utils/widgets/custom_button.dart';
 import 'package:svt_ppm/utils/widgets/custom_text.dart';
 import 'package:svt_ppm/utils/widgets/custom_textfield.dart';
+import 'package:svt_ppm/utils/widgets/custom_radio_list_tile.dart';
 import 'package:svt_ppm/utils/enum/enums.dart';
 
 class AddMemberScreen extends StatefulWidget {
-  final dynamic data;
-  const AddMemberScreen({super.key, required this.data});
+  final AddMemberArgs args;
+  const AddMemberScreen({super.key, required this.args});
 
   @override
   State<AddMemberScreen> createState() => _AddMemberScreenState();
@@ -30,33 +30,85 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
   TextEditingController middleNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
+  TextEditingController whatsappController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController idNoController = TextEditingController();
   TextEditingController occupationController = TextEditingController();
+  TextEditingController otherDegreeController = TextEditingController();
 
   String serialNoValue = '';
   bool old = false;
   bool addMember = false;
   bool edit = false;
+  bool isSameAsMobile = false;
   LoginModel? member;
+  String educationValue = '';
+  String bloodGroupValue = '';
+  String degreeValue = '';
+  String standardValue = '';
+  String relationValue = '';
 
   @override
   void initState() {
     super.initState();
-    old = widget.data['old'] ?? false;
-    addMember = widget.data['addMember'] ?? false;
-    edit = widget.data['edit'] ?? false;
-    member = widget.data['member'] as LoginModel?;
+    old = widget.args.old;
+    addMember = widget.args.addMember;
+    edit = widget.args.edit;
+    member = widget.args.member;
 
     if (edit && member != null) {
       firstNameController.text = member?.firstName ?? '';
       middleNameController.text = member?.middleName ?? '';
       lastNameController.text = member?.lastName ?? '';
       mobileController.text = member?.mobileNo ?? '';
+      whatsappController.text = member?.whatsappNo ?? '';
       emailController.text = member?.email ?? '';
       addressController.text = member?.address ?? '';
       occupationController.text = member?.occupation ?? '';
+      educationValue = educationList.firstWhere(
+        (e) => e.toLowerCase() == (member?.education ?? '').toLowerCase(),
+        orElse: () => member?.education ?? '',
+      );
+      bloodGroupValue = bloodGroupList.firstWhere(
+        (e) => e.toLowerCase() == (member?.bloodGroup ?? '').toLowerCase(),
+        orElse: () => member?.bloodGroup ?? '',
+      );
+      standardValue = standardList.firstWhere(
+        (e) => e.toLowerCase() == (member?.standard ?? '').toLowerCase(),
+        orElse: () => member?.standard ?? '',
+      );
+      relationValue = relationList.firstWhere(
+        (e) => e.toLowerCase() == (member?.relation ?? '').toLowerCase(),
+        orElse: () => member?.relation ?? '',
+      );
+      degreeValue = member?.degree ?? '';
+
+      // Check if degree is in the list, if not it might be "Other"
+      if (degreeValue.isNotEmpty) {
+        bool isGraduate = educationValue == 'Graduate';
+        List<String> currentDegrees =
+            isGraduate ? undergraduateDegrees : postgraduateDegrees;
+        if (educationValue == 'Graduate' || educationValue == 'Post Graduate') {
+          if (!currentDegrees.any(
+            (e) => e.toLowerCase() == degreeValue.toLowerCase(),
+          )) {
+            otherDegreeController.text = degreeValue;
+            degreeValue = 'Other (Type New)';
+          } else {
+            // Match the exact case from the list
+            degreeValue = currentDegrees.firstWhere(
+              (e) => e.toLowerCase() == degreeValue.toLowerCase(),
+            );
+          }
+        }
+      }
+      if ((member?.mobileNo ?? '').isNotEmpty &&
+          member?.mobileNo == member?.whatsappNo) {
+        setState(() {
+          isSameAsMobile = true;
+        });
+      }
 
       if ((member?.oldMemberId ?? '').length >= 1) {
         String oldId = member?.oldMemberId ?? '';
@@ -72,18 +124,10 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
               ? UserType.male
               : UserType.female,
         );
-        context.read<SelectRelationCubit>().updateValue(
-          relationValue: member?.relation ?? '',
-        );
-        context.read<SelectStandardCubit>().updateValue(
-          standardValue: member?.standard ?? '',
-        );
       });
     }
 
     context.read<RadioCubit>().init();
-    context.read<SelectRelationCubit>().init();
-    context.read<SelectStandardCubit>().init();
     context.read<ImageUploadCubit>().removeImage();
     context.read<ProfileImageCubit>().removeImage();
     context.read<FrontImageCubit>().removeImage();
@@ -97,16 +141,17 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
     BackImageCubit backImageCubit = context.watch<BackImageCubit>();
     ProfileImageCubit profileImageCubit = context.watch<ProfileImageCubit>();
     ImageUploadCubit imageUploadCubit = context.watch<ImageUploadCubit>();
-    SelectRelationCubit selectRelationCubit =
-        context.watch<SelectRelationCubit>();
-    SelectStandardCubit selectStandardCubit =
-        context.watch<SelectStandardCubit>();
     ProfileCubit profileCubit = context.read<ProfileCubit>();
 
     return Scaffold(
       backgroundColor: AppColor.whiteColor,
       appBar: CustomAppBar(
-        title: edit ? 'Edit Member' : 'Add Member',
+        title:
+            edit
+                ? 'Edit Member'
+                : old
+                ? 'Add Old Member'
+                : 'Add New Member',
         actions: [],
       ),
       body: SingleChildScrollView(
@@ -196,59 +241,165 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
               ),
               const Gap(20),
               CustomTextField(
+                labelText: 'WhatsApp Number',
+                hintText: 'Enter WhatsApp Number',
+                controller: whatsappController,
+                keyboardType: TextInputType.phone,
+                maxLength: 10,
+                onChanged: (val) {
+                  if (isSameAsMobile && val != mobileController.text) {
+                    setState(() {
+                      isSameAsMobile = false;
+                    });
+                  }
+                },
+              ),
+              const Gap(10),
+              Row(
+                children: [
+                  SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: Checkbox(
+                      value: isSameAsMobile,
+                      activeColor: AppColor.themePrimaryColor,
+                      onChanged: (val) {
+                        setState(() {
+                          isSameAsMobile = val ?? false;
+                          if (isSameAsMobile) {
+                            whatsappController.text = mobileController.text;
+                          }
+                        });
+                      },
+                    ),
+                  ),
+                  const Gap(10),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isSameAsMobile = !isSameAsMobile;
+                        if (isSameAsMobile) {
+                          whatsappController.text = mobileController.text;
+                        }
+                      });
+                    },
+                    child: const CustomText(
+                      text: 'Same as Mobile Number',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+              const Gap(20),
+              CustomTextField(
                 labelText: 'Email',
                 hintText: 'Enter Email Address (Optional)',
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
               ),
-              const Gap(20),
+              const Gap(10),
               const CustomText(
                 text: 'Gender',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
               const Gap(10),
+              BlocBuilder<RadioCubit, UserType>(
+                builder: (context, selectedType) {
+                  return Row(
+                    children: [
+                      Expanded(
+                        child: customRadio(
+                          buttonImage:
+                              selectedType == UserType.male
+                                  ? AppImage.radioButton
+                                  : AppImage.circle,
+                          genderIcon: AppImage.male,
+                          title: 'Male',
+                          onTap: () => radioCubit.selectUserType(UserType.male),
+                        ),
+                      ),
+                      const Gap(10),
+                      Expanded(
+                        child: customRadio(
+                          buttonImage:
+                              selectedType == UserType.female
+                                  ? AppImage.radioButton
+                                  : AppImage.circle,
+                          genderIcon: AppImage.female,
+                          title: 'Female',
+                          onTap:
+                              () => radioCubit.selectUserType(UserType.female),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+              const Gap(20),
               Row(
                 children: [
                   Expanded(
-                    child: RadioListTile<UserType>(
-                      title: const Text('Male'),
-                      value: UserType.male,
-                      groupValue: radioCubit.state,
-                      onChanged: (val) => radioCubit.selectUserType(val!),
+                    child: CustomDropWonFiled<String>(
+                      title: 'Education',
+                      hintText: 'Select Education',
+                      items: educationList,
+                      text: educationValue,
+                      initialItem: educationValue,
+                      onChanged: (val) {
+                        setState(() {
+                          educationValue = val ?? '';
+                          degreeValue = '';
+                          otherDegreeController.clear();
+                        });
+                      },
                     ),
                   ),
+                  const Gap(10),
                   Expanded(
-                    child: RadioListTile<UserType>(
-                      title: const Text('Female'),
-                      value: UserType.female,
-                      groupValue: radioCubit.state,
-                      onChanged: (val) => radioCubit.selectUserType(val!),
+                    child: CustomDropWonFiled<String>(
+                      title: 'Blood Group',
+                      hintText: 'Select Blood Group',
+                      items: bloodGroupList,
+                      text: bloodGroupValue,
+                      initialItem: bloodGroupValue,
+                      onChanged: (val) {
+                        setState(() => bloodGroupValue = val ?? '');
+                      },
                     ),
                   ),
                 ],
               ),
               const Gap(20),
-              CustomDropWonFiled<String>(
-                title: 'Relation',
-                hintText: 'Select Relation',
-                items: relationList,
-                text: selectRelationCubit.state,
-                onChanged:
-                    (val) => selectRelationCubit.updateValue(
-                      relationValue: val ?? '',
+              Row(
+                children: [
+                  Expanded(
+                    child: CustomDropWonFiled<String>(
+                      title: 'Standard',
+                      hintText: 'Select Standard',
+                      items: standardList,
+                      text: standardValue,
+                      initialItem: standardValue,
+                      onChanged: (val) {
+                        setState(() => standardValue = val ?? '');
+                      },
                     ),
-              ),
-              const Gap(20),
-              CustomDropWonFiled<String>(
-                title: 'Education/Standard',
-                hintText: 'Select Standard',
-                items: standardList,
-                text: selectStandardCubit.state,
-                onChanged:
-                    (val) => selectStandardCubit.updateValue(
-                      standardValue: val ?? '',
+                  ),
+                  const Gap(10),
+                  Expanded(
+                    child: CustomDropWonFiled<String>(
+                      title: 'Relation',
+                      hintText: 'Select Relation',
+                      items: relationList,
+                      text: relationValue,
+                      initialItem: relationValue,
+                      onChanged: (val) {
+                        setState(() => relationValue = val ?? '');
+                      },
                     ),
+                  ),
+                ],
               ),
               const Gap(20),
               CustomTextField(
@@ -257,8 +408,39 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                 controller: occupationController,
                 textCapitalization: TextCapitalization.characters,
               ),
+              if (educationValue == 'Graduate' ||
+                  educationValue == 'Post Graduate') ...[
+                const Gap(20),
+                CustomDropWonFiled<String>(
+                  title: 'Degree',
+                  hintText: 'Select Degree',
+                  items:
+                      educationValue == 'Graduate'
+                          ? undergraduateDegrees
+                          : postgraduateDegrees,
+                  text: degreeValue,
+                  initialItem: degreeValue,
+                  onChanged: (val) {
+                    setState(() {
+                      degreeValue = val ?? '';
+                      if (degreeValue != 'Other (Type New)') {
+                        otherDegreeController.clear();
+                      }
+                    });
+                  },
+                ),
+              ],
+              if (degreeValue == 'Other (Type New)') ...[
+                const Gap(20),
+                CustomTextField(
+                  labelText: 'Other Degree',
+                  hintText: 'Enter Degree Name',
+                  controller: otherDegreeController,
+                  textCapitalization: TextCapitalization.characters,
+                ),
+              ],
               const Gap(20),
-              if (old) ...[
+              if (old == true) ...[
                 Row(
                   children: [
                     Expanded(
@@ -332,8 +514,15 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                     middleName: middleNameController.text.trim(),
                     lastName: lastNameController.text.trim(),
                     mobileNo: mobileController.text.trim(),
+                    whatsappNo: whatsappController.text.trim(),
                     email: emailController.text.trim(),
                     address: addressController.text.trim(),
+                    education: educationValue,
+                    degree:
+                        degreeValue == 'Other (Type New)'
+                            ? otherDegreeController.text.trim()
+                            : degreeValue,
+                    bloodGroup: bloodGroupValue,
                     oldMemberId:
                         old
                             ? '$serialNoValue${idNoController.text.trim()}'
@@ -352,8 +541,8 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                         frontImageCubit.state?.path ??
                         member?.idProofFront ??
                         '',
-                    relation: selectRelationCubit.state.toLowerCase(),
-                    standard: selectStandardCubit.state.toLowerCase(),
+                    relation: relationValue.toLowerCase(),
+                    standard: standardValue,
                     occupation: occupationController.text.trim(),
                   );
                 },

@@ -15,6 +15,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Radius? bottomRadius;
   final Color? shadowColor;
   final double? blurRadius;
+  final List<BoxShadow>? boxShadow;
+  final Color? backgroundColor;
 
   const CustomAppBar({
     super.key,
@@ -28,25 +30,29 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.centerTitle,
     this.bottomRadius,
     this.shadowColor,
+    this.boxShadow,
+    this.backgroundColor,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: shadowColor ?? Colors.black.withOpacity(0.2),
-            blurRadius: 3,
-            spreadRadius: 2,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow:
+            boxShadow ??
+            [
+              BoxShadow(
+                color: shadowColor ?? Colors.black.withOpacity(0.2),
+                blurRadius: 3,
+                spreadRadius: 2,
+                offset: const Offset(0, 4),
+              ),
+            ],
         borderRadius: BorderRadius.only(
           bottomLeft: bottomRadius ?? const Radius.circular(15),
           bottomRight: bottomRadius ?? const Radius.circular(15),
         ),
-        color: AppColor.themePrimaryColor,
+        color: backgroundColor ?? AppColor.themePrimaryColor,
       ),
       child: AppBar(
         backgroundColor: AppColor.transparentColor,

@@ -169,6 +169,14 @@ class _CustomDropWonFiledState<T> extends State<CustomDropWonFiled<T>> {
     _selectedItem = widget.initialItem;
   }
 
+  @override
+  void didUpdateWidget(CustomDropWonFiled<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialItem != oldWidget.initialItem) {
+      _selectedItem = widget.initialItem;
+    }
+  }
+
   void _showBottomSheet() {
     showModalBottomSheet(
       context: context,
@@ -213,13 +221,18 @@ class _CustomDropWonFiledState<T> extends State<CustomDropWonFiled<T>> {
                 Expanded(
                   child: CustomText(
                     text:
-                        _selectedItem?.toString() ??
-                        widget.hintText ??
-                        'Select',
+                        (_selectedItem != null &&
+                                _selectedItem.toString().isNotEmpty)
+                            ? _selectedItem.toString()
+                            : (widget.text.isNotEmpty ? widget.text : null) ??
+                                widget.hintText ??
+                                'Select',
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                     color:
-                        _selectedItem != null
+                        ((_selectedItem != null &&
+                                    _selectedItem.toString().isNotEmpty) ||
+                                widget.text.isNotEmpty)
                             ? widget.selectColor ?? AppColor.themePrimaryColor
                             : AppColor.hintColor,
                   ),

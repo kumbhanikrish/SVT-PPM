@@ -13,11 +13,11 @@ class AppApi {
   static String eventsRegistration = 'events-registration';
 
   /// Scheme Flow
-  static String scheme = 'schemas';
+  static String scheme = 'schemes';
   static String villagePresident = 'village-president';
-  static String schemesRegistration = 'schemas-registration';
+  static String schemesRegistration = 'schemes-registration';
   static String schemesRegistrationChangeStatus =
-      'schemas-registration-change-status';
+      'schemes-registration-change-status';
 
   /// Kit Flow
   static String kits = 'kits';
@@ -35,4 +35,5 @@ class AppApi {
   static String totalGateEntry = 'total-gate-entry';
   static String gateEntry = 'gate-entry';
   static String gateEntryExtra = 'gate-entry-extra';
+  static String memberBenefits = 'member-benefits';
 }

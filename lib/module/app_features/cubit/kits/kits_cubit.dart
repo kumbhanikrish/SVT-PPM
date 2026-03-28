@@ -26,8 +26,13 @@ class KitsCubit extends Cubit<KitsState> {
     BuildContext context, {
     required int memberId,
     String? photo,
+    String? percentage,
   }) async {
-    Map<String, dynamic> params = {'member_id': memberId.toString()};
+    Map<String, dynamic> params = {
+      'member_id': memberId.toString(),
+      if (percentage != null && percentage.isNotEmpty)
+        'percentage': percentage,
+    };
 
     if (photo != null && photo.isNotEmpty && !photo.startsWith('http')) {
       params["photo"] = await MultipartFile.fromFile(

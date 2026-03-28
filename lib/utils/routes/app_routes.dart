@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:svt_ppm/module/app_features/view/app_feature_screen.dart';
 import 'package:svt_ppm/module/app_features/view/comity/comity_see_all_screen.dart';
 import 'package:svt_ppm/module/app_features/view/exam/exam_see_all_screen.dart';
@@ -8,6 +9,7 @@ import 'package:svt_ppm/module/app_features/view/scheme/role_scheme_registration
 import 'package:svt_ppm/module/app_features/view/scheme/scheme_content_screen.dart';
 import 'package:svt_ppm/module/app_features/view/scheme/role_scheme_registration_screen.dart';
 import 'package:svt_ppm/module/app_features/view/scheme/select_document_screen.dart';
+import 'package:svt_ppm/module/auth/model/auth_arguments.dart';
 import 'package:svt_ppm/module/auth/view/auth_screen.dart';
 import 'package:svt_ppm/module/auth/view/member_screen.dart';
 import 'package:svt_ppm/module/auth/view/signup_screen.dart';
@@ -22,18 +24,22 @@ import 'package:svt_ppm/module/profile/view/edit_profile_screen.dart';
 import 'package:svt_ppm/module/profile/view/add_member_screen.dart';
 import 'package:svt_ppm/module/profile/view/profile_screen.dart';
 import 'package:svt_ppm/module/profile/view/show_proof_screen.dart';
+import 'package:svt_ppm/module/benefit/view/benefit_screen.dart';
+import 'package:svt_ppm/module/benefit/cubit/benefit_cubit.dart';
 
 import 'package:svt_ppm/utils/constant/app_page.dart';
 
 final Map<String, WidgetBuilder> appRoutes = {
   AppPage.splashScreen: (context) => const SplashScreen(),
   AppPage.authScreen: (context) => const AuthScreen(),
-  AppPage.signupScreen:
-      (context) =>
-          SignupScreen(data: ModalRoute.of(context)?.settings.arguments),
-  AppPage.addMemberScreen:
-      (context) =>
-          AddMemberScreen(data: ModalRoute.of(context)?.settings.arguments),
+  AppPage.signupScreen: (context) {
+    final args = ModalRoute.of(context)?.settings.arguments as SignupArgs?;
+    return SignupScreen(args: args ?? SignupArgs());
+  },
+  AppPage.addMemberScreen: (context) {
+    final args = ModalRoute.of(context)?.settings.arguments as AddMemberArgs?;
+    return AddMemberScreen(args: args ?? AddMemberArgs());
+  },
   // AppPage.selectionScreen:
   //     (context) => SelectionScreen(
   //       arguments: ModalRoute.of(context)?.settings.arguments,
@@ -95,5 +101,9 @@ final Map<String, WidgetBuilder> appRoutes = {
   AppPage.kitPaymentDistributorPaymentScreen:
       (context) => KitPaymentDistributorPaymentScreen(
         argument: ModalRoute.of(context)?.settings.arguments,
+      ),
+  AppPage.benefitScreen: (context) => BlocProvider(
+        create: (context) => BenefitCubit(),
+        child: const BenefitScreen(),
       ),
 };

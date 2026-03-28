@@ -129,6 +129,7 @@ class AuthCubit extends Cubit<AuthState> {
     required String middleName,
     required String lastName,
     required String mobileNo,
+    required String whatsappNo,
     required String villageName,
     required String address,
     required String gender,
@@ -140,6 +141,15 @@ class AuthCubit extends Cubit<AuthState> {
     String? idProofFront,
     String? idProofBack,
     required bool old,
+    String? plotNo,
+    String? societyName,
+    String? areaName,
+    String? landmark,
+    String? pincode,
+    String? bloodGroup,
+    String? education,
+    String? degree,
+    String? occupation,
   }) async {
     // -------------------------------
     // VALIDATIONS
@@ -221,6 +231,7 @@ class AuthCubit extends Cubit<AuthState> {
       "middle_name": middleName,
       "last_name": lastName,
       "mobile_no": mobileNo,
+      "whatsapp_no": whatsappNo,
       "village_name": villageName,
       "village_code": villageCode,
       "gender": gender,
@@ -232,6 +243,15 @@ class AuthCubit extends Cubit<AuthState> {
               : 'en',
       "email": email,
       "address": address,
+      "plot_no": plotNo ?? '',
+      "society_name": societyName ?? '',
+      "area_name": areaName ?? '',
+      "landmark": landmark ?? '',
+      "pincode": pincode ?? '',
+      "blood_group": bloodGroup ?? '',
+      "education": education ?? '',
+      "degree": degree ?? '',
+      "occupation": occupation ?? '',
       "is_new_member": old ? 0 : 1,
     };
 

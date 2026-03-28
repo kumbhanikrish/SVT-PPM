@@ -23,9 +23,13 @@ class ProfileCubit extends Cubit<ProfileState> {
     required String middleName,
     required String lastName,
     required String mobileNo,
+    required String whatsappNo,
     required String address,
     required String gender,
     required String email,
+    String? education,
+    String? degree,
+    String? bloodGroup,
     String? relation,
     String? standard,
     String? villageName,
@@ -120,6 +124,10 @@ class ProfileCubit extends Cubit<ProfileState> {
       "middle_name": middleName,
       "last_name": lastName,
       "mobile_no": mobileNo,
+      "whatsapp_no": whatsappNo,
+      "education": education ?? '',
+      "degree": degree ?? '',
+      "blood_group": bloodGroup ?? '',
       "village_name": villageName,
       "gender": gender,
       "email": email,
@@ -229,27 +237,4 @@ class ProfileCubit extends Cubit<ProfileState> {
     return response;
   }
 }
-
-class SelectRelationCubit extends Cubit<String> {
-  SelectRelationCubit() : super('daughter');
-
-  updateValue({required String relationValue}) {
-    emit(relationValue);
-  }
-
-  init() {
-    emit('daughter');
-  }
-}
-
-class SelectStandardCubit extends Cubit<String> {
-  SelectStandardCubit() : super('playgroup');
-
-  updateValue({required String standardValue}) {
-    emit(standardValue);
-  }
-
-  init() {
-    emit('playgroup');
-  }
-}
+ 

@@ -145,10 +145,10 @@ class _SelectDocumentScreenState extends State<SelectDocumentScreen> {
         child: CustomButton(
           text: 'Submit',
           onTap: () async {
-             Map<String, dynamic> params = {
+            Map<String, dynamic> params = {
               "scheme_id": schemeId,
               "member_id": memberId,
-              "village_president_ids[]": selectedVillagePresidentIds,
+              "gam_pratinidhi_ids[]": selectedVillagePresidentIds,
             };
 
             for (var entry in selectedImages.entries) {

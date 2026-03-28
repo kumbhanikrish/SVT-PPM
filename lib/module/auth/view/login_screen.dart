@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:svt_ppm/module/auth/model/auth_arguments.dart';
 import 'package:svt_ppm/utils/constant/app_page.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
 import 'package:svt_ppm/utils/widgets/custom_button.dart';
@@ -64,24 +65,27 @@ class LoginScreen extends StatelessWidget {
                   context,
                   title: 'Select User Type',
                   subTitle: 'Please select the registration option.',
-                  buttonText: 'જો તમારી પાસે તાલુકાનું આઈડી કાર્ડ ન હોય તો અહીં ક્લિક કરો. (New Register)',
-                  button2Text: 'જો તમારી પાસે તાલુકાનું ID કાર્ડ હોય તો અહીં ક્લિક કરો. (Old Register)',
+                  buttonText:
+                      'જો તમારી પાસે તાલુકાનું આઈડી કાર્ડ ન હોય તો અહીં ક્લિક કરો. (New Register)',
+                  button2Text:
+                      'જો તમારી પાસે તાલુકાનું ID કાર્ડ હોય તો અહીં ક્લિક કરો. (Old Register)',
                   columnButton: true,
                   showCloseIcon: true,
                   onTap: () {
-
-               Navigator.pushNamed(
-                  context,
-                  AppPage.signupScreen,
-                  arguments: {'old': false, 'addMember': false},
-                );
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      AppPage.signupScreen,
+                      arguments: SignupArgs(old: false),
+                      (route) => false,
+                    );
                   },
                   cancelOnTap: () {
-                       Navigator.pushNamed(
-                  context,
-                  AppPage.signupScreen,
-                  arguments: {'old': true, 'addMember': false},
-                );
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      AppPage.signupScreen,
+                      arguments: SignupArgs(old: true),
+                      (route) => false,
+                    );
                   },
                 );
                 //             Navigator.pushNamed(

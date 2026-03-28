@@ -68,7 +68,7 @@ class VillagePresidentModel {
         gender: json["gender"],
         mobileNo: json["mobile_no"],
         whatsappNo: json["whatsapp_no"] ?? '',
-        email: json["email"],
+        email: json["email"] ?? '',
         villageName: json["village_name"],
         address: json["address"],
         isNewMember: json["is_new_member"],

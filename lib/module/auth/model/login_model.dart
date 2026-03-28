@@ -12,12 +12,20 @@ class LoginModel {
   final String villageName;
   final String villageCode;
   final String address;
+  final String plotNo;
+  final String societyName;
+  final String areaName;
+  final String landmark;
+  final String pincode;
   final dynamic isNewMember;
   final dynamic oldMemberId;
   final dynamic oldMemberIdCard;
   final String idProofFront;
   final String idProofBack;
   final String occupation;
+  final String education;
+  final String degree;
+  final String bloodGroup;
   final int active;
   final String password;
   final dynamic rememberToken;
@@ -65,6 +73,14 @@ class LoginModel {
     required this.token,
     required this.name,
     required this.roles,
+    required this.plotNo,
+    required this.societyName,
+    required this.areaName,
+    required this.landmark,
+    required this.pincode,
+    required this.education,
+    required this.degree,
+    required this.bloodGroup,
   });
 
   factory LoginModel.fromJson(Map<String, dynamic> json) => LoginModel(
@@ -99,6 +115,14 @@ class LoginModel {
     deletedAt: json["deleted_at"],
     token: json["token"] ?? '',
     name: json["name"],
+    plotNo: json["plot_no"] ?? '',
+    societyName: json["society_name"] ?? '',
+    areaName: json["area_name"] ?? '',
+    landmark: json["landmark"] ?? '',
+    pincode: json["pincode"] ?? '',
+    education: json["education"] ?? '',
+    degree: json["degree"] ?? '',
+    bloodGroup: json["blood_group"] ?? '',
     roles:
         json["roles"] == null
             ? []
@@ -135,6 +159,14 @@ class LoginModel {
     "deleted_at": deletedAt,
     "token": token,
     "name": name,
+    "plot_no": plotNo,
+    "society_name": societyName,
+    "area_name": areaName,
+    "landmark": landmark,
+    "pincode": pincode,
+    "education": education,
+    "degree": degree,
+    "blood_group": bloodGroup,
     "roles": List<dynamic>.from(roles.map((x) => x.toJson())),
   };
 

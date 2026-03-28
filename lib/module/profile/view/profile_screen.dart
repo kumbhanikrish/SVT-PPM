@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:svt_ppm/main.dart';
+import 'package:svt_ppm/module/auth/model/auth_arguments.dart';
 import 'package:svt_ppm/module/auth/model/login_model.dart';
 import 'package:svt_ppm/module/home/cubit/home_cubit.dart';
 import 'package:svt_ppm/utils/constant/app_page.dart';
@@ -30,27 +31,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     loadLoginData();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<HomeCubit>().memberFamily(context, pageName: 'profile');
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    HomeCubit homeCubit = BlocProvider.of<HomeCubit>(context);
-    homeCubit.memberFamily(context, pageName: 'profile');
+    // HomeCubit homeCubit = BlocProvider.of<HomeCubit>(context);
+    // homeCubit.memberFamily(context, pageName: 'profile');
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar(
-        title: 'Profile',
-        actions: [],
-      ),
+      appBar: CustomAppBar(title: 'Profile', actions: []),
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(right: 10, bottom: 20),
         child: FloatingActionButton(
           onPressed: () => _showAddMemberDialog(context),
           backgroundColor: AppColor.themePrimaryColor,
           elevation: 4,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           child: const Icon(Icons.add, color: AppColor.whiteColor, size: 32),
         ),
       ),
@@ -135,7 +138,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 padding: const EdgeInsets.all(2),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(color: AppColor.themeSecondaryColor.withOpacity(0.5), width: 1),
+                  border: Border.all(
+                    color: AppColor.themeSecondaryColor.withOpacity(0.5),
+                    width: 1,
+                  ),
                 ),
                 child: ClipOval(
                   child: CustomCachedImage(
@@ -194,12 +200,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 color: Colors.grey.shade400,
                 size: 26,
               ),
-              onPressed: () {
-                Navigator.pushNamed(
+              onPressed: () async {
+                await Navigator.pushNamed(
                   context,
                   AppPage.editProfileScreen,
                   arguments: {'userData': model},
                 );
+                loadLoginData();
               },
             ),
           ),
@@ -286,11 +293,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Navigator.pushNamed(
                   context,
                   AppPage.addMemberScreen,
-                  arguments: {
-                    'addMember': true,
-                    'edit': true,
-                    'member': member,
-                  },
+                  arguments: AddMemberArgs(
+                    addMember: true,
+                    edit: true,
+                    member: member,
+                  ),
                 );
               },
             ),
@@ -315,14 +322,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Navigator.pushNamed(
           context,
           AppPage.addMemberScreen,
-          arguments: {'old': false, 'addMember': true},
+          arguments: AddMemberArgs(old: false, addMember: true),
         );
       },
       cancelOnTap: () {
         Navigator.pushNamed(
           context,
           AppPage.addMemberScreen,
-          arguments: {'old': true, 'addMember': true},
+          arguments: AddMemberArgs(old: true, addMember: true),
         );
       },
     );

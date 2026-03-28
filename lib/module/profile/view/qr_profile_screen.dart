@@ -49,7 +49,7 @@ class _QrProfileScreenState extends State<QrProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
-      appBar: CustomAppBar(title: 'My QR Profile'),
+      appBar: CustomAppBar(title: 'My QR Profile', actions: []),
       body: ValueListenableBuilder<LoginModel?>(
         valueListenable: loginModelNotifier,
         builder: (context, userModel, child) {
