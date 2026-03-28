@@ -4,10 +4,10 @@ import 'package:svt_ppm/module/app_features/view/comity/comity_see_all_screen.da
 import 'package:svt_ppm/module/app_features/view/exam/exam_see_all_screen.dart';
 import 'package:svt_ppm/module/app_features/view/kit/kit_detail_screen.dart';
 import 'package:svt_ppm/module/app_features/view/kit/kit_payment_distributor_payment_screen.dart';
-import 'package:svt_ppm/module/app_features/view/schema/role_schema_registration_user_screen.dart';
-import 'package:svt_ppm/module/app_features/view/schema/schema_content_screen.dart';
-import 'package:svt_ppm/module/app_features/view/schema/role_schema_registration_screen.dart';
-import 'package:svt_ppm/module/app_features/view/schema/select_document_screen.dart';
+import 'package:svt_ppm/module/app_features/view/scheme/role_scheme_registration_user_screen.dart';
+import 'package:svt_ppm/module/app_features/view/scheme/scheme_content_screen.dart';
+import 'package:svt_ppm/module/app_features/view/scheme/role_scheme_registration_screen.dart';
+import 'package:svt_ppm/module/app_features/view/scheme/select_document_screen.dart';
 import 'package:svt_ppm/module/auth/view/auth_screen.dart';
 import 'package:svt_ppm/module/auth/view/member_screen.dart';
 import 'package:svt_ppm/module/auth/view/signup_screen.dart';
@@ -19,6 +19,7 @@ import 'package:svt_ppm/module/event/view/event_screen.dart';
 import 'package:svt_ppm/module/event/view/event_view_all_Screen.dart';
 import 'package:svt_ppm/module/home/view/home_screen.dart';
 import 'package:svt_ppm/module/profile/view/edit_profile_screen.dart';
+import 'package:svt_ppm/module/profile/view/add_member_screen.dart';
 import 'package:svt_ppm/module/profile/view/profile_screen.dart';
 import 'package:svt_ppm/module/profile/view/show_proof_screen.dart';
 
@@ -30,6 +31,9 @@ final Map<String, WidgetBuilder> appRoutes = {
   AppPage.signupScreen:
       (context) =>
           SignupScreen(data: ModalRoute.of(context)?.settings.arguments),
+  AppPage.addMemberScreen:
+      (context) =>
+          AddMemberScreen(data: ModalRoute.of(context)?.settings.arguments),
   // AppPage.selectionScreen:
   //     (context) => SelectionScreen(
   //       arguments: ModalRoute.of(context)?.settings.arguments,
@@ -52,8 +56,8 @@ final Map<String, WidgetBuilder> appRoutes = {
       (context) => EditProfileScreen(
         argument: ModalRoute.of(context)?.settings.arguments,
       ),
-  AppPage.schemaContentScreen:
-      (context) => SchemaContentScreen(
+  AppPage.schemeContentScreen:
+      (context) => SchemeContentScreen(
         argument: ModalRoute.of(context)?.settings.arguments,
       ),
   AppPage.comitySeeAllScreen:
@@ -77,10 +81,10 @@ final Map<String, WidgetBuilder> appRoutes = {
       ),
 
   // AppPage.selectLanguageScreen: (context) => LanguageSelectScreen(),
-  AppPage.roleSchemaRegistrationScreen:
-      (context) => RoleSchemaRegistrationScreen(),
-  AppPage.roleSchemaRegistrationUserScreen:
-      (context) => RoleSchemaRegistrationUserScreen(
+  AppPage.roleSchemeRegistrationScreen:
+      (context) => RoleSchemeRegistrationScreen(),
+  AppPage.roleSchemeRegistrationUserScreen:
+      (context) => RoleSchemeRegistrationUserScreen(
         argument: ModalRoute.of(context)?.settings.arguments,
       ),
   AppPage.dataEntryScreen: (context) => DataEntryScreen(),

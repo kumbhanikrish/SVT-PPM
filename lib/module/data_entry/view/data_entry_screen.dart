@@ -35,7 +35,7 @@ class _DataEntryScreenState extends State<DataEntryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.whiteColor,
-      appBar: CustomAppBar(title: 'Data Entry', actions: []),
+      appBar: CustomAppBar(title: 'Gate Entry', actions: []),
       body: RefreshIndicator(
         backgroundColor: AppColor.whiteColor,
         color: AppColor.themePrimaryColor,

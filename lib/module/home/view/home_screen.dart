@@ -47,7 +47,7 @@
 // // //   @override
 // // //   Widget build(BuildContext context) {
 // // //     List<StaticModel> appFeaturesList = [
-// // //       StaticModel(image: AppImage.kit, title: 'Schema'),
+// // //       StaticModel(image: AppImage.kit, title: 'Scheme'),
 // // //       StaticModel(image: AppImage.comity, title: 'Kit'),
 // // //       StaticModel(image: AppImage.exam, title: 'Exam (GK)'),
 // // //       StaticModel(image: AppImage.comity, title: 'Comity'),
@@ -287,7 +287,7 @@
 // // //                           Navigator.pushNamed(
 // // //                             context,
 // // //                             AppPage.appFeatureScreen,
-// // //                             arguments: {'title': 'Schema'},
+// // //                             arguments: {'title': 'Scheme'},
 // // //                           );
 // // //                         } else if (index == 1) {
 // // //                           Navigator.pushNamed(
@@ -423,7 +423,7 @@
 // //   @override
 // //   Widget build(BuildContext context) {
 // //     List<StaticModel> appFeaturesList = [
-// //       StaticModel(image: AppImage.kit, title: 'Schema'),
+// //       StaticModel(image: AppImage.kit, title: 'Scheme'),
 // //       StaticModel(image: AppImage.comity, title: 'Kit'),
 // //       StaticModel(image: AppImage.exam, title: 'Exam (GK)'),
 // //       StaticModel(image: AppImage.comity, title: 'Comity'),
@@ -638,7 +638,7 @@
 // //                           Navigator.pushNamed(
 // //                             context,
 // //                             AppPage.appFeatureScreen,
-// //                             arguments: {'title': 'Schema'},
+// //                             arguments: {'title': 'Scheme'},
 // //                           );
 // //                         } else if (index == 1) {
 // //                           Navigator.pushNamed(
@@ -848,7 +848,7 @@
 //   @override
 //   Widget build(BuildContext context) {
 //     List<StaticModel> appFeaturesList = [
-//       StaticModel(image: AppImage.kit, title: 'Schema'),
+//       StaticModel(image: AppImage.kit, title: 'Scheme'),
 //       StaticModel(image: AppImage.comity, title: 'Kit'),
 //       StaticModel(image: AppImage.exam, title: 'Exam (GK)'),
 //       StaticModel(image: AppImage.comity, title: 'Comity'),
@@ -1081,7 +1081,7 @@
 //                           Navigator.pushNamed(
 //                             context,
 //                             AppPage.appFeatureScreen,
-//                             arguments: {'title': 'Schema'},
+//                             arguments: {'title': 'Scheme'},
 //                           );
 //                         } else if (index == 1) {
 //                           Navigator.pushNamed(
@@ -1284,10 +1284,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     List<StaticModel> appFeaturesList = [
-      StaticModel(image: AppImage.schema, title: 'Schema'),
+      StaticModel(image: AppImage.scheme, title: 'Scheme'),
       StaticModel(image: AppImage.kit, title: 'Kit'),
       StaticModel(image: AppImage.exam, title: 'Exam (GK)'),
-      StaticModel(image: AppImage.comity, title: 'Comity'),
+      StaticModel(image: AppImage.comity, title: 'Committee'),
     ];
 
     HomeCubit homeCubit = BlocProvider.of<HomeCubit>(context);
@@ -1295,7 +1295,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
-        title: 'SVTPPM',
+        title: 'SVTPSS',
         actions: [
           ValueListenableBuilder<LoginModel?>(
             valueListenable: loginModelNotifier,
@@ -1599,7 +1599,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         } else {
                           String pageTitle = '';
                           if (index == 0) {
-                            pageTitle = 'Schema';
+                            pageTitle = 'Scheme';
                           } else if (index == 1) {
                             pageTitle = 'Kit';
                           } else if (index == 2) {

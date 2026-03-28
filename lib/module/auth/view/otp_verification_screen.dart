@@ -46,7 +46,7 @@ class OtpVerificationScreen extends StatelessWidget {
           fontWeight: FontWeight.w600,
         ),
         CustomText(
-          text: 'Please enter the 6 digit code sent to your mobile no.',
+          text: 'Please enter the 4 digit code sent to your mobile no.',
           fontSize: 12,
           color: AppColor.hintColor,
           fontWeight: FontWeight.w500,

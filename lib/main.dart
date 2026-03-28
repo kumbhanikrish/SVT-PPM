@@ -15,8 +15,8 @@ import 'package:svt_ppm/local_data/local_data_sever.dart';
 import 'package:svt_ppm/module/app_features/cubit/community/community_cubit.dart';
 import 'package:svt_ppm/module/app_features/cubit/exam/exam_cubit.dart';
 import 'package:svt_ppm/module/app_features/cubit/kits/kits_cubit.dart';
-import 'package:svt_ppm/module/app_features/cubit/role_schemas_registration/role_schemas_registration_cubit.dart';
-import 'package:svt_ppm/module/app_features/cubit/schemas/schemas_cubit.dart';
+import 'package:svt_ppm/module/app_features/cubit/role_schemes_registration/role_schemes_registration_cubit.dart';
+import 'package:svt_ppm/module/app_features/cubit/schemes/schemes_cubit.dart';
 import 'package:svt_ppm/module/auth/cubit/auth_cubit.dart';
 import 'package:svt_ppm/module/data_entry/cubit/data_entry_cubit.dart';
 import 'package:svt_ppm/module/home/cubit/home_cubit.dart';
@@ -187,7 +187,7 @@ dynamic providers = [
   BlocProvider(create: (context) => FrontImageCubit()),
   BlocProvider(create: (context) => BackImageCubit()),
   BlocProvider(create: (context) => RadioCubit()),
-  BlocProvider(create: (context) => SchemasCubit()),
+  BlocProvider(create: (context) => SchemesCubit()),
   BlocProvider(create: (context) => SelectRelationCubit()),
   BlocProvider(create: (context) => SelectStandardCubit()),
   BlocProvider(create: (context) => ProfileCubit()),
@@ -199,6 +199,6 @@ dynamic providers = [
   BlocProvider(create: (context) => LanguageCubit()),
   BlocProvider(create: (context) => ChangeBorder2Cubit()),
   BlocProvider(create: (context) => DataEntryCubit()),
-  BlocProvider(create: (context) => RoleSchemasRegistrationCubit()),
+  BlocProvider(create: (context) => RoleSchemesRegistrationCubit()),
   BlocProvider(create: (context) => StatusRadioCubit()),
 ];

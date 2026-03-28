@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:sizer/sizer.dart';
-import 'package:svt_ppm/module/app_features/cubit/schemas/schemas_cubit.dart';
-import 'package:svt_ppm/module/app_features/model/schemas_model.dart';
+import 'package:svt_ppm/module/app_features/cubit/schemes/schemes_cubit.dart';
+import 'package:svt_ppm/module/app_features/model/schemes_model.dart';
 import 'package:svt_ppm/module/app_features/model/village_president_model.dart';
 import 'package:svt_ppm/utils/constant/app_page.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
@@ -15,14 +15,14 @@ import 'package:svt_ppm/utils/widgets/custom_list_tile.dart';
 void customVillagePresidentBottomSheet(
   BuildContext context, {
   required Set<int> selectedMemberIds,
-  required int schemaId,
+  required int schemeId,
   required List<Document> documents,
 }) {
-  SchemasCubit schemasCubit = BlocProvider.of<SchemasCubit>(context);
+  SchemesCubit schemesCubit = BlocProvider.of<SchemesCubit>(context);
   List<VillagePresidentModel> villagePresidentList = [];
   Set<int> selectedVillagePresidentIds = {};
 
-  schemasCubit.villagePresident(context);
+  schemesCubit.villagePresident(context);
 
   customBottomSheet(
     context,
@@ -35,7 +35,7 @@ void customVillagePresidentBottomSheet(
           context,
           AppPage.selectDocumentScreen,
           arguments: {
-            'schemaId': schemaId,
+            'schemeId': schemeId,
             'selectedVillagePresidentIds': selectedVillagePresidentIds.toList(),
             'memberId': selectedMemberIds.first,
             'documents': documents,
@@ -55,9 +55,9 @@ void customVillagePresidentBottomSheet(
                 const Gap(10),
                 SizedBox(
                   height: 40.h,
-                  child: BlocBuilder<SchemasCubit, SchemasState>(
+                  child: BlocBuilder<SchemesCubit, SchemesState>(
                     builder: (context, state) {
-                      if (state is GetSchemasState) {
+                      if (state is GetSchemesState) {
                         villagePresidentList = state.villagePresidentList;
                       }
 

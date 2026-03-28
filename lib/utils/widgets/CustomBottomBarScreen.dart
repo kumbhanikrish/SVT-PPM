@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:svt_ppm/module/app_features/view/app_feature_screen.dart';
 import 'package:svt_ppm/module/auth/model/login_model.dart';
 import 'package:svt_ppm/module/home/cubit/home_cubit.dart';
-import 'package:svt_ppm/module/app_features/cubit/schemas/schemas_cubit.dart';
+import 'package:svt_ppm/module/app_features/cubit/schemes/schemes_cubit.dart';
 import 'package:svt_ppm/module/app_features/cubit/kits/kits_cubit.dart'; // ✅ Kit Cubit Import
 import 'package:svt_ppm/module/app_features/cubit/exam/exam_cubit.dart'; // ✅ Exam Cubit Import
 import 'package:svt_ppm/module/home/view/app_drawer.dart';
@@ -33,8 +33,8 @@ class _CustomBottomBarScreenState extends State<CustomBottomBarScreen> {
       context.read<HomeCubit>().init();
       context.read<HomeCubit>().getHomeData(context);
 
-      // 2. Schema Data Call
-      context.read<SchemasCubit>().getSchemasData(context);
+      // 2. Scheme Data Call
+      context.read<SchemesCubit>().getSchemesData(context);
 
       // 3. Kit Data Call (જેથી Kit દેખાય)
       final kitsCubit = context.read<KitsCubit>();
@@ -51,7 +51,7 @@ class _CustomBottomBarScreenState extends State<CustomBottomBarScreen> {
   // ✅ સ્ક્રીનનું લિસ્ટ
   final List<Widget> _pages = [
     const HomeScreen(),
-    const AppFeatureScreen(data: {'title': 'Schema'}),
+    const AppFeatureScreen(data: {'title': 'Scheme'}),
     const AppFeatureScreen(data: {'title': 'Kit'}),
     const AppFeatureScreen(data: {'title': 'Exam (GK)'}),
     const ProfileScreen(),
@@ -125,7 +125,7 @@ class _CustomBottomBarScreenState extends State<CustomBottomBarScreen> {
                       ? Icons.description
                       : Icons.description_outlined,
                 ),
-                label: 'Schema',
+                label: 'Scheme',
               ),
               BottomNavigationBarItem(
                 icon: Icon(

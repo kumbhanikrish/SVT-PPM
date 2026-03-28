@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:sizer/sizer.dart';
-import 'package:svt_ppm/module/app_features/cubit/schemas/schemas_cubit.dart';
+import 'package:svt_ppm/module/app_features/cubit/schemes/schemes_cubit.dart';
 import 'package:svt_ppm/module/auth/model/login_model.dart';
 import 'package:svt_ppm/module/home/cubit/home_cubit.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';

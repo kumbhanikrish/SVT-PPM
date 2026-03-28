@@ -12,11 +12,11 @@ class AppApi {
   static String memberFamily = 'member-family';
   static String eventsRegistration = 'events-registration';
 
-  /// Schema Flow
-  static String schema = 'schemas';
+  /// Scheme Flow
+  static String scheme = 'schemas';
   static String villagePresident = 'village-president';
-  static String schemasRegistration = 'schemas-registration';
-  static String schemasRegistrationChangeStatus =
+  static String schemesRegistration = 'schemas-registration';
+  static String schemesRegistrationChangeStatus =
       'schemas-registration-change-status';
 
   /// Kit Flow

@@ -17,6 +17,7 @@ class LoginModel {
   final dynamic oldMemberIdCard;
   final String idProofFront;
   final String idProofBack;
+  final String occupation;
   final int active;
   final String password;
   final dynamic rememberToken;
@@ -54,6 +55,7 @@ class LoginModel {
     required this.idProofFront,
     required this.familyHeadId,
     required this.idProofBack,
+    required this.occupation,
     required this.active,
     required this.password,
     required this.rememberToken,
@@ -78,6 +80,7 @@ class LoginModel {
     standard: json["standard"] ?? '',
     memberFamilyCard: json["memberFamilyCard"] ?? '',
     mobileNo: json["mobile_no"],
+    occupation: json["occupation"] ?? '',
     whatsappNo: json["whatsapp_no"] ?? '',
     email: json["email"] ?? '',
     villageName: json["village_name"],
@@ -125,6 +128,7 @@ class LoginModel {
     "password": password,
     "standard": standard,
     "relation": relation,
+    "occupation": occupation,
     "remember_token": rememberToken,
     "created_at": createdAt.toIso8601String(),
     "updated_at": updatedAt.toIso8601String(),

@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:svt_ppm/module/app_features/cubit/schemas/schemas_cubit.dart';
+import 'package:svt_ppm/module/app_features/cubit/schemes/schemes_cubit.dart';
 import 'package:svt_ppm/module/auth/model/login_model.dart';
 import 'package:svt_ppm/module/home/model/home_model.dart';
 import 'package:svt_ppm/module/home/repo/home_repo.dart';

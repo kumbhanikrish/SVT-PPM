@@ -76,9 +76,9 @@ class AppDrawer extends StatelessWidget {
 
                     _drawerItem(
                       context,
-                      title: "Schema",
+                      title: "Scheme",
                       route: AppPage.appFeatureScreen,
-                      arguments: {'title': 'Schema'},
+                      arguments: {'title': 'Scheme'},
             
                     ),
 
@@ -88,15 +88,15 @@ class AppDrawer extends StatelessWidget {
                     ])) ...[
                       _drawerItem(
                         context,
-                        title: "Schema Registration",
-                        route: AppPage.roleSchemaRegistrationScreen,
+                        title: "Scheme Registration",
+                        route: AppPage.roleSchemeRegistrationScreen,
                         
                       ),
                     ],
                     if (UserSession.hasRole(UserRoles.getEntry)) ...[
                       _drawerItem(
                         context,
-                        title: "Get Entry",
+                        title: "Gate Entry",
                         route: AppPage.dataEntryScreen,
                  
                       ),
@@ -187,11 +187,11 @@ class AppDrawer extends StatelessWidget {
         return Icons.person;
       case "Family Detail":
         return Icons.family_restroom;
-      case "Schema":
+      case "Scheme":
         return Icons.description;
-      case "Schema Registration":
+      case "Scheme Registration":
         return Icons.how_to_reg;
-      case "Get Entry":
+      case "Gate Entry":
         return Icons.post_add;
       case "Kit Distributor":
         return Icons.local_shipping;
@@ -235,10 +235,10 @@ class AppDrawer extends StatelessWidget {
 
       log('headIdheadId :$headId');
       
-            if ((title == 'Schema' ||
+            if ((title == 'Scheme' ||
                     title == 'Kit' ||
                     title == 'Exam (GK)' ||
-                    title == 'Schema Registration') &&
+                    title == 'Scheme Registration') &&
                 headId != 0) {
               showCustomDialog(
                 context,

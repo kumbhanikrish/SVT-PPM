@@ -71,9 +71,7 @@ class ApiServices {
       if (showLoading) {
         await EasyLoading.show();
       }
-      log(
-        'FormData.fromMap(params)FormData.fromMap(params) ::${FormData.fromMap(params).fields}',
-      );
+      log('paramsparamsparamsparams  ::${params}');
       final response = await dio.post(
         '$baseUrl$url',
 

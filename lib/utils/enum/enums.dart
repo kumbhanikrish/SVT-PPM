@@ -1,5 +1,16 @@
 enum UserType { male, female }
 
+UserType? userTypeFromString(String? gender) {
+  if (gender == null) return null;
+  if (gender.toLowerCase() == 'male') return UserType.male;
+  if (gender.toLowerCase() == 'female') return UserType.female;
+  return null;
+}
+
+String userTypeToString(UserType type) {
+  return type == UserType.male ? 'Male' : 'Female';
+}
+
 enum StatusType { pending, approved, rejected }
 
 class UserRoles {

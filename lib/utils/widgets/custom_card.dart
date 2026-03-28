@@ -726,7 +726,7 @@ class KitCard extends StatelessWidget {
   }
 }
 
-class SchemaItemCard extends StatelessWidget {
+class SchemeItemCard extends StatelessWidget {
   final String title;
   final String? image;
   final String status;
@@ -735,7 +735,7 @@ class SchemaItemCard extends StatelessWidget {
   final VoidCallback cardOnTap;
   final VoidCallback onTap;
 
-  const SchemaItemCard({
+  const SchemeItemCard({
     super.key,
     required this.title,
     required this.image,
@@ -789,13 +789,13 @@ class SchemaItemCard extends StatelessWidget {
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
                             return SvgPicture.asset(
-                              AppImage.schemaDetails,
+                              AppImage.schemeDetails,
                               fit: BoxFit.cover,
                             );
                           },
                         )
                         : SvgPicture.asset(
-                          AppImage.schemaDetails,
+                          AppImage.schemeDetails,
                           fit: BoxFit.cover,
                         ),
               ),

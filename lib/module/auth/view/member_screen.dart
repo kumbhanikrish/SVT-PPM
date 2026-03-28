@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:svt_ppm/module/auth/cubit/auth_cubit.dart';
 import 'package:svt_ppm/module/auth/model/login_model.dart';
 import 'package:svt_ppm/module/home/cubit/home_cubit.dart';
+import 'package:svt_ppm/local_data/local_data_sever.dart';
 import 'package:svt_ppm/utils/constant/app_page.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
 import 'package:svt_ppm/utils/widgets/custom_app_bar.dart';
@@ -20,19 +21,26 @@ class MemberScreen extends StatefulWidget {
 
 class _MemberScreenState extends State<MemberScreen> {
   List<LoginModel> noOfMemberList = [];
+  LoginModel? userProfile;
   @override
   void initState() {
     super.initState();
+    getUserData();
     BlocProvider.of<HomeCubit>(
       context,
     ).memberFamily(context, pageName: 'profile');
+  }
+
+  getUserData() async {
+    userProfile = await LocalDataSaver().getLoginModel();
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'Member',
+        title: 'Select Profile',
         notificationOnTap: () {},
 
         actions: const [],
@@ -59,6 +67,90 @@ class _MemberScreenState extends State<MemberScreen> {
 
             child: Column(
               children: [
+                if (userProfile != null)
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 16),
+                    decoration: BoxDecoration(
+                      color: AppColor.whiteColor,
+                      border: Border.all(
+                        color: AppColor.dividerColor,
+                        width: 0.5,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: ListTile(
+                      leading: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: AppColor.themePrimaryColor,
+                            width: 2,
+                          ),
+                        ),
+                        child: ClipOval(
+                          child: CustomCachedImage(
+                            imageUrl: userProfile!.photo,
+                            height: 45,
+                            width: 45,
+                          ),
+                        ),
+                      ),
+                      title: CustomText(
+                        text: userProfile!.name,
+                        color: AppColor.themePrimaryColor,
+                      ),
+                      subtitle: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColor.themePrimaryColor.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.badge_outlined,
+                                color: AppColor.themePrimaryColor,
+                                size: 20,
+                              ),
+                              const Gap(10),
+                              Flexible(
+                                child: CustomText(
+                                  text:
+                                      "ID: ${userProfile!.memberId} ${'(${userProfile!.relation})'}",
+                                  color: AppColor.themePrimaryColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  overflow: true,
+                                  maxLines: 1,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      trailing: InkWell(
+                        onTap: () {
+                          Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            AppPage.homeScreen,
+                            (route) => false,
+                          );
+                        },
+                        child: CustomText(
+                          text: 'Home',
+                          color: AppColor.themePrimaryColor,
+                        ),
+                      ),
+                    ),
+                  ),
+
                 Expanded(
                   child: ListView.separated(
                     itemCount: noOfMemberList.length,
@@ -94,38 +186,41 @@ class _MemberScreenState extends State<MemberScreen> {
                             text: noOfMemberList[index].name,
                             color: AppColor.whiteColor,
                           ),
-                          subtitle: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 8,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(
-                                  Icons.badge_outlined,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                                const Gap(10),
-
-                                Flexible(
-                                  child: CustomText(
-                                    text:
-                                        "ID: ${noOfMemberList[index].memberId} ${'(${noOfMemberList[index].relation})'}",
-                                    color: AppColor.whiteColor,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    overflow: true,
-                                    maxLines: 1,
+                          subtitle: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(
+                                    Icons.badge_outlined,
+                                    color: Colors.white,
+                                    size: 20,
                                   ),
-                                ),
-                              ],
+                                  const Gap(10),
+
+                                  Flexible(
+                                    child: CustomText(
+                                      text:
+                                          "ID: ${noOfMemberList[index].memberId} ${'(${noOfMemberList[index].relation})'}",
+                                      color: AppColor.whiteColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      overflow: true,
+                                      maxLines: 1,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                           trailing: InkWell(
@@ -150,19 +245,6 @@ class _MemberScreenState extends State<MemberScreen> {
                       return Gap(16);
                     },
                   ),
-                ),
-                CustomTextButton(
-                  text: 'Back to home',
-                  color: AppColor.hintColor,
-                  fontSize: 14,
-                  
-                  onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                      context,
-                      AppPage.homeScreen,
-                      (route) => false,
-                    );
-                  },
                 ),
               ],
             ),

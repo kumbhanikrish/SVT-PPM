@@ -9,7 +9,7 @@ class AppImage {
   static String circle = 'assets/image/circle.svg';
   static String user = 'assets/image/user.jpg';
   static String calendar = 'assets/image/calendar.svg';
-  static String schema = 'assets/image/schema.png';
+  static String scheme = 'assets/image/scheme.png';
   static String kit = 'assets/image/kit.png';
   static String comity = 'assets/image/comity.png';
   static String exam = 'assets/image/exam.png';
@@ -18,7 +18,7 @@ class AppImage {
   static String dateTime = 'assets/image/date-time.svg';
   static String pastEvent = 'assets/image/past-event.svg';
   static String date = 'assets/image/date.svg';
-  static String schemaDetails = 'assets/image/schema-details.svg';
+  static String schemeDetails = 'assets/image/scheme-details.svg';
   static String pdf = 'assets/image/pdf.svg';
   static String president = 'assets/image/president.svg';
   static String editProfile = 'assets/image/edit_profile.svg';

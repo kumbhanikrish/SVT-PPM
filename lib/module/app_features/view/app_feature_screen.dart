@@ -2,7 +2,7 @@
 // import 'package:svt_ppm/module/app_features/view/comity/comity_section.dart';
 // import 'package:svt_ppm/module/app_features/view/exam/exam_screen.dart';
 // import 'package:svt_ppm/module/app_features/view/kit/kit_screen.dart';
-// import 'package:svt_ppm/module/app_features/view/schema/schema_section.dart';
+// import 'package:svt_ppm/module/app_features/view/scheme/scheme_section.dart';
 // import 'package:svt_ppm/utils/widgets/custom_app_bar.dart';
 //
 // class AppFeatureScreen extends StatelessWidget {
@@ -13,8 +13,8 @@
 //     String title = data['title'];
 //     Widget buildScreen(String title) {
 //       switch (title) {
-//         case 'Schema':
-//           return SchemaSection();
+//         case 'Scheme':
+//           return SchemeSection();
 //         case 'Kit':
 //           return KitScreen();
 //
@@ -38,7 +38,7 @@ import 'package:flutter/material.dart';
 import 'package:svt_ppm/module/app_features/view/comity/comity_section.dart';
 import 'package:svt_ppm/module/app_features/view/exam/exam_screen.dart';
 import 'package:svt_ppm/module/app_features/view/kit/kit_screen.dart';
-import 'package:svt_ppm/module/app_features/view/schema/schema_section.dart';
+import 'package:svt_ppm/module/app_features/view/scheme/scheme_section.dart';
 import 'package:svt_ppm/utils/widgets/custom_app_bar.dart';
 
 class AppFeatureScreen extends StatelessWidget {
@@ -59,8 +59,8 @@ class AppFeatureScreen extends StatelessWidget {
     // ✅ સ્ક્રીન નક્કી કરવાનું લોજિક
     Widget buildScreen(String title) {
       switch (title) {
-        case 'Schema':
-          return SchemaSection();
+        case 'Scheme':
+          return SchemeSection();
         case 'Kit':
           return KitScreen();
         case 'Exam (GK)':
