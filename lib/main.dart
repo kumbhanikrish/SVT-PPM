@@ -145,7 +145,7 @@ class MyApp extends StatelessWidget {
             child: MaterialApp(
               navigatorKey: navigatorKey,
               debugShowCheckedModeBanner: false,
-              title: 'Flutter Demo',
+              title: 'SVTPSS',
               theme: ThemeData(
                 dialogTheme: DialogThemeData(
                   backgroundColor: AppColor.whiteColor,

@@ -450,8 +450,16 @@ class VillageCubit extends Cubit<VillageState> {
     List<VillageModel> villageList = [];
     String villageName = '';
     String villageCode = '';
+
+    // Capture current values if set (e.g. from setVillageName called during init)
+    if (state is VillageLoaded) {
+      villageName = (state as VillageLoaded).villageName;
+      villageCode = (state as VillageLoaded).villageCode;
+    }
+
     final Response response = await authRepo.village(context);
     if (response.data['success'] == true) {
+      // Re-check state after async call to get the latest values
       if (state is VillageLoaded) {
         villageName = (state as VillageLoaded).villageName;
         villageCode = (state as VillageLoaded).villageCode;
@@ -473,15 +481,17 @@ class VillageCubit extends Cubit<VillageState> {
   }
 
   void setVillageName({required String name, required String nameCode}) {
+    List<VillageModel> villageList = [];
     if (state is VillageLoaded) {
-      final currentState = state as VillageLoaded;
-      emit(
-        VillageLoaded(
-          villageList: currentState.villageList,
-          villageName: name,
-          villageCode: nameCode,
-        ),
-      );
+      villageList = (state as VillageLoaded).villageList;
     }
+
+    emit(
+      VillageLoaded(
+        villageList: villageList,
+        villageName: name,
+        villageCode: nameCode,
+      ),
+    );
   }
 }

@@ -90,7 +90,7 @@ class Item {
     memberName: json["member_name"],
     memberPhoto: json["member_photo"],
     adminStatus: json["admin_status"],
-    villagePresidentStatus: json["village_president_status"],
+    villagePresidentStatus: json["gam_pratinidhi_status"] ?? '',
     remarks: json["remarks"],
   );
 
@@ -100,7 +100,7 @@ class Item {
     "member_name": memberName,
     "member_photo": memberPhoto,
     "admin_status": adminStatus,
-    "village_president_status": villagePresidentStatus,
+    "gam_pratinidhi_status": villagePresidentStatus,
     "remarks": remarks,
   };
 }

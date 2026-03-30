@@ -71,7 +71,7 @@ class ApiServices {
       if (showLoading) {
         await EasyLoading.show();
       }
-      log('paramsparamsparamsparams  ::${params}');
+      log('paramsparamsparamsparams  ::$params');
       final response = await dio.post(
         '$baseUrl$url',
 

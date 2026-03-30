@@ -39,6 +39,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   TextEditingController whatsappController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController addressController = TextEditingController();
+  TextEditingController villageController = TextEditingController();
   List<VillageModel> villageList = [];
   bool isSameAsMobile = false;
 
@@ -59,9 +60,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final villageCubit = BlocProvider.of<VillageCubit>(context);
-      villageCubit.fetchVillage(context);
-
       final userData = widget.argument['userData'] as LoginModel;
       firstNameController.text = userData.firstName;
       middleNameController.text = userData.middleName;
@@ -76,6 +74,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       landmarkController.text = userData.landmark;
       pincodeController.text = userData.pincode;
       occupationController.text = userData.occupation;
+      villageController.text = userData.villageName;
 
       setState(() {
         educationValue = educationList.firstWhere(
@@ -131,18 +130,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       BlocProvider.of<RadioCubit>(context).selectUserType(
         userData.gender == 'Male' ? UserType.male : UserType.female,
       );
-
-      villageCubit.setVillageName(
-        name: userData.villageName,
-        nameCode: userData.villageCode,
-      );
     });
   }
 
   @override
   Widget build(BuildContext context) {
     LoginModel userData = widget.argument['userData'];
-    VillageCubit villageCubit = BlocProvider.of<VillageCubit>(context);
     ProfileCubit profileCubit = BlocProvider.of<ProfileCubit>(context);
     AuthCubit authCubit = BlocProvider.of<AuthCubit>(context);
     RadioCubit radioCubit = context.watch<RadioCubit>();
@@ -259,7 +252,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   }
                 },
               ),
-              const Gap(10),
+              Gap(10),
               Row(
                 children: [
                   SizedBox(
@@ -268,6 +261,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     child: Checkbox(
                       value: isSameAsMobile,
                       activeColor: AppColor.themePrimaryColor,
+
                       onChanged: (val) {
                         setState(() {
                           isSameAsMobile = val ?? false;
@@ -353,57 +347,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
                   Gap(20),
 
-                  BlocBuilder<VillageCubit, VillageState>(
-                    builder: (context, state) {
-                      VillageModel? initialVillage;
-                      if (state is VillageLoaded) {
-                        log('initialVillage ::${initialVillage}');
-                        villageList = state.villageList;
-                        String targetVillage =
-                            state.villageName.isNotEmpty
-                                ? state.villageName
-                                : userData.villageName;
-                        String targetCode =
-                            state.villageCode.isNotEmpty
-                                ? state.villageCode
-                                : userData.villageCode;
-
-                        initialVillage = villageList.firstWhere(
-                          (item) =>
-                              item.name == targetVillage ||
-                              item.code == targetCode ||
-                              item.key == targetVillage,
-                          orElse:
-                              () =>
-                                  villageList.isEmpty
-                                      ? VillageModel(
-                                        id: 0,
-                                        name: '',
-                                        key: '',
-                                        code: '',
-                                        createdAt: DateTime.now(),
-                                        updatedAt: DateTime.now(),
-                                      )
-                                      : villageList.first,
-                        );
-                      }
-                      return CustomDropWonFiled<VillageModel>(
-                        text: '',
-                        title: 'Village',
-                        hintText: 'Select Village',
-                        initialItem: initialVillage,
-                        selectColor: AppColor.themePrimaryColor,
-                        items: villageList,
-
-                        onChanged: (value) {
-                          log('value?.key ??  ::${value?.name ?? ''}');
-                          villageCubit.setVillageName(
-                            name: value?.name ?? '',
-                            nameCode: value?.code ?? '',
-                          );
-                        },
-                      );
-                    },
+                  CustomTextField(
+                    labelText: 'Village',
+                    hintText: 'Village',
+                    controller: villageController,
+                    readOnly: true,
                   ),
                   Gap(20),
                   Row(
@@ -514,7 +462,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     fontWeight: FontWeight.bold,
                     color: AppColor.themePrimaryColor,
                   ),
-                  const Gap(10),
+                  Gap(20),
 
                   CustomTextField(
                     labelText: 'Area Name',
@@ -525,52 +473,36 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                   Gap(20),
 
-                  Row(
-                    children: [
-                      Expanded(
-                        child: CustomTextField(
-                          labelText: 'Plot/Flat No.',
-                          hintText: 'Plot/Flat No',
-                          controller: plotNoController,
-                          readOnly: true,
-                          maxLength: 20,
-                        ),
-                      ),
-                      const Gap(10),
-                      Expanded(
-                        child: CustomTextField(
-                          labelText: 'Society/Building Name',
-                          hintText: 'Society/Building Name',
-                          controller: societyNameController,
-                          readOnly: true,
-                          maxLength: 20,
-                        ),
-                      ),
-                    ],
+                  CustomTextField(
+                    labelText: 'Plot/Flat No.',
+                    hintText: 'Plot/Flat No',
+                    controller: plotNoController,
+                    readOnly: true,
+                    maxLength: 20,
+                  ),
+                  Gap(20),
+                  CustomTextField(
+                    labelText: 'Society/Building Name',
+                    hintText: 'Society/Building Name',
+                    controller: societyNameController,
+                    readOnly: true,
+                    maxLength: 20,
                   ),
                   Gap(20),
 
-                  Row(
-                    children: [
-                      Expanded(
-                        child: CustomTextField(
-                          labelText: 'Nearby/Locality',
-                          hintText: 'Nearby/Locality',
-                          controller: landmarkController,
-                          readOnly: true,
-                          maxLength: 20,
-                        ),
-                      ),
-                      const Gap(10),
-                      Expanded(
-                        child: CustomTextField(
-                          labelText: 'Pincode',
-                          hintText: 'Pincode',
-                          controller: pincodeController,
-                          readOnly: true,
-                        ),
-                      ),
-                    ],
+                  CustomTextField(
+                    labelText: 'Nearby/Locality',
+                    hintText: 'Nearby/Locality',
+                    controller: landmarkController,
+                    readOnly: true,
+                    maxLength: 20,
+                  ),
+                  Gap(20),
+                  CustomTextField(
+                    labelText: 'Pincode',
+                    hintText: 'Pincode',
+                    controller: pincodeController,
+                    readOnly: true,
                   ),
                   const Gap(20),
                   // CustomTextField(
@@ -679,72 +611,61 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        child: BlocBuilder<VillageCubit, VillageState>(
-          builder: (context, state) {
-            String villageName = '';
-            if (state is VillageLoaded) {
-              villageName = state.villageName;
+        child: CustomButton(
+          text: 'Update',
+          onTap: () async {
+            if (userData.mobileNo == mobileController.text) {
+              profileCubit.addMemberFamily(
+                context,
+                memberId: userData.id,
+                edit: true,
+                editProfile: true,
+                firstName: firstNameController.text,
+                middleName: middleNameController.text,
+                lastName: lastNameController.text,
+                mobileNo: mobileController.text,
+                whatsappNo: whatsappController.text,
+                email: emailController.text,
+                address: addressController.text,
+                villageName: villageController.text,
+                relation: relationValue.toLowerCase(),
+                standard: standardValue,
+                education: educationValue,
+                degree:
+                    degreeValue == 'Other (Type New)'
+                        ? otherDegreeController.text.trim()
+                        : degreeValue,
+                bloodGroup: bloodGroupValue,
+                gender: radioCubit.state == UserType.male ? 'Male' : 'Female',
+                photo: profileImageCubit.state?.path ?? userData.photo,
+              );
+            } else {
+              mobileVerification(
+                context,
+                profileCubit: profileCubit,
+                number: mobileController.text,
+                authCubit: authCubit,
+                memberId: userData.id,
+                firstName: firstNameController.text,
+                middleName: middleNameController.text,
+                lastName: lastNameController.text,
+                mobileNo: mobileController.text,
+                whatsappNo: whatsappController.text,
+                email: emailController.text,
+                address: addressController.text,
+                villageName: villageController.text,
+                relation: relationValue.toLowerCase(),
+                standard: standardValue,
+                education: educationValue,
+                degree:
+                    degreeValue == 'Other (Type New)'
+                        ? otherDegreeController.text.trim()
+                        : degreeValue,
+                bloodGroup: bloodGroupValue,
+                gender: radioCubit.state == UserType.male ? 'Male' : 'Female',
+                photo: profileImageCubit.state?.path ?? userData.photo,
+              );
             }
-
-            return CustomButton(
-              text: 'Update',
-              onTap: () async {
-                if (userData.mobileNo == mobileController.text) {
-                  profileCubit.addMemberFamily(
-                    context,
-                    memberId: userData.id,
-                    edit: true,
-                    editProfile: true,
-                    firstName: firstNameController.text,
-                    middleName: middleNameController.text,
-                    lastName: lastNameController.text,
-                    mobileNo: mobileController.text,
-                    whatsappNo: whatsappController.text,
-                    email: emailController.text,
-                    address: addressController.text,
-                    villageName: villageName,
-                    relation: relationValue.toLowerCase(),
-                    standard: standardValue,
-                    education: educationValue,
-                    degree:
-                        degreeValue == 'Other (Type New)'
-                            ? otherDegreeController.text.trim()
-                            : degreeValue,
-                    bloodGroup: bloodGroupValue,
-                    gender:
-                        radioCubit.state == UserType.male ? 'Male' : 'Female',
-                    photo: profileImageCubit.state?.path ?? userData.photo,
-                  );
-                } else {
-                  mobileVerification(
-                    context,
-                    profileCubit: profileCubit,
-                    number: mobileController.text,
-                    authCubit: authCubit,
-                    memberId: userData.id,
-                    firstName: firstNameController.text,
-                    middleName: middleNameController.text,
-                    lastName: lastNameController.text,
-                    mobileNo: mobileController.text,
-                    whatsappNo: whatsappController.text,
-                    email: emailController.text,
-                    address: addressController.text,
-                    villageName: villageName,
-                    relation: relationValue.toLowerCase(),
-                    standard: standardValue,
-                    education: educationValue,
-                    degree:
-                        degreeValue == 'Other (Type New)'
-                            ? otherDegreeController.text.trim()
-                            : degreeValue,
-                    bloodGroup: bloodGroupValue,
-                    gender:
-                        radioCubit.state == UserType.male ? 'Male' : 'Female',
-                    photo: profileImageCubit.state?.path ?? userData.photo,
-                  );
-                }
-              },
-            );
           },
         ),
       ),

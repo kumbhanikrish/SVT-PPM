@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:svt_ppm/module/auth/cubit/auth_cubit.dart';
 import 'package:svt_ppm/module/auth/view/login_screen.dart';
 import 'package:svt_ppm/module/auth/view/otp_verification_screen.dart';
-import 'package:svt_ppm/module/auth/view/signup_screen.dart';
-import 'package:svt_ppm/module/auth/model/auth_arguments.dart';
 import 'package:svt_ppm/utils/constant/app_image.dart';
 import 'package:svt_ppm/utils/widgets/custom_error_toast.dart';
 import 'package:svt_ppm/utils/widgets/curved_glow_painter.dart';

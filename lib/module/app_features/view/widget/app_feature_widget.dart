@@ -45,7 +45,7 @@ void customVillagePresidentBottomSheet(
     },
 
     showButton: true,
-    title: 'Village President',
+    title: 'Gam Pratinidhi',
     child: StatefulBuilder(
       builder: (BuildContext context, StateSetter setModalState) {
         return Flexible(

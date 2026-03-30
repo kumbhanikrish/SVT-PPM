@@ -54,93 +54,106 @@ class _SelectDocumentScreenState extends State<SelectDocumentScreen> {
         notificationOnTap: () {},
         actions: const [],
       ),
-      body: ListView.separated(
-        padding: const EdgeInsets.all(15),
-        itemCount: documents.length,
-        separatorBuilder: (BuildContext context, int index) => const Gap(15),
-        itemBuilder: (BuildContext context, int index) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomText(
-                text: documents[index].name,
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
-              ),
-
-              const Gap(5),
-              Stack(
-                children: [
-                  InkWell(
-                    onTap: () => _pickImage(index),
-                    child: Container(
-                      height: 150,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: AppColor.themePrimaryColor,
-                          width: 1,
-                        ),
-                        borderRadius: BorderRadius.circular(12),
-                        color: AppColor.fillColor,
+      body:
+          documents.isEmpty
+              ? Center(
+                child: CustomEmpty(
+                  text: 'No Document Found - Click on submit button',
+                ),
+              )
+              : ListView.separated(
+                padding: const EdgeInsets.all(15),
+                itemCount: documents.length,
+                separatorBuilder:
+                    (BuildContext context, int index) => const Gap(15),
+                itemBuilder: (BuildContext context, int index) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomText(
+                        text: documents[index].name,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
                       ),
-                      child:
-                          selectedImages.containsKey(index)
-                              ? ClipRRect(
-                                borderRadius: BorderRadius.circular(11),
-                                child: Image.file(
-                                  selectedImages[index]!,
-                                  fit: BoxFit.cover,
+
+                      const Gap(5),
+                      Stack(
+                        children: [
+                          InkWell(
+                            onTap: () => _pickImage(index),
+                            child: Container(
+                              height: 150,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: AppColor.themePrimaryColor,
+                                  width: 1,
                                 ),
-                              )
-                              : Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(AppImage.uploadImage),
-                                    Gap(10),
-                                    const CustomText(
-                                      text: 'Tap to upload image',
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: AppColor.blackColor,
-                                    ),
-                                  ],
+                                borderRadius: BorderRadius.circular(12),
+                                color: AppColor.fillColor,
+                              ),
+                              child:
+                                  selectedImages.containsKey(index)
+                                      ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(11),
+                                        child: Image.file(
+                                          selectedImages[index]!,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                      : Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SvgPicture.asset(
+                                              AppImage.uploadImage,
+                                            ),
+                                            Gap(10),
+                                            const CustomText(
+                                              text: 'Tap to upload image',
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600,
+                                              color: AppColor.blackColor,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                            ),
+                          ),
+
+                          if (selectedImages.containsKey(index))
+                            Positioned(
+                              top: 5,
+                              right: 5,
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selectedImages.remove(
+                                      index,
+                                    ); // ઈમેજ દૂર કરવા માટે
+                                  });
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.red, // લાલ રંગનું બટન
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.close,
+                                    color: Colors.white,
+                                    size: 18,
+                                  ),
                                 ),
                               ),
-                    ),
-                  ),
-
-                  if (selectedImages.containsKey(index))
-                    Positioned(
-                      top: 5,
-                      right: 5,
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            selectedImages.remove(index); // ઈમેજ દૂર કરવા માટે
-                          });
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: const BoxDecoration(
-                            color: Colors.red, // લાલ રંગનું બટન
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Icons.close,
-                            color: Colors.white,
-                            size: 18,
-                          ),
-                        ),
+                            ),
+                        ],
                       ),
-                    ),
-                ],
+                    ],
+                  );
+                },
               ),
-            ],
-          );
-        },
-      ),
       bottomNavigationBar: BottomAppBar(
         child: CustomButton(
           text: 'Submit',

@@ -102,14 +102,15 @@ class CustomTitleName extends StatelessWidget {
 }
 
 class CustomEmpty extends StatelessWidget {
-  const CustomEmpty({super.key});
+  final String? text;
+  const CustomEmpty({super.key, this.text});
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Center(
         child: CustomText(
-          text: 'Not Found!!!',
+          text: text ?? 'Not Found!!!',
           fontSize: 12,
           fontWeight: FontWeight.w500,
           color: AppColor.subTitleColor,

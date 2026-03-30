@@ -44,7 +44,6 @@ class CustomCachedImage extends StatelessWidget {
   final double width;
   final double height;
   final BorderRadiusGeometry? borderRadius;
-
   const CustomCachedImage({
     super.key,
     required this.imageUrl,

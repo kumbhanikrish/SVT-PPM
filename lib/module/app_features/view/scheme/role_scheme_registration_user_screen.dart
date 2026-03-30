@@ -155,7 +155,7 @@ class RoleSchemeRegistrationUserScreen extends StatelessWidget {
                                           CrossAxisAlignment.start,
                                       children: [
                                         CustomText(
-                                          text: 'Village President',
+                                          text: 'Gam Pratinidhi',
                                           fontSize: 12,
                                           fontWeight: FontWeight.w600,
                                           color: AppColor.blackColor,

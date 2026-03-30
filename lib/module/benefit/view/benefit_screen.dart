@@ -5,7 +5,6 @@ import 'package:gap/gap.dart';
 import 'package:svt_ppm/utils/theme/colors.dart';
 import 'package:svt_ppm/utils/widgets/custom_app_bar.dart';
 import 'package:svt_ppm/utils/widgets/custom_text.dart';
-import 'package:svt_ppm/utils/widgets/custom_widget.dart';
 
 class BenefitScreen extends StatefulWidget {
   const BenefitScreen({super.key});

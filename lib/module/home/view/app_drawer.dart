@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:svt_ppm/main.dart';
 import 'package:svt_ppm/module/auth/cubit/auth_cubit.dart';
 import 'package:svt_ppm/module/auth/model/login_model.dart';
@@ -32,31 +33,48 @@ class AppDrawer extends StatelessWidget {
                 child: ListView(
                   padding: EdgeInsets.zero,
                   children: [
-                    UserAccountsDrawerHeader(
-                      decoration: BoxDecoration(
-                        color: AppColor.themePrimaryColor,
-                      ),
-                      accountName: CustomText(
-                        text: model?.name ?? "",
-                        color: AppColor.whiteColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                      accountEmail: CustomText(
-                        text: model?.email ?? "",
-                        color: AppColor.whiteColor,
-                        fontSize: 14,
-                      ),
-                      currentAccountPicture: CircleAvatar(
-                        backgroundColor: AppColor.whiteColor,
-                        backgroundImage:
-                            model?.photo != null && model!.photo.isNotEmpty
-                                ? NetworkImage(model.photo)
-                                : null,
-                        child:
-                            model?.photo == null || model!.photo.isEmpty
-                                ? const Icon(Icons.person, size: 40)
-                                : null,
+                    Container(
+                      color: AppColor.themePrimaryColor,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Gap(50),
+                            CircleAvatar(
+                              radius: 40,
+                              backgroundColor: AppColor.whiteColor,
+                              backgroundImage:
+                                  model?.photo != null &&
+                                          model!.photo.isNotEmpty
+                                      ? NetworkImage(model.photo)
+                                      : null,
+                              child:
+                                  model?.photo == null || model!.photo.isEmpty
+                                      ? const Icon(Icons.person, size: 40)
+                                      : null,
+                            ),
+                            Gap(10),
+                            CustomText(
+                              text: model?.name ?? "",
+                              color: AppColor.whiteColor,
+                              fontWeight: FontWeight.bold,
+
+                              fontSize: 18,
+                            ),
+                            if (model?.email != null &&
+                                model!.email.isNotEmpty) ...[
+                              Gap(5),
+
+                              CustomText(
+                                text: model.email,
+                                color: AppColor.whiteColor,
+                                fontSize: 14,
+                              ),
+                            ],
+                            Gap(20),
+                          ],
+                        ),
                       ),
                     ),
 

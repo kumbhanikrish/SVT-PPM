@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
@@ -120,7 +119,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
         context.read<RadioCubit>().selectUserType(
-          member?.gender?.toLowerCase() == 'male'
+          member?.gender.toLowerCase() == 'male'
               ? UserType.male
               : UserType.female,
         );
