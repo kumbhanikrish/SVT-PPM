@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:svt_ppm/main.dart';
 
@@ -20,7 +21,19 @@ import 'package:svt_ppm/utils/widgets/custom_error_toast.dart';
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
-  AuthCubit() : super(AuthInitial());
+  AuthCubit() : super(AuthInitial()) {
+    loadLoginData();
+  }
+
+  final ValueNotifier<LoginModel?> loginModelNotifier = ValueNotifier(null);
+
+  Future<void> loadLoginData() async {
+    loginModelNotifier.value = await localDataSaver.getLoginModel();
+  }
+
+  void updateLoginModel(LoginModel model) {
+    loginModelNotifier.value = model;
+  }
 
   AuthRepo authRepo = AuthRepo();
   FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -112,12 +125,20 @@ class AuthCubit extends Cubit<AuthState> {
       await localDataSaver.setHeadId(loginModel.familyHeadId);
       await UserSession.load();
       await localDataSaver.setAuthToken(loginModel.token);
-
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        AppPage.memberScreen,
-        (route) => false,
-      );
+      updateLoginModel(loginModel);
+      if (switchUser == false) {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppPage.memberScreen,
+          (route) => false,
+        );
+      } else {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppPage.homeScreen,
+          (route) => false,
+        );
+      }
     }
     return response;
   }
@@ -356,7 +377,40 @@ class ImageUploadCubit extends Cubit<File?> {
   Future<void> pickImage() async {
     final XFile? file = await picker.pickImage(source: ImageSource.gallery);
     if (file != null) {
-      emit(File(file.path));
+      final croppedFile = await ImageCropper().cropImage(
+        sourcePath: file.path,
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: 'Crop Document',
+            toolbarColor: Colors.blue,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false,
+            aspectRatioPresets: [
+              CropAspectRatioPreset.original,
+              CropAspectRatioPreset.square,
+              CropAspectRatioPreset.ratio3x2,
+              CropAspectRatioPreset.ratio4x3,
+              CropAspectRatioPreset.ratio16x9,
+            ],
+            cropStyle: CropStyle.rectangle,
+          ),
+          IOSUiSettings(
+            title: 'Crop Document',
+            aspectRatioPresets: [
+              CropAspectRatioPreset.original,
+              CropAspectRatioPreset.square,
+              CropAspectRatioPreset.ratio3x2,
+              CropAspectRatioPreset.ratio4x3,
+              CropAspectRatioPreset.ratio16x9,
+            ],
+            cropStyle: CropStyle.rectangle,
+          ),
+        ],
+      );
+      if (croppedFile != null) {
+        emit(File(croppedFile.path));
+      }
     }
   }
 
@@ -373,7 +427,40 @@ class FrontImageCubit extends Cubit<File?> {
   Future<void> pickImage() async {
     final XFile? file = await picker.pickImage(source: ImageSource.gallery);
     if (file != null) {
-      emit(File(file.path));
+      final croppedFile = await ImageCropper().cropImage(
+        sourcePath: file.path,
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: 'Crop Document',
+            toolbarColor: Colors.blue,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false,
+            aspectRatioPresets: [
+              CropAspectRatioPreset.original,
+              CropAspectRatioPreset.square,
+              CropAspectRatioPreset.ratio3x2,
+              CropAspectRatioPreset.ratio4x3,
+              CropAspectRatioPreset.ratio16x9,
+            ],
+            cropStyle: CropStyle.rectangle,
+          ),
+          IOSUiSettings(
+            title: 'Crop Document',
+            aspectRatioPresets: [
+              CropAspectRatioPreset.original,
+              CropAspectRatioPreset.square,
+              CropAspectRatioPreset.ratio3x2,
+              CropAspectRatioPreset.ratio4x3,
+              CropAspectRatioPreset.ratio16x9,
+            ],
+            cropStyle: CropStyle.rectangle,
+          ),
+        ],
+      );
+      if (croppedFile != null) {
+        emit(File(croppedFile.path));
+      }
     }
   }
 
@@ -390,7 +477,40 @@ class BackImageCubit extends Cubit<File?> {
   Future<void> pickImage() async {
     final XFile? file = await picker.pickImage(source: ImageSource.gallery);
     if (file != null) {
-      emit(File(file.path));
+      final croppedFile = await ImageCropper().cropImage(
+        sourcePath: file.path,
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: 'Crop Document',
+            toolbarColor: Colors.blue,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false,
+            aspectRatioPresets: [
+              CropAspectRatioPreset.original,
+              CropAspectRatioPreset.square,
+              CropAspectRatioPreset.ratio3x2,
+              CropAspectRatioPreset.ratio4x3,
+              CropAspectRatioPreset.ratio16x9,
+            ],
+            cropStyle: CropStyle.rectangle,
+          ),
+          IOSUiSettings(
+            title: 'Crop Document',
+            aspectRatioPresets: [
+              CropAspectRatioPreset.original,
+              CropAspectRatioPreset.square,
+              CropAspectRatioPreset.ratio3x2,
+              CropAspectRatioPreset.ratio4x3,
+              CropAspectRatioPreset.ratio16x9,
+            ],
+            cropStyle: CropStyle.rectangle,
+          ),
+        ],
+      );
+      if (croppedFile != null) {
+        emit(File(croppedFile.path));
+      }
     }
   }
 
@@ -407,7 +527,28 @@ class ProfileImageCubit extends Cubit<File?> {
   Future<void> pickImage({required ImageSource source}) async {
     final XFile? file = await picker.pickImage(source: source);
     if (file != null) {
-      emit(File(file.path));
+      final croppedFile = await ImageCropper().cropImage(
+        sourcePath: file.path,
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: 'Edit Image',
+            toolbarColor: Colors.blue,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.square,
+            lockAspectRatio: true,
+            aspectRatioPresets: [CropAspectRatioPreset.square],
+            cropStyle: CropStyle.circle,
+          ),
+          IOSUiSettings(
+            title: 'Edit Image',
+            aspectRatioPresets: [CropAspectRatioPreset.square],
+            cropStyle: CropStyle.circle,
+          ),
+        ],
+      );
+      if (croppedFile != null) {
+        emit(File(croppedFile.path));
+      }
     }
   }
 

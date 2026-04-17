@@ -1190,6 +1190,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:sizer/sizer.dart';
 import 'package:svt_ppm/main.dart';
+import 'package:svt_ppm/module/auth/cubit/auth_cubit.dart';
 import 'package:svt_ppm/module/auth/model/login_model.dart';
 import 'package:svt_ppm/module/home/cubit/home_cubit.dart';
 import 'package:svt_ppm/module/home/model/home_model.dart';
@@ -1216,7 +1217,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final ValueNotifier<LoginModel?> loginModelNotifier = ValueNotifier(null);
   HomeModel homeModel = HomeModel(broadcasts: [], events: []);
 
   final PageController _eventPageController = PageController(
@@ -1236,14 +1236,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<Broadcast> filteredEvents = [];
 
-  Future<void> loadLoginData() async {
-    final model = await localDataSaver.getLoginModel();
-    loginModelNotifier.value = model;
-  }
+
 
   @override
   void initState() {
-    loadLoginData();
     HomeCubit homeCubit = BlocProvider.of<HomeCubit>(context);
     homeCubit.getHomeData(context);
     _startAutoScroll();
@@ -1298,7 +1294,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: 'SVTPSS',
         actions: [
           ValueListenableBuilder<LoginModel?>(
-            valueListenable: loginModelNotifier,
+            valueListenable: context.read<AuthCubit>().loginModelNotifier,
             builder: (BuildContext context, LoginModel? model, Widget? child) {
               String imageUrl = model?.photo ?? '';
               return InkWell(
@@ -1326,7 +1322,9 @@ class _HomeScreenState extends State<HomeScreen> {
           Gap(12),
         ],
       ),
-      drawer: AppDrawer(loginModelNotifier: loginModelNotifier),
+      drawer: AppDrawer(
+        loginModelNotifier: context.read<AuthCubit>().loginModelNotifier,
+      ),
 
       body: RefreshIndicator(
         backgroundColor: AppColor.whiteColor,

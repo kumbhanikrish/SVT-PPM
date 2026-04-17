@@ -43,3 +43,30 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# # Android related
+# **/android/.gradle/
+# **/android/local.properties
+# **/android/app/src/main/res/raw/google_services.json
+# **/android/app/google-services.json
+# *.keystore
+# *.jks
+
+# # iOS related
+# **/ios/Pods/
+# **/ios/.symlinks/
+# **/ios/Flutter/Flutter.framework
+# **/ios/Flutter/Flutter.podspec
+# **/ios/Flutter/Generated.xcconfig
+# **/ios/Flutter/app.flx
+# **/ios/Flutter/app.zip
+# **/ios/Flutter/flutter_assets/
+# **/ios/Flutter/flutter_export_environment.sh
+# **/ios/ServiceDefinitions.json
+# **/ios/Runner/GeneratedPluginRegistrant.h
+# **/ios/Runner/GeneratedPluginRegistrant.m
+# **/ios/Runner/GoogleService-Info.plist
+
+# # Gradle
+# .gradle/
+# build/

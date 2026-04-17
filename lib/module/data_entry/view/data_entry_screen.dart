@@ -24,6 +24,7 @@ class _DataEntryScreenState extends State<DataEntryScreen> {
   int totalMember = 0;
 
   bool hasScanned = false;
+  bool isScanning = true;
 
   @override
   void initState() {
@@ -50,27 +51,101 @@ class _DataEntryScreenState extends State<DataEntryScreen> {
             children: [
               SizedBox(
                 height: 62.h,
-                child: MobileScanner(
-                  controller: scannerController,
-                  onDetect: (capture) async {
-                    // 3. Stop the camera immediately so it stops looking for codes
-                    await scannerController.stop();
-
-                    final barcode = capture.barcodes.first;
-                    log('Scanned: ${barcode.rawValue}');
-
-                    // 4. Run your Cubit logic
-                    await BlocProvider.of<DataEntryCubit>(context).getEntry(
-                      context,
-                      sNumber: barcode.rawValue.toString(),
-                      scannerController: scannerController,
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final scanWindow = Rect.fromCenter(
+                      center: Offset(
+                        constraints.maxWidth / 2,
+                        constraints.maxHeight / 2,
+                      ),
+                      width: 250,
+                      height: 250,
                     );
+                    return Stack(
+                      children: [
+                        MobileScanner(
+                          controller: scannerController,
+                          scanWindow: scanWindow,
+                          onDetect: (capture) async {
+                            if (!isScanning) return;
+                            setState(() {
+                              isScanning = false;
+                            });
+                            // 3. Stop the camera immediately so it stops looking for codes
+                            await scannerController.stop();
 
-                    // 5. IMPORTANT: Add a slight delay before restarting
-                    // to give the user time to move the phone away.
-                    await Future.delayed(const Duration(milliseconds: 1500));
+                            final barcode = capture.barcodes.first;
+                            log('Scanned: ${barcode.rawValue}');
 
-                    // 6. Restart the camera hardware
+                            // 4. Run your Cubit logic
+                            await BlocProvider.of<DataEntryCubit>(
+                              context,
+                            ).getEntry(
+                              context,
+                              sNumber: barcode.rawValue.toString(),
+                              scannerController: scannerController,
+                            );
+
+                            // 5. IMPORTANT: Add a slight delay before restarting
+                            // to give the user time to move the phone away.
+                            await Future.delayed(
+                              const Duration(milliseconds: 1500),
+                            );
+
+                            setState(() {
+                              isScanning = true;
+                            });
+
+                            // 6. Restart the camera hardware
+                          },
+                        ),
+                        if (isScanning) ...[
+                          ClipRect(
+                            child: ColorFiltered(
+                              colorFilter: ColorFilter.mode(
+                                Colors.black.withOpacity(0.5),
+                                BlendMode.srcOut,
+                              ),
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    decoration: const BoxDecoration(
+                                      color: Colors.black,
+                                      backgroundBlendMode: BlendMode.dstOut,
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: Container(
+                                      width: 250,
+                                      height: 250,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              width: 250,
+                              height: 250,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: AppColor.themePrimaryColor,
+                                  width: 3,
+                                ),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
+                    );
                   },
                 ),
               ),

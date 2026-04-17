@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:svt_ppm/main.dart';
+import 'package:svt_ppm/module/auth/cubit/auth_cubit.dart';
 import 'package:svt_ppm/module/auth/model/auth_arguments.dart';
 import 'package:svt_ppm/module/auth/model/login_model.dart';
 import 'package:svt_ppm/module/home/cubit/home_cubit.dart';
@@ -19,17 +20,10 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final ValueNotifier<LoginModel?> loginModelNotifier = ValueNotifier(null);
   List<LoginModel> noOfMemberList = [];
-
-  Future<void> loadLoginData() async {
-    final model = await localDataSaver.getLoginModel();
-    loginModelNotifier.value = model;
-  }
 
   @override
   void initState() {
-    loadLoginData();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<HomeCubit>().memberFamily(context, pageName: 'profile');
     });
@@ -57,7 +51,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
       body: ValueListenableBuilder<LoginModel?>(
-        valueListenable: loginModelNotifier,
+        valueListenable: context.read<AuthCubit>().loginModelNotifier,
         builder: (context, model, child) {
           if (model == null) {
             return const Center(child: CircularProgressIndicator());
@@ -205,7 +199,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   AppPage.editProfileScreen,
                   arguments: {'userData': model},
                 );
-                loadLoginData();
               },
             ),
           ),

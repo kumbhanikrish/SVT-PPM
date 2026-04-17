@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart'; // image_picker import કરો
 import 'package:svt_ppm/module/app_features/cubit/schemes/schemes_cubit.dart';
 import 'package:svt_ppm/module/app_features/model/schemes_model.dart';
@@ -33,9 +34,43 @@ class _SelectDocumentScreenState extends State<SelectDocumentScreen> {
     );
 
     if (pickedFile != null) {
-      setState(() {
-        selectedImages[index] = File(pickedFile.path);
-      });
+      final croppedFile = await ImageCropper().cropImage(
+        sourcePath: pickedFile.path,
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: 'Crop Document',
+            toolbarColor: Colors.blue,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false,
+            aspectRatioPresets: [
+              CropAspectRatioPreset.original,
+              CropAspectRatioPreset.square,
+              CropAspectRatioPreset.ratio3x2,
+              CropAspectRatioPreset.ratio4x3,
+              CropAspectRatioPreset.ratio16x9,
+            ],
+            cropStyle: CropStyle.rectangle,
+          ),
+          IOSUiSettings(
+            title: 'Crop Document',
+            aspectRatioPresets: [
+              CropAspectRatioPreset.original,
+              CropAspectRatioPreset.square,
+              CropAspectRatioPreset.ratio3x2,
+              CropAspectRatioPreset.ratio4x3,
+              CropAspectRatioPreset.ratio16x9,
+            ],
+            cropStyle: CropStyle.rectangle,
+          ),
+        ],
+      );
+
+      if (croppedFile != null) {
+        setState(() {
+          selectedImages[index] = File( croppedFile.path);
+        });
+      }
     }
   }
 

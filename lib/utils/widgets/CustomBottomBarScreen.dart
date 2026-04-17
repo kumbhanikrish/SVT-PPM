@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:svt_ppm/module/app_features/view/app_feature_screen.dart';
+import 'package:svt_ppm/module/auth/cubit/auth_cubit.dart';
 import 'package:svt_ppm/module/auth/model/login_model.dart';
 import 'package:svt_ppm/module/home/cubit/home_cubit.dart';
 import 'package:svt_ppm/module/app_features/cubit/schemes/schemes_cubit.dart';
@@ -21,7 +22,6 @@ class CustomBottomBarScreen extends StatefulWidget {
 
 class _CustomBottomBarScreenState extends State<CustomBottomBarScreen> {
   int _selectedIndex = 0;
-  final ValueNotifier<LoginModel?> loginModelNotifier = ValueNotifier(null);
 
   @override
   void initState() {
@@ -70,7 +70,9 @@ class _CustomBottomBarScreenState extends State<CustomBottomBarScreen> {
       extendBody: true,
 
       body: IndexedStack(index: _selectedIndex, children: _pages),
-      drawer: AppDrawer(loginModelNotifier: loginModelNotifier),
+      drawer: AppDrawer(
+        loginModelNotifier: context.read<AuthCubit>().loginModelNotifier,
+      ),
 
       bottomNavigationBar: Container(
         height: 67, // ✅ હાઈટ 67

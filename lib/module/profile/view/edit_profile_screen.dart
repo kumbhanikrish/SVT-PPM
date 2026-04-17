@@ -91,7 +91,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         );
         relationValue = relationList.firstWhere(
           (e) => e.toLowerCase() == userData.relation.toLowerCase(),
-          orElse: () => userData.relation,
+          orElse: () => '',
         );
         degreeValue = userData.degree;
 
@@ -392,19 +392,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     children: [
                       Expanded(
                         child: CustomDropWonFiled<String>(
-                          title: 'Standard',
-                          hintText: 'Select Standard',
-                          items: standardList,
-                          text: standardValue,
-                          initialItem: standardValue,
-                          onChanged: (val) {
-                            setState(() => standardValue = val ?? '');
-                          },
-                        ),
-                      ),
-                      const Gap(10),
-                      Expanded(
-                        child: CustomDropWonFiled<String>(
                           title: 'Relation',
                           hintText: 'Select Relation',
                           items: relationList,
@@ -415,6 +402,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           },
                         ),
                       ),
+                      if (relationValue.toLowerCase() == 'son' ||
+                          relationValue.toLowerCase() == 'daughter') ...[
+                        const Gap(10),
+
+                        Expanded(
+                          child: CustomDropWonFiled<String>(
+                            title: 'Standard',
+                            hintText: 'Select Standard',
+                            items: standardList,
+                            text: standardValue,
+                            initialItem: standardValue,
+                            onChanged: (val) {
+                              setState(() => standardValue = val ?? '');
+                            },
+                          ),
+                        ),
+                        const Gap(10),
+                      ],
                     ],
                   ),
                   const Gap(20),

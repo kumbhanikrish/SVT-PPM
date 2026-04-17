@@ -26,8 +26,8 @@ class _MemberScreenState extends State<MemberScreen> {
     super.initState();
     getUserData();
     BlocProvider.of<HomeCubit>(
-      context,
-    ).memberFamily(context, pageName: 'profile');
+      context, 
+    ).memberFamily(context, pageName: 'switch_profile');
   }
 
   getUserData() async {

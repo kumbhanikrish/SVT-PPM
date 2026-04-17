@@ -22,20 +22,15 @@ class QrProfileScreen extends StatefulWidget {
 }
 
 class _QrProfileScreenState extends State<QrProfileScreen> {
-  final ValueNotifier<LoginModel?> loginModelNotifier = ValueNotifier(null);
   List<LoginModel> noOfMemberList = [];
   final PageController _pageController = PageController(viewportFraction: 0.85);
 
-  Future<void> loadLoginData() async {
-    final model = await localDataSaver.getLoginModel();
-    loginModelNotifier.value = model;
-  }
+
 
   @override
   void initState() {
-    loadLoginData();
     HomeCubit homeCubit = BlocProvider.of<HomeCubit>(context);
-    homeCubit.memberFamily(context, pageName: 'profile');
+    homeCubit.memberFamily(context, pageName: 'switch_profile');
     super.initState();
   }
 
@@ -51,7 +46,7 @@ class _QrProfileScreenState extends State<QrProfileScreen> {
       backgroundColor: Colors.grey.shade100,
       appBar: CustomAppBar(title: 'My QR Profile', actions: []),
       body: ValueListenableBuilder<LoginModel?>(
-        valueListenable: loginModelNotifier,
+        valueListenable: context.read<AuthCubit>().loginModelNotifier,
         builder: (context, userModel, child) {
           if (userModel == null) return const SizedBox();
 

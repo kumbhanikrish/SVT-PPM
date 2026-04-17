@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:svt_ppm/main.dart';
+import 'package:svt_ppm/module/auth/cubit/auth_cubit.dart';
 import 'package:svt_ppm/module/auth/model/login_model.dart';
 import 'package:svt_ppm/module/home/cubit/home_cubit.dart';
 import 'package:svt_ppm/module/profile/repo/profile_repo.dart';
@@ -204,6 +205,10 @@ class ProfileCubit extends Cubit<ProfileState> {
         LoginModel loginModel = LoginModel.fromJson(response.data['data']);
         await localDataSaver.setLoginData(loginModel);
 
+        if (context.mounted) {
+          context.read<AuthCubit>().updateLoginModel(loginModel);
+        }
+
         Navigator.pop(context);
 
         showCustomDialog(
@@ -237,4 +242,3 @@ class ProfileCubit extends Cubit<ProfileState> {
     return response;
   }
 }
- 

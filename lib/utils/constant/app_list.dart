@@ -1,12 +1,4 @@
-List<String> relationList = [
-  'Father',
-  'Mother',
-  'Son',
-  'Daughter',
-  'Brother',
-  'Spouse',
-  'Self',
-];
+List<String> relationList = ['Spouse', 'Son', 'Daughter', 'Self'];
 List<String> standardList = [
   'Playgroup',
   '1',
