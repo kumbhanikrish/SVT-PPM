@@ -171,6 +171,7 @@ class AuthCubit extends Cubit<AuthState> {
     String? education,
     String? degree,
     String? occupation,
+    String? pancardImage,
   }) async {
     // -------------------------------
     // VALIDATIONS
@@ -313,6 +314,15 @@ class AuthCubit extends Cubit<AuthState> {
       loginParams["photo"] = await MultipartFile.fromFile(
         photo,
         filename: photo.split('/').last,
+      );
+    }
+
+    if (pancardImage != null &&
+        pancardImage.isNotEmpty &&
+        !pancardImage.startsWith('http')) {
+      loginParams["pancard_image"] = await MultipartFile.fromFile(
+        pancardImage,
+        filename: pancardImage.split('/').last,
       );
     }
 
@@ -471,6 +481,56 @@ class FrontImageCubit extends Cubit<File?> {
 
 class BackImageCubit extends Cubit<File?> {
   BackImageCubit() : super(null);
+
+  final ImagePicker picker = ImagePicker();
+
+  Future<void> pickImage() async {
+    final XFile? file = await picker.pickImage(source: ImageSource.gallery);
+    if (file != null) {
+      final croppedFile = await ImageCropper().cropImage(
+        sourcePath: file.path,
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: 'Crop Document',
+            toolbarColor: Colors.blue,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false,
+            aspectRatioPresets: [
+              CropAspectRatioPreset.original,
+              CropAspectRatioPreset.square,
+              CropAspectRatioPreset.ratio3x2,
+              CropAspectRatioPreset.ratio4x3,
+              CropAspectRatioPreset.ratio16x9,
+            ],
+            cropStyle: CropStyle.rectangle,
+          ),
+          IOSUiSettings(
+            title: 'Crop Document',
+            aspectRatioPresets: [
+              CropAspectRatioPreset.original,
+              CropAspectRatioPreset.square,
+              CropAspectRatioPreset.ratio3x2,
+              CropAspectRatioPreset.ratio4x3,
+              CropAspectRatioPreset.ratio16x9,
+            ],
+            cropStyle: CropStyle.rectangle,
+          ),
+        ],
+      );
+      if (croppedFile != null) {
+        emit(File(croppedFile.path));
+      }
+    }
+  }
+
+  void removeImage() {
+    emit(null);
+  }
+}
+
+class PanCardImageCubit extends Cubit<File?> {
+  PanCardImageCubit() : super(null);
 
   final ImagePicker picker = ImagePicker();
 

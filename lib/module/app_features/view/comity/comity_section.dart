@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -51,6 +53,9 @@ class _ComitySectionState extends State<ComitySection> {
                     final String key = entry.key;
                     final dynamic value = entry.value;
                     String formattedTitle = formatTitle(key);
+                    log(
+                      'formattedTitle: $formattedTitle, Members Count: ${value is List ? value.length : (value != null ? 1 : 0)}',
+                    );
 
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,7 +105,10 @@ class _ComitySectionState extends State<ComitySection> {
                         value is List
                             ? value.isEmpty
                                 ? CustomEmpty()
-                                : Padding(
+                                : (key == 'karobari' ||
+                                    key == 'working' ||
+                                    key == 'yuva_yoddha')
+                                ? Padding(
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 16,
                                   ),
@@ -127,8 +135,29 @@ class _ComitySectionState extends State<ComitySection> {
                                                     key == 'yuva_yoddha'
                                                 ? ''
                                                 : member['mobile_no'],
-
                                         position: member['village_name'],
+                                      );
+                                    },
+                                  ),
+                                )
+                                : Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                  ),
+                                  child: ListView.separated(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    itemCount: value.length,
+                                    separatorBuilder:
+                                        (context, index) => const Gap(10),
+                                    itemBuilder: (context, index) {
+                                      final member = value[index];
+                                      return CustomPresidentCard(
+                                        image: member['photo'] ?? '',
+                                        name: member['name'] ?? '',
+                                        position: member['village_name'] ?? '',
+                                        // number: member['mobile_no'] ?? '',
                                       );
                                     },
                                   ),
@@ -142,9 +171,8 @@ class _ComitySectionState extends State<ComitySection> {
                               child: CustomPresidentCard(
                                 image: value['photo'] ?? '',
                                 name: value['name'] ?? '',
-                                position: value['village_name'],
-
-                                // des: 'Mobile: ${value['mobile_no']}',
+                                position: value['village_name'] ?? '',
+                                // number: value['mobile_no'] ?? '',
                               ),
                             ),
                         Gap(15),

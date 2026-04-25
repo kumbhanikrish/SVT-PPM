@@ -42,6 +42,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     String? idProofFront,
     String? idProofBack,
     bool? old,
+    String? pancardImage,
   }) async {
     // ---------------------------------------------------
     // VALIDATIONS
@@ -178,6 +179,18 @@ class ProfileCubit extends Cubit<ProfileState> {
       } else if (idProofBack != null && idProofBack.startsWith('http')) {
         params["id_proof_back"] = idProofBack;
       }
+    }
+
+    // PANCARD IMAGE
+    if (pancardImage != null &&
+        pancardImage.isNotEmpty &&
+        !pancardImage.startsWith('http')) {
+      params["pancard_image"] = await MultipartFile.fromFile(
+        pancardImage,
+        filename: pancardImage.split('/').last,
+      );
+    } else if (pancardImage != null && pancardImage.startsWith('http')) {
+      params["pancard_image"] = pancardImage;
     }
 
     // PHOTO

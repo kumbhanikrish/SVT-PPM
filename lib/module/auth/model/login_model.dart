@@ -38,6 +38,7 @@ class LoginModel {
   final String memberFamilyCard;
   final String standard;
   final int familyHeadId;
+  final String pancardImage;
   final List<Role> roles;
 
   LoginModel({
@@ -81,6 +82,7 @@ class LoginModel {
     required this.education,
     required this.degree,
     required this.bloodGroup,
+    required this.pancardImage,
   });
 
   factory LoginModel.fromJson(Map<String, dynamic> json) => LoginModel(
@@ -123,6 +125,7 @@ class LoginModel {
     education: json["education"] ?? '',
     degree: json["degree"] ?? '',
     bloodGroup: json["blood_group"] ?? '',
+    pancardImage: json["pancard_image"] ?? '',
     roles:
         json["roles"] == null
             ? []
@@ -167,6 +170,7 @@ class LoginModel {
     "education": education,
     "degree": degree,
     "blood_group": bloodGroup,
+    "pancard_image": pancardImage,
     "roles": List<dynamic>.from(roles.map((x) => x.toJson())),
   };
 

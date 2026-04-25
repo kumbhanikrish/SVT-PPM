@@ -34,6 +34,7 @@ mobileVerification(
   String? degree,
   String? bloodGroup,
   required String photo,
+  String? pancardImage,
 }) async {
   log('numbernumber ::$number');
   authCubit.sendOtp(context, number: number, login: false);
@@ -68,6 +69,7 @@ mobileVerification(
         degree: degree,
         bloodGroup: bloodGroup,
         photo: photo,
+        pancardImage: pancardImage,
       );
     },
   );

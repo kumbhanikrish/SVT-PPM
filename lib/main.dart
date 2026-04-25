@@ -199,4 +199,5 @@ dynamic providers = [
   BlocProvider(create: (context) => DataEntryCubit()),
   BlocProvider(create: (context) => RoleSchemesRegistrationCubit()),
   BlocProvider(create: (context) => StatusRadioCubit()),
+  BlocProvider(create: (context) => PanCardImageCubit()),
 ];

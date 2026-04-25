@@ -130,6 +130,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       BlocProvider.of<RadioCubit>(context).selectUserType(
         userData.gender == 'Male' ? UserType.male : UserType.female,
       );
+      context.read<PanCardImageCubit>().removeImage();
     });
   }
 
@@ -142,6 +143,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     ProfileImageCubit profileImageCubit = BlocProvider.of<ProfileImageCubit>(
       context,
     );
+    PanCardImageCubit panCardImageCubit = context.watch<PanCardImageCubit>();
 
     return Scaffold(
       appBar: CustomAppBar(title: 'Edit Profile', actions: []),
@@ -470,22 +472,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   Gap(20),
 
                   CustomTextField(
-                    labelText: 'Area Name',
-                    hintText: 'Area Name',
-                    controller: areaNameController,
-                    readOnly: true,
-                    maxLength: 20,
-                  ),
-                  Gap(20),
-
-                  CustomTextField(
                     labelText: 'Plot/Flat No.',
                     hintText: 'Plot/Flat No',
                     controller: plotNoController,
                     readOnly: true,
                     maxLength: 20,
                   ),
-                  Gap(20),
+                  const Gap(20),
                   CustomTextField(
                     labelText: 'Society/Building Name',
                     hintText: 'Society/Building Name',
@@ -493,8 +486,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     readOnly: true,
                     maxLength: 20,
                   ),
-                  Gap(20),
-
+                  const Gap(20),
+                  CustomTextField(
+                    labelText: 'Area Name',
+                    hintText: 'Area Name',
+                    controller: areaNameController,
+                    readOnly: true,
+                    maxLength: 20,
+                  ),
+                  const Gap(20),
                   CustomTextField(
                     labelText: 'Nearby/Locality',
                     hintText: 'Nearby/Locality',
@@ -502,14 +502,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     readOnly: true,
                     maxLength: 20,
                   ),
-                  Gap(20),
+                  const Gap(20),
                   CustomTextField(
                     labelText: 'Pincode',
                     hintText: 'Pincode',
                     controller: pincodeController,
                     readOnly: true,
                   ),
-                  const Gap(20),
+
                   // CustomTextField(
                   //   hintText: 'Enter Address',
                   //   labelText: 'Address',
@@ -609,6 +609,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   //     ),
                   //   ],
                   // ),
+                  const Gap(20),
+                  const CustomText(
+                    text: 'Pan Card',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  const Gap(10),
+                  _buildImageUpload(
+                    cubit: panCardImageCubit,
+                    title: 'Upload Pan Card',
+                    existingUrl: userData.pancardImage,
+                  ),
                 ],
               ),
             ],
@@ -643,6 +655,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 bloodGroup: bloodGroupValue,
                 gender: radioCubit.state == UserType.male ? 'Male' : 'Female',
                 photo: profileImageCubit.state?.path ?? userData.photo,
+                pancardImage:
+                    panCardImageCubit.state?.path ?? userData.pancardImage,
               );
             } else {
               mobileVerification(
@@ -669,10 +683,86 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 bloodGroup: bloodGroupValue,
                 gender: radioCubit.state == UserType.male ? 'Male' : 'Female',
                 photo: profileImageCubit.state?.path ?? userData.photo,
+                pancardImage:
+                    panCardImageCubit.state?.path ?? userData.pancardImage,
               );
             }
           },
         ),
+      ),
+    );
+  }
+
+  Widget _buildImageUpload({
+    required dynamic cubit,
+    required String title,
+    String? existingUrl,
+  }) {
+    return InkWell(
+      onTap: () => cubit.pickImage(),
+      child: Container(
+        height: 150,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: AppColor.themePrimaryColor.withOpacity(0.5),
+          ),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child:
+            cubit.state != null
+                ? Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.file(
+                        cubit.state!,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                      ),
+                    ),
+                    Positioned(
+                      top: 5,
+                      right: 5,
+                      child: CircleAvatar(
+                        backgroundColor: Colors.black54,
+                        radius: 12,
+                        child: IconButton(
+                          icon: const Icon(
+                            Icons.close,
+                            size: 12,
+                            color: Colors.white,
+                          ),
+                          onPressed: () => cubit.removeImage(),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+                : existingUrl != null && existingUrl.isNotEmpty
+                ? ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: CustomCachedImage(
+                    imageUrl: existingUrl,
+                    width: double.infinity,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                )
+                : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.cloud_upload_outlined,
+                      size: 40,
+                      color: AppColor.themePrimaryColor,
+                    ),
+                    const Gap(10),
+                    Text(
+                      title,
+                      style: TextStyle(color: AppColor.themePrimaryColor),
+                    ),
+                  ],
+                ),
       ),
     );
   }

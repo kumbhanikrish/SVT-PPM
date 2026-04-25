@@ -28,17 +28,20 @@ class _ShowProofScreenState extends State<ShowProofScreen> {
     <style>
         body {
             margin: 0;
-            padding: 20px;
+            padding: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
             background-color: #f8f9fa;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            box-sizing: border-box;
         }
         .card-wrapper {
             width: 100%;
-            max-width: 600px;
+            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -46,19 +49,17 @@ class _ShowProofScreenState extends State<ShowProofScreen> {
         }
         img {
             max-width: 100%;
-            height: auto;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 0 !important;
+            box-shadow: none;
         }
         table {
             width: 100% !important;
-            max-width: 100% !important;
-            height: auto !important;
+            height: 100% !important;
             border-collapse: collapse;
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            background: transparent !important;
+            box-shadow: none;
         }
     </style>
 </head>

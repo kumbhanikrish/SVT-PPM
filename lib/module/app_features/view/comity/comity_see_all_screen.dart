@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svt_ppm/utils/widgets/custom_app_bar.dart';
 import 'package:svt_ppm/utils/widgets/custom_card.dart';
+import 'package:svt_ppm/utils/widgets/custom_text.dart';
 
 class ComitySeeAllScreen extends StatelessWidget {
   final dynamic argument;
@@ -19,24 +20,27 @@ class ComitySeeAllScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 25),
-        child: ListView.separated(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
+        child:
+            comityData.isEmpty
+                ? CustomEmpty()
+                : ListView.separated(
+                  shrinkWrap: true,
 
-          itemCount: comityData.length,
-          itemBuilder: (context, index) {
-            final member = comityData[index];
-            return CustomPresidentCard(
-              image: member['photo'],
-              name: member['name'],
-              number: showNo ? member['mobile_no'] : '',
-              position: member['village_name'],
-            );
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return Gap(16);
-          },
-        ),
+                  // physics: const NeverScrollableScrollPhysics(),
+                  itemCount: comityData.length,
+                  itemBuilder: (context, index) {
+                    final member = comityData[index];
+                    return CustomPresidentCard(
+                      image: member['photo'],
+                      name: member['name'],
+                      number: showNo ? member['mobile_no'] : '',
+                      position: member['village_name'],
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return Gap(16);
+                  },
+                ),
       ),
     );
   }

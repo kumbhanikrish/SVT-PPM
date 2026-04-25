@@ -63,6 +63,7 @@ class _SignupScreenState extends State<SignupScreen> {
     context.read<ProfileImageCubit>().removeImage();
     context.read<FrontImageCubit>().removeImage();
     context.read<BackImageCubit>().removeImage();
+    context.read<PanCardImageCubit>().removeImage();
     context.read<VillageCubit>().fetchVillage(context);
   }
 
@@ -73,6 +74,7 @@ class _SignupScreenState extends State<SignupScreen> {
     BackImageCubit backImageCubit = context.watch<BackImageCubit>();
     ProfileImageCubit profileImageCubit = context.watch<ProfileImageCubit>();
     ImageUploadCubit imageUploadCubit = context.watch<ImageUploadCubit>();
+    PanCardImageCubit panCardImageCubit = context.watch<PanCardImageCubit>();
     AuthCubit authCubit = context.read<AuthCubit>();
     VillageCubit villageCubit = context.read<VillageCubit>();
 
@@ -218,7 +220,8 @@ class _SignupScreenState extends State<SignupScreen> {
                               setState(() {
                                 isSameAsMobile = val ?? false;
                                 if (isSameAsMobile) {
-                                  whatsappController.text = mobileController.text;
+                                  whatsappController.text =
+                                      mobileController.text;
                                 }
                               });
                             },
@@ -374,9 +377,12 @@ class _SignupScreenState extends State<SignupScreen> {
                           hintText: 'Select Village',
                           items: villageList,
                           text: villageName,
-                          initialItem: villageList.any((e) => e.name == villageName)
-                              ? villageList.firstWhere((e) => e.name == villageName)
-                              : null,
+                          initialItem:
+                              villageList.any((e) => e.name == villageName)
+                                  ? villageList.firstWhere(
+                                    (e) => e.name == villageName,
+                                  )
+                                  : null,
                           onChanged: (val) {
                             if (val != null) {
                               villageName = val.name;
@@ -428,72 +434,53 @@ class _SignupScreenState extends State<SignupScreen> {
                       color: AppColor.themePrimaryColor,
                     ),
                     const Gap(10),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: CustomTextField(
-                            labelText: 'Plot/Flat No.',
-                            hintText: 'Plot/Flat No',
-                            controller: plotNoController,
-                            textCapitalization: TextCapitalization.characters,
-                            maxLength: 20,
-                          ),
-                        ),
-                        const Gap(10),
-                        Expanded(
-                          child: CustomTextField(
-                            labelText: 'Society/Building Name',
-                            hintText: 'Society/Building Name',
-                            controller: societyNameController,
-                            textCapitalization: TextCapitalization.characters,
-                            maxLength: 20,
-                          ),
-                        ),
-                        const Gap(10),
-                        Expanded(
-                          child: CustomTextField(
-                            labelText: 'Area Name',
-                            hintText: 'Area Name',
-                            controller: areaNameController,
-                            textCapitalization: TextCapitalization.characters,
-                            maxLength: 20,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Gap(15),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: CustomTextField(
-                            labelText: 'Nearby/Locality',
-                            hintText: 'Nearby/Locality',
-                            controller: landmarkController,
-                            textCapitalization: TextCapitalization.characters,
-                            maxLength: 20,
-                          ),
-                        ),
-                        const Gap(10),
-                        Expanded(
-                          child: CustomTextField(
-                            labelText: 'Pincode',
-                            hintText: 'Pincode',
-                            controller: pincodeController,
-                            keyboardType: TextInputType.number,
-                            maxLength: 6,
-                          ),
-                        ),
-                        const Expanded(child: SizedBox()),
-                      ],
+                    CustomTextField(
+                      labelText: 'Plot/Flat No.',
+                      hintText: 'Plot/Flat No',
+                      controller: plotNoController,
+                      textCapitalization: TextCapitalization.characters,
+                      maxLength: 20,
                     ),
                     const Gap(20),
                     CustomTextField(
-                      labelText: 'Address',
-                      hintText: 'Enter Address',
-                      controller: addressController,
-                      line: 3,
+                      labelText: 'Society/Building Name',
+                      hintText: 'Society/Building Name',
+                      controller: societyNameController,
                       textCapitalization: TextCapitalization.characters,
+                      maxLength: 20,
                     ),
+                    const Gap(20),
+                    CustomTextField(
+                      labelText: 'Area Name',
+                      hintText: 'Area Name',
+                      controller: areaNameController,
+                      textCapitalization: TextCapitalization.characters,
+                      maxLength: 20,
+                    ),
+                    const Gap(20),
+                    CustomTextField(
+                      labelText: 'Nearby/Locality',
+                      hintText: 'Nearby/Locality',
+                      controller: landmarkController,
+                      textCapitalization: TextCapitalization.characters,
+                      maxLength: 20,
+                    ),
+                    const Gap(20),
+                    CustomTextField(
+                      labelText: 'Pincode',
+                      hintText: 'Pincode',
+                      controller: pincodeController,
+                      keyboardType: TextInputType.number,
+                      maxLength: 6,
+                    ),
+                    // const Gap(20),
+                    // CustomTextField(
+                    //   labelText: 'Address',
+                    //   hintText: 'Enter Address',
+                    //   controller: addressController,
+                    //   line: 3,
+                    //   textCapitalization: TextCapitalization.characters,
+                    // ),
                     const Gap(20),
                     if (old) ...[
                       _buildImageUpload(
@@ -511,6 +498,11 @@ class _SignupScreenState extends State<SignupScreen> {
                         title: 'ID Proof (Back)',
                       ),
                     ],
+                    const Gap(15),
+                    _buildImageUpload(
+                      cubit: panCardImageCubit,
+                      title: 'Pan Card Image',
+                    ),
                     const Gap(30),
                     CustomButton(
                       text: 'Submit',
@@ -552,6 +544,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ? otherDegreeController.text.trim()
                                   : degreeValue,
                           occupation: occupationController.text.trim(),
+                          pancardImage: panCardImageCubit.state?.path ?? '',
                         );
                       },
                     ),
