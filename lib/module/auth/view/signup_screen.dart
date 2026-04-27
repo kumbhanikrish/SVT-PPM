@@ -32,7 +32,7 @@ class _SignupScreenState extends State<SignupScreen> {
   TextEditingController mobileController = TextEditingController();
   TextEditingController whatsappController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-  TextEditingController addressController = TextEditingController();
+  // TextEditingController addressController = TextEditingController();
   TextEditingController idNoController = TextEditingController();
   TextEditingController plotNoController = TextEditingController();
   TextEditingController societyNameController = TextEditingController();
@@ -165,28 +165,28 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     const Gap(20),
                     CustomTextField(
-                      labelText: 'First Name',
+                      labelText: 'First Name *',
                       hintText: 'Enter First Name',
                       controller: firstNameController,
                       textCapitalization: TextCapitalization.characters,
                     ),
                     const Gap(20),
                     CustomTextField(
-                      labelText: 'Middle Name',
+                      labelText: 'Middle Name *',
                       hintText: 'Enter Middle Name',
                       controller: middleNameController,
                       textCapitalization: TextCapitalization.characters,
                     ),
                     const Gap(20),
                     CustomTextField(
-                      labelText: 'Last Name',
+                      labelText: 'Last Name *',
                       hintText: 'Enter Last Name',
                       controller: lastNameController,
                       textCapitalization: TextCapitalization.characters,
                     ),
                     const Gap(20),
                     CustomTextField(
-                      labelText: 'Mobile Number',
+                      labelText: 'Mobile Number *',
                       hintText: 'Enter Mobile Number',
                       controller: mobileController,
                       keyboardType: TextInputType.phone,
@@ -254,7 +254,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     const Gap(20),
                     const CustomText(
-                      text: 'Gender',
+                      text: 'Gender *',
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                     ),
@@ -373,7 +373,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           villageList = state.villageList;
                         }
                         return CustomDropWonFiled<VillageModel>(
-                          title: 'Village',
+                          title: 'Village *',
                           hintText: 'Select Village',
                           items: villageList,
                           text: villageName,
@@ -415,7 +415,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           Expanded(
                             flex: 2,
                             child: CustomTextField(
-                              labelText: 'ID Number',
+                              labelText: 'ID Number *',
                               hintText: 'Enter ID',
                               controller: idNoController,
                               keyboardType: TextInputType.number,
@@ -473,29 +473,22 @@ class _SignupScreenState extends State<SignupScreen> {
                       keyboardType: TextInputType.number,
                       maxLength: 6,
                     ),
-                    // const Gap(20),
-                    // CustomTextField(
-                    //   labelText: 'Address',
-                    //   hintText: 'Enter Address',
-                    //   controller: addressController,
-                    //   line: 3,
-                    //   textCapitalization: TextCapitalization.characters,
-                    // ),
+                  
                     const Gap(20),
                     if (old) ...[
                       _buildImageUpload(
                         cubit: imageUploadCubit,
-                        title: 'Upload Old ID Card',
+                        title: 'Upload Old ID Card *',
                       ),
                     ] else ...[
                       _buildImageUpload(
                         cubit: frontImageCubit,
-                        title: 'ID Proof (Front)',
+                        title: 'ID Proof (Front) *',
                       ),
                       const Gap(15),
                       _buildImageUpload(
                         cubit: backImageCubit,
-                        title: 'ID Proof (Back)',
+                        title: 'ID Proof (Back) *',
                       ),
                     ],
                     const Gap(15),
@@ -515,7 +508,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           mobileNo: mobileController.text.trim(),
                           whatsappNo: whatsappController.text.trim(),
                           email: emailController.text.trim(),
-                          address: addressController.text.trim(),
+                         
                           villageName: villageName,
                           villageCode: villageCode,
                           oldMemberId:

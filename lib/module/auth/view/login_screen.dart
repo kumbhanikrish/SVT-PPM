@@ -36,7 +36,7 @@ class LoginScreen extends StatelessWidget {
         Gap(30),
         CustomTextField(
           hintText: 'Enter Mobile Number',
-          labelText: 'Mobile Number',
+          labelText: 'Mobile Number *',
           keyboardType: TextInputType.number,
           maxLength: 10,
 

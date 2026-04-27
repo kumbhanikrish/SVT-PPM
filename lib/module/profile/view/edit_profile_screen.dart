@@ -212,14 +212,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               Gap(25),
               CustomTextField(
                 hintText: 'Enter Your Name',
-                labelText: 'First Name',
+                labelText: 'First Name *',
                 controller: firstNameController,
                 textCapitalization: TextCapitalization.characters,
               ),
               Gap(20),
               CustomTextField(
                 hintText: 'Enter Middle Name',
-                labelText: 'Middle Name',
+                labelText: 'Middle Name *',
                 textCapitalization: TextCapitalization.characters,
 
                 controller: middleNameController,
@@ -227,7 +227,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               Gap(20),
               CustomTextField(
                 hintText: 'Enter Last Name',
-                labelText: 'Last Name',
+                labelText: 'Last Name *',
                 controller: lastNameController,
                 textCapitalization: TextCapitalization.characters,
               ),
@@ -306,7 +306,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomText(
-                    text: 'Gender',
+                    text: 'Gender *',
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
                   ),

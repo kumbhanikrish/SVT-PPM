@@ -211,21 +211,21 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
               ),
               const Gap(25),
               CustomTextField(
-                labelText: 'First Name',
+                labelText: 'First Name *',
                 hintText: 'Enter First Name',
                 controller: firstNameController,
                 textCapitalization: TextCapitalization.characters,
               ),
               const Gap(20),
               CustomTextField(
-                labelText: 'Middle Name',
+                labelText: 'Middle Name *',
                 hintText: 'Enter Middle Name',
                 controller: middleNameController,
                 textCapitalization: TextCapitalization.characters,
               ),
               const Gap(20),
               CustomTextField(
-                labelText: 'Last Name',
+                labelText: 'Last Name *',
                 hintText: 'Enter Last Name',
                 controller: lastNameController,
                 textCapitalization: TextCapitalization.characters,
@@ -299,7 +299,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
               ),
               const Gap(10),
               const CustomText(
-                text: 'Gender',
+                text: 'Gender *',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
@@ -388,7 +388,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                   const Gap(10),
                   Expanded(
                     child: CustomDropWonFiled<String>(
-                      title: 'Relation',
+                      title: 'Relation *',
                       hintText: 'Select Relation',
                       items: relationList,
                       text: relationValue,
@@ -473,7 +473,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                 const Gap(10),
                 _buildImageUpload(
                   cubit: imageUploadCubit,
-                  title: 'Upload ID Card',
+                  title: 'Upload ID Card *',
                   existingUrl: member?.oldMemberIdCard,
                 ),
               ] else ...[
@@ -485,7 +485,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                 const Gap(10),
                 _buildImageUpload(
                   cubit: frontImageCubit,
-                  title: 'Upload Front Side',
+                  title: 'Upload Front Side *',
                   existingUrl: member?.idProofFront,
                 ),
                 const Gap(20),
@@ -497,7 +497,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                 const Gap(10),
                 _buildImageUpload(
                   cubit: backImageCubit,
-                  title: 'Upload Back Side',
+                  title: 'Upload Back Side *',
                   existingUrl: member?.idProofBack,
                 ),
               ],

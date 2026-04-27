@@ -152,7 +152,7 @@ class AuthCubit extends Cubit<AuthState> {
     required String mobileNo,
     required String whatsappNo,
     required String villageName,
-    required String address,
+
     required String gender,
     required String language,
     required String email,
@@ -205,9 +205,7 @@ class AuthCubit extends Cubit<AuthState> {
     if (villageName.isEmpty) {
       return customErrorToast(context, text: "Please enter village name");
     }
-    if (address.isEmpty) {
-      return customErrorToast(context, text: "Please enter address");
-    }
+
     if (gender.isEmpty) {
       return customErrorToast(context, text: "Please select gender");
     }
@@ -264,7 +262,7 @@ class AuthCubit extends Cubit<AuthState> {
               ? 'hi'
               : 'en',
       "email": email,
-      "address": address,
+
       "plot_no": plotNo ?? '',
       "society_name": societyName ?? '',
       "area_name": areaName ?? '',
@@ -396,24 +394,12 @@ class ImageUploadCubit extends Cubit<File?> {
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original,
             lockAspectRatio: false,
-            aspectRatioPresets: [
-              CropAspectRatioPreset.original,
-              CropAspectRatioPreset.square,
-              CropAspectRatioPreset.ratio3x2,
-              CropAspectRatioPreset.ratio4x3,
-              CropAspectRatioPreset.ratio16x9,
-            ],
+            aspectRatioPresets: [CropAspectRatioPreset.ratio3x2],
             cropStyle: CropStyle.rectangle,
           ),
           IOSUiSettings(
             title: 'Crop Document',
-            aspectRatioPresets: [
-              CropAspectRatioPreset.original,
-              CropAspectRatioPreset.square,
-              CropAspectRatioPreset.ratio3x2,
-              CropAspectRatioPreset.ratio4x3,
-              CropAspectRatioPreset.ratio16x9,
-            ],
+            aspectRatioPresets: [CropAspectRatioPreset.ratio3x2],
             cropStyle: CropStyle.rectangle,
           ),
         ],
@@ -446,24 +432,12 @@ class FrontImageCubit extends Cubit<File?> {
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original,
             lockAspectRatio: false,
-            aspectRatioPresets: [
-              CropAspectRatioPreset.original,
-              CropAspectRatioPreset.square,
-              CropAspectRatioPreset.ratio3x2,
-              CropAspectRatioPreset.ratio4x3,
-              CropAspectRatioPreset.ratio16x9,
-            ],
+            aspectRatioPresets: [CropAspectRatioPreset.ratio3x2],
             cropStyle: CropStyle.rectangle,
           ),
           IOSUiSettings(
             title: 'Crop Document',
-            aspectRatioPresets: [
-              CropAspectRatioPreset.original,
-              CropAspectRatioPreset.square,
-              CropAspectRatioPreset.ratio3x2,
-              CropAspectRatioPreset.ratio4x3,
-              CropAspectRatioPreset.ratio16x9,
-            ],
+            aspectRatioPresets: [CropAspectRatioPreset.ratio3x2],
             cropStyle: CropStyle.rectangle,
           ),
         ],
@@ -496,24 +470,12 @@ class BackImageCubit extends Cubit<File?> {
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original,
             lockAspectRatio: false,
-            aspectRatioPresets: [
-              CropAspectRatioPreset.original,
-              CropAspectRatioPreset.square,
-              CropAspectRatioPreset.ratio3x2,
-              CropAspectRatioPreset.ratio4x3,
-              CropAspectRatioPreset.ratio16x9,
-            ],
+            aspectRatioPresets: [CropAspectRatioPreset.ratio3x2],
             cropStyle: CropStyle.rectangle,
           ),
           IOSUiSettings(
             title: 'Crop Document',
-            aspectRatioPresets: [
-              CropAspectRatioPreset.original,
-              CropAspectRatioPreset.square,
-              CropAspectRatioPreset.ratio3x2,
-              CropAspectRatioPreset.ratio4x3,
-              CropAspectRatioPreset.ratio16x9,
-            ],
+            aspectRatioPresets: [CropAspectRatioPreset.ratio3x2],
             cropStyle: CropStyle.rectangle,
           ),
         ],
@@ -546,24 +508,12 @@ class PanCardImageCubit extends Cubit<File?> {
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original,
             lockAspectRatio: false,
-            aspectRatioPresets: [
-              CropAspectRatioPreset.original,
-              CropAspectRatioPreset.square,
-              CropAspectRatioPreset.ratio3x2,
-              CropAspectRatioPreset.ratio4x3,
-              CropAspectRatioPreset.ratio16x9,
-            ],
+            aspectRatioPresets: [CropAspectRatioPreset.ratio3x2],
             cropStyle: CropStyle.rectangle,
           ),
           IOSUiSettings(
             title: 'Crop Document',
-            aspectRatioPresets: [
-              CropAspectRatioPreset.original,
-              CropAspectRatioPreset.square,
-              CropAspectRatioPreset.ratio3x2,
-              CropAspectRatioPreset.ratio4x3,
-              CropAspectRatioPreset.ratio16x9,
-            ],
+            aspectRatioPresets: [CropAspectRatioPreset.ratio3x2],
             cropStyle: CropStyle.rectangle,
           ),
         ],
